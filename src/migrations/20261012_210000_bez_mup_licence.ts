@@ -1,4 +1,5 @@
 import type { MigrateDownArgs, MigrateUpArgs } from '@payloadcms/db-sqlite'
+import { applyKeyHomeLayout } from './20261012_194417_home_key_layout'
 
 /*
  * Texts only, no schema change: removes the mention of a Ministry of Interior (MUP) licence
@@ -47,7 +48,24 @@ function replaceAll(doc: Record<string, unknown>, pairs: Pair[]) {
   return after === before ? null : JSON.parse(after)
 }
 
+/*
+ * Content changes run here, in the last migration: the Local API reads with the current schema,
+ * so every table must already exist. A failed content change is logged and never blocks the site.
+ */
 export async function up({ payload, req }: MigrateUpArgs): Promise<void> {
+  try {
+    await applyKeyHomeLayout(payload, req)
+  } catch (err) {
+    payload.logger.warn(`Početna nije preuređena: ${(err as Error).message}`)
+  }
+  try {
+    await replaceTexts({ payload, req } as MigrateUpArgs)
+  } catch (err) {
+    payload.logger.warn(`Tekst o licenci nije zamenjen: ${(err as Error).message}`)
+  }
+}
+
+async function replaceTexts({ payload, req }: MigrateUpArgs): Promise<void> {
   let changed = 0
   for (const [locale, pairs] of [['sr', SR], ['en', EN]] as const) {
     for (const collection of ['pages', 'services'] as const) {
