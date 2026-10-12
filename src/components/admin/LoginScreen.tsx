@@ -83,6 +83,13 @@ export function LoginScreen({ redirectTo }: { redirectTo: string }) {
       const me = await fetch('/api/users/me', { credentials: 'include', cache: 'no-store' })
       const meBody = await me.json().catch(() => null)
       if (!meBody?.user) {
+        // Payload accepts the session only from the site address set on the server.
+        const site = (process.env.NEXT_PUBLIC_SITE_URL || '').replace(/\/$/, '')
+        if (site && site !== window.location.origin) {
+          return fail(
+            `Adresa u pregledaču (${window.location.origin}) nije ista kao adresa sajta na serveru (${site}). U fajlu .env postavite NEXT_PUBLIC_SITE_URL=${window.location.origin} ili je dodajte u ALLOWED_ORIGINS, pa pokrenite npm run build i pm2 restart parkingrampe.`,
+          )
+        }
         return fail(
           'Lozinka je tačna, ali pregledač nije sačuvao prijavu (kolačić). Proverite da li pregledač blokira kolačiće za ovu adresu ili da li ga uređaj između (proxy/firewall) uklanja.',
         )
