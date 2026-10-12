@@ -1,0 +1,241 @@
+@import 'tailwindcss';
+
+/*
+  Visual direction: Key Automation style. Bright, quiet pages; full-bleed photography;
+  grey bands; small bold uppercase headings centred over the content; dark square buttons;
+  one coloured pill (the accent) reserved for the main call to action.
+  Accent, dark and grey are set in the CMS (Site settings → Appearance) and arrive as CSS variables.
+*/
+:root {
+  --accent: #2bb04a;
+  --dark: #2f3336;
+  --grey: #ededed;
+}
+
+@theme inline {
+  --color-accent: var(--accent);
+  --color-dark: var(--dark);
+  --color-band: var(--grey);
+  --color-ink: #222527;
+  --color-body: #4a4f53;
+  --color-muted: #7b8186;
+  --color-line: #dcdcdc;
+  --color-alert: #e5252a;
+  --font-sans: 'Plus Jakarta Sans Variable', 'Helvetica Neue', Arial, sans-serif;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+  body {
+    background: #fff;
+    color: var(--color-body);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    font-feature-settings: 'ss01';
+    line-height: 1.65;
+    letter-spacing: -0.003em;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: var(--color-ink);
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .wrap {
+    width: 100%;
+    max-width: 1180px;
+    margin-inline: auto;
+    padding-inline: 20px;
+  }
+  .wrap-narrow {
+    width: 100%;
+    max-width: 820px;
+    margin-inline: auto;
+    padding-inline: 20px;
+  }
+
+  /* Section heading: small, bold, uppercase, centred. */
+  .h-section {
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--color-ink);
+  }
+  .h-page {
+    font-size: clamp(26px, 4vw, 40px);
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .label-caps {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* Dark square button, as on the reference site. */
+  .btn-dark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--dark);
+    color: #fff;
+    font-size: 11.5px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 9px 16px;
+    line-height: 1.2;
+    transition: background-color 0.2s, opacity 0.2s;
+  }
+  .btn-dark:hover {
+    background: #000;
+  }
+  .btn-light {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: #fff;
+    color: var(--dark);
+    font-size: 11.5px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 9px 16px;
+    line-height: 1.2;
+  }
+  .btn-light:hover {
+    background: var(--grey);
+  }
+  .btn-outline-light {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid rgb(255 255 255 / 0.7);
+    color: #fff;
+    font-size: 11.5px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 8px 15px;
+    line-height: 1.2;
+  }
+  .btn-outline-light:hover {
+    background: rgb(255 255 255 / 0.12);
+  }
+  /* The one coloured pill. */
+  .btn-accent {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    border-radius: 999px;
+    padding: 7px 16px;
+    line-height: 1.2;
+    transition: filter 0.2s;
+  }
+  .btn-accent:hover {
+    filter: brightness(1.08);
+  }
+  .btn-accent-lg {
+    padding: 12px 24px;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .tile-zoom img {
+    transition: transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .tile-zoom:hover img {
+    transform: scale(1.05);
+  }
+
+  .text-shadow {
+    text-shadow: 0 1px 12px rgb(0 0 0 / 0.45);
+  }
+
+  .prose-kgb {
+    color: var(--color-body);
+  }
+  .prose-kgb > * + * {
+    margin-top: 1em;
+  }
+  .prose-kgb h2 {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-top: 1.8em;
+  }
+  .prose-kgb h3 {
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-top: 1.6em;
+  }
+  .prose-kgb ul {
+    list-style: disc;
+    padding-left: 1.2em;
+  }
+  .prose-kgb ol {
+    list-style: decimal;
+    padding-left: 1.3em;
+  }
+  .prose-kgb li + li {
+    margin-top: 0.35em;
+  }
+  .prose-kgb li::marker {
+    color: var(--accent);
+  }
+  .prose-kgb a {
+    color: var(--color-ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .prose-kgb strong {
+    color: var(--color-ink);
+    font-weight: 700;
+  }
+  .prose-invert,
+  .prose-invert strong,
+  .prose-invert h2,
+  .prose-invert h3 {
+    color: rgb(255 255 255 / 0.85);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
