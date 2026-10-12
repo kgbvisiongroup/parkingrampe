@@ -51,6 +51,12 @@ export default buildConfig({
   serverURL: process.env.NEXT_PUBLIC_SITE_URL || '',
   // Own cookie name: another Payload site on the same server/IP (cookies ignore the port) must not clash.
   cookiePrefix: 'kgb',
+  // Admin sign-in is accepted only from these addresses (plus NEXT_PUBLIC_SITE_URL), e.g.
+  // ALLOWED_ORIGINS=http://192.168.20.102:8081,https://parkingrampe.rs
+  csrf: (process.env.ALLOWED_ORIGINS || '')
+    .split(',')
+    .map((o) => o.trim().replace(/\/$/, ''))
+    .filter(Boolean),
   admin: {
     user: Users.slug,
     avatar: 'default',
