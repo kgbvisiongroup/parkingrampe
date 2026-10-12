@@ -11,6 +11,8 @@ export function LoginIntro() {
     }
     // The fields mount together with this component; one frame later they exist.
     const id = requestAnimationFrame(() => {
+      const emailLabel = document.querySelector('.login__form label[for="field-email"]')
+      if (emailLabel?.firstChild?.nodeType === Node.TEXT_NODE) emailLabel.firstChild.textContent = 'Email'
       set('.login__form input[name="email"]', 'vi@kgb.co.rs')
       set('.login__form input[name="password"]', 'Vaša lozinka')
     })

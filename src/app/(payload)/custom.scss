@@ -275,6 +275,11 @@ html[data-theme='dark'] :focus-visible {
     margin-top: 18px;
   }
 
+  /* Password reset needs e-mail (SMTP); hidden until it is set up. */
+  .login__form a[href$='/forgot'] {
+    display: none;
+  }
+
   .field-label {
     font-size: 12px;
     font-weight: 600;
