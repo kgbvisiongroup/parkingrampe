@@ -1,7 +1,7 @@
 import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-sqlite'
 
-export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
-  await db.run(sql`CREATE TABLE \`pages_blocks_link_boxes_items\` (
+export async function up({ db }: MigrateUpArgs): Promise<void> {
+  await db.run(sql`CREATE TABLE IF NOT EXISTS \`pages_blocks_link_boxes_items\` (
   	\`_order\` integer NOT NULL,
   	\`_parent_id\` text NOT NULL,
   	\`id\` text PRIMARY KEY NOT NULL,
@@ -10,9 +10,9 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	FOREIGN KEY (\`_parent_id\`) REFERENCES \`pages_blocks_link_boxes\`(\`id\`) ON UPDATE no action ON DELETE cascade
   );
   `)
-  await db.run(sql`CREATE INDEX \`pages_blocks_link_boxes_items_order_idx\` ON \`pages_blocks_link_boxes_items\` (\`_order\`);`)
-  await db.run(sql`CREATE INDEX \`pages_blocks_link_boxes_items_parent_id_idx\` ON \`pages_blocks_link_boxes_items\` (\`_parent_id\`);`)
-  await db.run(sql`CREATE TABLE \`pages_blocks_link_boxes_items_locales\` (
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`pages_blocks_link_boxes_items_order_idx\` ON \`pages_blocks_link_boxes_items\` (\`_order\`);`)
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`pages_blocks_link_boxes_items_parent_id_idx\` ON \`pages_blocks_link_boxes_items\` (\`_parent_id\`);`)
+  await db.run(sql`CREATE TABLE IF NOT EXISTS \`pages_blocks_link_boxes_items_locales\` (
   	\`title\` text NOT NULL,
   	\`text\` text,
   	\`link_url\` text,
@@ -22,8 +22,8 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	FOREIGN KEY (\`_parent_id\`) REFERENCES \`pages_blocks_link_boxes_items\`(\`id\`) ON UPDATE no action ON DELETE cascade
   );
   `)
-  await db.run(sql`CREATE UNIQUE INDEX \`pages_blocks_link_boxes_items_locales_locale_parent_id_uniqu\` ON \`pages_blocks_link_boxes_items_locales\` (\`_locale\`,\`_parent_id\`);`)
-  await db.run(sql`CREATE TABLE \`pages_blocks_link_boxes\` (
+  await db.run(sql`CREATE UNIQUE INDEX IF NOT EXISTS \`pages_blocks_link_boxes_items_locales_locale_parent_id_uniqu\` ON \`pages_blocks_link_boxes_items_locales\` (\`_locale\`,\`_parent_id\`);`)
+  await db.run(sql`CREATE TABLE IF NOT EXISTS \`pages_blocks_link_boxes\` (
   	\`_order\` integer NOT NULL,
   	\`_parent_id\` integer NOT NULL,
   	\`_path\` text NOT NULL,
@@ -32,10 +32,10 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	FOREIGN KEY (\`_parent_id\`) REFERENCES \`pages\`(\`id\`) ON UPDATE no action ON DELETE cascade
   );
   `)
-  await db.run(sql`CREATE INDEX \`pages_blocks_link_boxes_order_idx\` ON \`pages_blocks_link_boxes\` (\`_order\`);`)
-  await db.run(sql`CREATE INDEX \`pages_blocks_link_boxes_parent_id_idx\` ON \`pages_blocks_link_boxes\` (\`_parent_id\`);`)
-  await db.run(sql`CREATE INDEX \`pages_blocks_link_boxes_path_idx\` ON \`pages_blocks_link_boxes\` (\`_path\`);`)
-  await db.run(sql`CREATE TABLE \`pages_blocks_link_boxes_locales\` (
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`pages_blocks_link_boxes_order_idx\` ON \`pages_blocks_link_boxes\` (\`_order\`);`)
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`pages_blocks_link_boxes_parent_id_idx\` ON \`pages_blocks_link_boxes\` (\`_parent_id\`);`)
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`pages_blocks_link_boxes_path_idx\` ON \`pages_blocks_link_boxes\` (\`_path\`);`)
+  await db.run(sql`CREATE TABLE IF NOT EXISTS \`pages_blocks_link_boxes_locales\` (
   	\`heading\` text,
   	\`id\` integer PRIMARY KEY NOT NULL,
   	\`_locale\` text NOT NULL,
@@ -43,8 +43,8 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	FOREIGN KEY (\`_parent_id\`) REFERENCES \`pages_blocks_link_boxes\`(\`id\`) ON UPDATE no action ON DELETE cascade
   );
   `)
-  await db.run(sql`CREATE UNIQUE INDEX \`pages_blocks_link_boxes_locales_locale_parent_id_unique\` ON \`pages_blocks_link_boxes_locales\` (\`_locale\`,\`_parent_id\`);`)
-  await db.run(sql`CREATE TABLE \`services_blocks_link_boxes_items\` (
+  await db.run(sql`CREATE UNIQUE INDEX IF NOT EXISTS \`pages_blocks_link_boxes_locales_locale_parent_id_unique\` ON \`pages_blocks_link_boxes_locales\` (\`_locale\`,\`_parent_id\`);`)
+  await db.run(sql`CREATE TABLE IF NOT EXISTS \`services_blocks_link_boxes_items\` (
   	\`_order\` integer NOT NULL,
   	\`_parent_id\` text NOT NULL,
   	\`id\` text PRIMARY KEY NOT NULL,
@@ -53,9 +53,9 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	FOREIGN KEY (\`_parent_id\`) REFERENCES \`services_blocks_link_boxes\`(\`id\`) ON UPDATE no action ON DELETE cascade
   );
   `)
-  await db.run(sql`CREATE INDEX \`services_blocks_link_boxes_items_order_idx\` ON \`services_blocks_link_boxes_items\` (\`_order\`);`)
-  await db.run(sql`CREATE INDEX \`services_blocks_link_boxes_items_parent_id_idx\` ON \`services_blocks_link_boxes_items\` (\`_parent_id\`);`)
-  await db.run(sql`CREATE TABLE \`services_blocks_link_boxes_items_locales\` (
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`services_blocks_link_boxes_items_order_idx\` ON \`services_blocks_link_boxes_items\` (\`_order\`);`)
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`services_blocks_link_boxes_items_parent_id_idx\` ON \`services_blocks_link_boxes_items\` (\`_parent_id\`);`)
+  await db.run(sql`CREATE TABLE IF NOT EXISTS \`services_blocks_link_boxes_items_locales\` (
   	\`title\` text NOT NULL,
   	\`text\` text,
   	\`link_url\` text,
@@ -65,8 +65,8 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	FOREIGN KEY (\`_parent_id\`) REFERENCES \`services_blocks_link_boxes_items\`(\`id\`) ON UPDATE no action ON DELETE cascade
   );
   `)
-  await db.run(sql`CREATE UNIQUE INDEX \`services_blocks_link_boxes_items_locales_locale_parent_id_un\` ON \`services_blocks_link_boxes_items_locales\` (\`_locale\`,\`_parent_id\`);`)
-  await db.run(sql`CREATE TABLE \`services_blocks_link_boxes\` (
+  await db.run(sql`CREATE UNIQUE INDEX IF NOT EXISTS \`services_blocks_link_boxes_items_locales_locale_parent_id_un\` ON \`services_blocks_link_boxes_items_locales\` (\`_locale\`,\`_parent_id\`);`)
+  await db.run(sql`CREATE TABLE IF NOT EXISTS \`services_blocks_link_boxes\` (
   	\`_order\` integer NOT NULL,
   	\`_parent_id\` integer NOT NULL,
   	\`_path\` text NOT NULL,
@@ -75,10 +75,10 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	FOREIGN KEY (\`_parent_id\`) REFERENCES \`services\`(\`id\`) ON UPDATE no action ON DELETE cascade
   );
   `)
-  await db.run(sql`CREATE INDEX \`services_blocks_link_boxes_order_idx\` ON \`services_blocks_link_boxes\` (\`_order\`);`)
-  await db.run(sql`CREATE INDEX \`services_blocks_link_boxes_parent_id_idx\` ON \`services_blocks_link_boxes\` (\`_parent_id\`);`)
-  await db.run(sql`CREATE INDEX \`services_blocks_link_boxes_path_idx\` ON \`services_blocks_link_boxes\` (\`_path\`);`)
-  await db.run(sql`CREATE TABLE \`services_blocks_link_boxes_locales\` (
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`services_blocks_link_boxes_order_idx\` ON \`services_blocks_link_boxes\` (\`_order\`);`)
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`services_blocks_link_boxes_parent_id_idx\` ON \`services_blocks_link_boxes\` (\`_parent_id\`);`)
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`services_blocks_link_boxes_path_idx\` ON \`services_blocks_link_boxes\` (\`_path\`);`)
+  await db.run(sql`CREATE TABLE IF NOT EXISTS \`services_blocks_link_boxes_locales\` (
   	\`heading\` text,
   	\`id\` integer PRIMARY KEY NOT NULL,
   	\`_locale\` text NOT NULL,
@@ -86,8 +86,8 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	FOREIGN KEY (\`_parent_id\`) REFERENCES \`services_blocks_link_boxes\`(\`id\`) ON UPDATE no action ON DELETE cascade
   );
   `)
-  await db.run(sql`CREATE UNIQUE INDEX \`services_blocks_link_boxes_locales_locale_parent_id_unique\` ON \`services_blocks_link_boxes_locales\` (\`_locale\`,\`_parent_id\`);`)
-  await db.run(sql`CREATE TABLE \`home_blocks_link_boxes_items\` (
+  await db.run(sql`CREATE UNIQUE INDEX IF NOT EXISTS \`services_blocks_link_boxes_locales_locale_parent_id_unique\` ON \`services_blocks_link_boxes_locales\` (\`_locale\`,\`_parent_id\`);`)
+  await db.run(sql`CREATE TABLE IF NOT EXISTS \`home_blocks_link_boxes_items\` (
   	\`_order\` integer NOT NULL,
   	\`_parent_id\` text NOT NULL,
   	\`id\` text PRIMARY KEY NOT NULL,
@@ -96,9 +96,9 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	FOREIGN KEY (\`_parent_id\`) REFERENCES \`home_blocks_link_boxes\`(\`id\`) ON UPDATE no action ON DELETE cascade
   );
   `)
-  await db.run(sql`CREATE INDEX \`home_blocks_link_boxes_items_order_idx\` ON \`home_blocks_link_boxes_items\` (\`_order\`);`)
-  await db.run(sql`CREATE INDEX \`home_blocks_link_boxes_items_parent_id_idx\` ON \`home_blocks_link_boxes_items\` (\`_parent_id\`);`)
-  await db.run(sql`CREATE TABLE \`home_blocks_link_boxes_items_locales\` (
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`home_blocks_link_boxes_items_order_idx\` ON \`home_blocks_link_boxes_items\` (\`_order\`);`)
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`home_blocks_link_boxes_items_parent_id_idx\` ON \`home_blocks_link_boxes_items\` (\`_parent_id\`);`)
+  await db.run(sql`CREATE TABLE IF NOT EXISTS \`home_blocks_link_boxes_items_locales\` (
   	\`title\` text NOT NULL,
   	\`text\` text,
   	\`link_url\` text,
@@ -108,8 +108,8 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	FOREIGN KEY (\`_parent_id\`) REFERENCES \`home_blocks_link_boxes_items\`(\`id\`) ON UPDATE no action ON DELETE cascade
   );
   `)
-  await db.run(sql`CREATE UNIQUE INDEX \`home_blocks_link_boxes_items_locales_locale_parent_id_unique\` ON \`home_blocks_link_boxes_items_locales\` (\`_locale\`,\`_parent_id\`);`)
-  await db.run(sql`CREATE TABLE \`home_blocks_link_boxes\` (
+  await db.run(sql`CREATE UNIQUE INDEX IF NOT EXISTS \`home_blocks_link_boxes_items_locales_locale_parent_id_unique\` ON \`home_blocks_link_boxes_items_locales\` (\`_locale\`,\`_parent_id\`);`)
+  await db.run(sql`CREATE TABLE IF NOT EXISTS \`home_blocks_link_boxes\` (
   	\`_order\` integer NOT NULL,
   	\`_parent_id\` integer NOT NULL,
   	\`_path\` text NOT NULL,
@@ -118,10 +118,10 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	FOREIGN KEY (\`_parent_id\`) REFERENCES \`home\`(\`id\`) ON UPDATE no action ON DELETE cascade
   );
   `)
-  await db.run(sql`CREATE INDEX \`home_blocks_link_boxes_order_idx\` ON \`home_blocks_link_boxes\` (\`_order\`);`)
-  await db.run(sql`CREATE INDEX \`home_blocks_link_boxes_parent_id_idx\` ON \`home_blocks_link_boxes\` (\`_parent_id\`);`)
-  await db.run(sql`CREATE INDEX \`home_blocks_link_boxes_path_idx\` ON \`home_blocks_link_boxes\` (\`_path\`);`)
-  await db.run(sql`CREATE TABLE \`home_blocks_link_boxes_locales\` (
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`home_blocks_link_boxes_order_idx\` ON \`home_blocks_link_boxes\` (\`_order\`);`)
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`home_blocks_link_boxes_parent_id_idx\` ON \`home_blocks_link_boxes\` (\`_parent_id\`);`)
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`home_blocks_link_boxes_path_idx\` ON \`home_blocks_link_boxes\` (\`_path\`);`)
+  await db.run(sql`CREATE TABLE IF NOT EXISTS \`home_blocks_link_boxes_locales\` (
   	\`heading\` text,
   	\`id\` integer PRIMARY KEY NOT NULL,
   	\`_locale\` text NOT NULL,
@@ -129,8 +129,9 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	FOREIGN KEY (\`_parent_id\`) REFERENCES \`home_blocks_link_boxes\`(\`id\`) ON UPDATE no action ON DELETE cascade
   );
   `)
-  await db.run(sql`CREATE UNIQUE INDEX \`home_blocks_link_boxes_locales_locale_parent_id_unique\` ON \`home_blocks_link_boxes_locales\` (\`_locale\`,\`_parent_id\`);`)
-  await applyKeyHomeLayout(payload, req)
+  await db.run(sql`CREATE UNIQUE INDEX IF NOT EXISTS \`home_blocks_link_boxes_locales_locale_parent_id_unique\` ON \`home_blocks_link_boxes_locales\` (\`_locale\`,\`_parent_id\`);`)
+  // The home page itself is reordered in the last migration (20261012_210000_bez_mup_licence),
+  // after every table that the current code reads exists.
 }
 
 export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
@@ -165,7 +166,7 @@ const BOXES = [
  * 3 featured products, projects, banner, call to action, map, useful links.
  * Images and texts stay as they are. Skipped on an empty database (the seed builds the page).
  */
-async function applyKeyHomeLayout(payload: MigrateUpArgs['payload'], req: MigrateUpArgs['req']) {
+export async function applyKeyHomeLayout(payload: MigrateUpArgs['payload'], req: MigrateUpArgs['req']) {
   const home = await payload.findGlobal({ slug: 'home', locale: 'sr', depth: 0, req })
   const layout = (home?.layout ?? []) as Block[]
   if (!layout.length || layout.some((b) => b.blockType === 'linkBoxes')) return
