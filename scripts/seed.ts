@@ -367,12 +367,12 @@ async function main() {
       slug: l('o-nama', 'about'),
       template: 'about',
       lead: l(
-        'Projektujemo, ugrađujemo i održavamo tehničke sisteme zaštite i automatizaciju kapija. Licencirani od MUP-a, iz Obrenovca za celu Srbiju.',
-        'We design, install and maintain technical security systems and gate automation. Licensed, from Obrenovac for all of Serbia.',
+        'Projektujemo, ugrađujemo i održavamo tehničke sisteme zaštite i automatizaciju kapija. Kapije i rampe kojima upravljate telefonom, iz Obrenovca za celu Srbiju.',
+        'We design, install and maintain technical security systems and gate automation. Gates and barriers you control from your phone, from Obrenovac for all of Serbia.',
       ),
       heroImage: img.heroGate,
       highlights: [
-        { value: 'MUP', label: l('Zvanična licenca', 'Official licence') },
+        { value: 'App', label: l('Upravljanje telefonom', 'Phone control') },
         { value: '48h', label: l('Ponuda nakon upita', 'Quote after inquiry') },
         { value: '0–5', label: l('Godina garancije', 'Years of warranty') },
         { value: 'Srbija', label: l('Radimo na celoj teritoriji', 'We work nationwide') },
@@ -382,10 +382,10 @@ async function main() {
           [
             { h: 'Ko smo mi' },
             {
-              p: 'KGB Vision Group je licencirana kompanija iz Obrenovca (Beograd), specijalizovana za ugradnju tehničkih sistema zaštite i automatizacije. Ugrađujemo motore za klizne i krilne kapije, parking rampe, kontrolu pristupa i evidenciju radnog vremena, video nadzor i alarmne sisteme.',
+              p: 'KGB Vision Group je kompanija iz Obrenovca (Beograd), specijalizovana za ugradnju tehničkih sistema zaštite i automatizacije. Ugrađujemo motore za klizne i krilne kapije, parking rampe, kontrolu pristupa i evidenciju radnog vremena, video nadzor i alarmne sisteme.',
             },
             {
-              p: 'Posedujemo MUP licencu za projektovanje, ugradnju i puštanje u rad tehničkih sistema zaštite. Radimo sa proverenim brendovima, a za automatiku kapija i rampi isključivo sa Key Automation opremom.',
+              p: 'Svaku kapiju i rampu povezujemo na telefon: otvarate je iz aplikacije, delite pristup ukućanima ili zaposlenima i vidite ko je i kada prošao. Radimo sa proverenim brendovima, a za automatiku kapija i rampi isključivo sa Key Automation opremom.',
             },
             {
               p: 'Stalno proširujemo naše usluge i ulažemo u obuku tima. Naš cilj je da svakom klijentu – od kuće, preko stambene zgrade, do kompanije – pružimo moderno, pouzdano i dugotrajno rešenje, bilo gde u Srbiji.',
@@ -393,7 +393,7 @@ async function main() {
             { h: 'Šta nas izdvaja' },
             {
               ul: [
-                'MUP licenca i stručnost – licenciran i kontinuirano obučen tim',
+                'Upravljanje telefonom – kapija i rampa u aplikaciji, bez traženja daljinskog',
                 'Pouzdanost – kvalitetna oprema renomiranih proizvođača, uz garanciju na svaku instalaciju',
                 'Posvećenost klijentima – besplatan obilazak objekta i ponuda u roku od 48 sati',
                 'Kontinuirani razvoj – pratimo najnovije tehnologije u industriji',
@@ -403,10 +403,10 @@ async function main() {
           [
             { h: 'Who we are' },
             {
-              p: 'KGB Vision Group is a licensed company from Obrenovac, Belgrade, specialised in technical security and automation. We install sliding and swing gate motors, parking barriers, access control and time attendance, video surveillance and alarm systems.',
+              p: 'KGB Vision Group is a company from Obrenovac, Belgrade, specialised in technical security and automation. We install sliding and swing gate motors, parking barriers, access control and time attendance, video surveillance and alarm systems.',
             },
             {
-              p: 'We hold a licence from the Ministry of Interior for designing, installing and commissioning technical security systems. We work with proven brands, and for gate and barrier automation exclusively with Key Automation equipment.',
+              p: 'We connect every gate and barrier to your phone: open it from the app, share access with family or staff and see who passed and when. We work with proven brands, and for gate and barrier automation exclusively with Key Automation equipment.',
             },
             {
               p: 'We keep expanding our services and invest in training our team. Our goal is to give every client – from a house to an apartment building or a company – a modern, reliable and long-lasting solution, anywhere in Serbia.',
@@ -414,7 +414,7 @@ async function main() {
             { h: 'What sets us apart' },
             {
               ul: [
-                'Licensed, continuously trained team',
+                'Phone control – your gate and barrier in an app, no more looking for the remote',
                 'Reliability – quality equipment from established manufacturers, with a warranty on every installation',
                 'Client focus – free site visit and a quote within 48 hours',
                 'Continuous development – we follow the latest technology',
@@ -471,8 +471,8 @@ async function main() {
         blockType: 'introBand',
         tone: 'grey',
         text: l(
-          'Projektujemo, ugrađujemo i održavamo Key Automation motore za klizne i krilne kapije, rampe za parking i kontrolu pristupa širom Srbije. Licenca MUP-a i besplatna ponuda za 48h.',
-          'We design, install and maintain Key Automation sliding and swing gate motors, parking barriers and access control across Serbia. Licensed installer, free quote within 48 hours.',
+          'Projektujemo, ugrađujemo i održavamo Key Automation motore za klizne i krilne kapije, rampe za parking i kontrolu pristupa širom Srbije. Upravljanje telefonom i besplatna ponuda za 48h.',
+          'We design, install and maintain Key Automation sliding and swing gate motors, parking barriers and access control across Serbia. Phone control and a free quote within 48 hours.',
         ),
         link: link('pages', pageIds.catalog, l('Pogledajte katalog proizvoda', 'Browse the product catalogue')),
       },
@@ -508,7 +508,7 @@ async function main() {
           { title: l('Katalog proizvoda', 'Product catalogue'), text: l('Motori, rampe, oprema i datasheet-ovi', 'Motors, barriers, accessories and datasheets'), link: link('pages', pageIds.catalog) },
           { title: l('Usluge', 'Services'), text: l('Ugradnja, servis i održavanje', 'Installation, service and maintenance'), link: link('pages', pageIds.services) },
           { title: l('Portfolio', 'Portfolio'), text: l('Objekti na kojima smo radili', 'Sites we have worked on'), link: link('pages', pageIds.portfolio) },
-          { title: l('O nama', 'About us'), text: l('Licencirani partner Key Automation', 'Licensed Key Automation partner'), link: link('pages', pageIds.about) },
+          { title: l('O nama', 'About us'), text: l('Ovlašćeni partner Key Automation', 'Authorised Key Automation partner'), link: link('pages', pageIds.about) },
           { title: l('Kontakt', 'Contact'), text: l('Zatražite besplatnu ponudu', 'Request a free quote'), link: link('pages', pageIds.contact) },
         ],
       },

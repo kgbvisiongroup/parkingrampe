@@ -227,7 +227,7 @@ export const services = [
     features: [
       { icon: 'car', title: l('Besplatan izlazak na teren', 'Free site visit'), text: l('Obilazimo lokaciju pre ponude.', 'We visit the site before quoting.') },
       { icon: 'timer', title: l('Ponuda za 48h', 'Quote within 48h'), text: l('Ponuda sa tačnom cenom opreme i ugradnje.', 'An exact price for equipment and installation.') },
-      { icon: 'shield', title: l('Licenca MUP-a', 'Licensed installer'), text: l('Licencirani za sisteme tehničke zaštite.', 'Licensed for technical security systems.') },
+      { icon: 'shield', title: l('Garancija i servis', 'Warranty and service'), text: l('Garancija na opremu i ugradnju, servis širom Srbije.', 'Warranty on equipment and installation, service across Serbia.') },
       { icon: 'smartphone', title: l('Upravljanje telefonom', 'Phone control'), text: l('Key Automation aplikacija za rampe i kapije.', 'One Key Automation app for barriers and gates.') },
     ],
     whyHeading: l('Zašto ugradnja rampe sa KGB Vision Group?', 'Why choose KGB Vision Group?'),
@@ -255,8 +255,8 @@ export const services = [
     meta: {
       title: l('Rampe za parking – ugradnja i servis', 'Parking barriers – installation and service'),
       description: l(
-        'Ugradnja automatskih rampi za parking na daljinski za zgrade, firme i parkirališta. Key Automation oprema, licenca MUP-a i besplatna ponuda za 48h.',
-        'Automatic parking barriers with remote control for buildings, companies and car parks. Key Automation equipment, licensed installer, free quote within 48h.',
+        'Ugradnja automatskih rampi za parking na daljinski za zgrade, firme i parkirališta. Key Automation oprema, upravljanje telefonom i besplatna ponuda za 48h.',
+        'Automatic parking barriers with remote control for buildings, companies and car parks. Key Automation equipment, phone control, free quote within 48h.',
       ),
     },
   },
@@ -339,8 +339,8 @@ export const services = [
     meta: {
       title: l('Motori za klizne i krilne kapije sa ugradnjom', 'Sliding and swing gate motors, installed'),
       description: l(
-        'Prodaja i ugradnja motora za klizne i krilne kapije Key Automation, sa otvaranjem na daljinski i preko telefona. Licenca MUP-a i ponuda za 48h.',
-        'Key Automation motors for sliding and swing gates, sold and installed, with remote and phone control. Licensed installer, quote within 48h.',
+        'Prodaja i ugradnja motora za klizne i krilne kapije Key Automation, sa otvaranjem na daljinski i preko telefona. Garancija i servis i ponuda za 48h.',
+        'Key Automation motors for sliding and swing gates, sold and installed, with remote and phone control. Free quote within 48h.',
       ),
     },
   },
@@ -426,8 +426,8 @@ export const services = [
     meta: {
       title: l('Kontrola pristupa i evidencija radnog vremena', 'Access control and time attendance'),
       description: l(
-        'Ugradnja sistema za kontrolu pristupa i evidenciju radnog vremena zaposlenih – kartice, PIN kod, otisak prsta i telefon. Licenca MUP-a, ponuda za 48h.',
-        'Access control and staff time attendance systems – cards, PIN, fingerprint and phone. Licensed installer, quote within 48h.',
+        'Ugradnja sistema za kontrolu pristupa i evidenciju radnog vremena zaposlenih – kartice, PIN kod, otisak prsta i telefon. Garancija i servis, ponuda za 48h.',
+        'Access control and staff time attendance systems – cards, PIN, fingerprint and phone. Free quote within 48h.',
       ),
     },
   },
