@@ -203,6 +203,7 @@ export interface Page {
         | ClientsBlock
         | ContactBlock
         | MapBlock
+        | LinkBoxesBlock
       )[]
     | null;
   meta?: {
@@ -437,6 +438,7 @@ export interface Service {
         | ClientsBlock
         | ContactBlock
         | MapBlock
+        | LinkBoxesBlock
       )[]
     | null;
   meta?: {
@@ -738,7 +740,7 @@ export interface CategoryGridBlock {
   heading?: string | null;
   source?: ('top' | 'selected') | null;
   categories?: (number | ProductCategory)[] | null;
-  columns?: ('2' | '3' | '4') | null;
+  columns?: ('2' | '3' | '4' | '5') | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'categoryGrid';
@@ -1076,6 +1078,52 @@ export interface MapBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LinkBoxesBlock".
+ */
+export interface LinkBoxesBlock {
+  heading?: string | null;
+  items?:
+    | {
+        title: string;
+        text?: string | null;
+        link?: {
+          type?: ('internal' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: number | Page;
+              } | null)
+            | ({
+                relationTo: 'services';
+                value: number | Service;
+              } | null)
+            | ({
+                relationTo: 'product-categories';
+                value: number | ProductCategory;
+              } | null)
+            | ({
+                relationTo: 'products';
+                value: number | Product;
+              } | null)
+            | ({
+                relationTo: 'projects';
+                value: number | Project;
+              } | null);
+          /**
+           * E.g. /en/contact, https://… or tel:+381…
+           */
+          url?: string | null;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'linkBoxes';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "clients".
  */
 export interface Client {
@@ -1319,6 +1367,7 @@ export interface PagesSelect<T extends boolean = true> {
         clients?: T | ClientsBlockSelect<T>;
         contact?: T | ContactBlockSelect<T>;
         map?: T | MapBlockSelect<T>;
+        linkBoxes?: T | LinkBoxesBlockSelect<T>;
       };
   meta?:
     | T
@@ -1575,6 +1624,30 @@ export interface MapBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LinkBoxesBlock_select".
+ */
+export interface LinkBoxesBlockSelect<T extends boolean = true> {
+  heading?: T;
+  items?:
+    | T
+    | {
+        title?: T;
+        text?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "services_select".
  */
 export interface ServicesSelect<T extends boolean = true> {
@@ -1619,6 +1692,7 @@ export interface ServicesSelect<T extends boolean = true> {
         clients?: T | ClientsBlockSelect<T>;
         contact?: T | ContactBlockSelect<T>;
         map?: T | MapBlockSelect<T>;
+        linkBoxes?: T | LinkBoxesBlockSelect<T>;
       };
   meta?:
     | T
@@ -1966,6 +2040,7 @@ export interface Home {
         | ClientsBlock
         | ContactBlock
         | MapBlock
+        | LinkBoxesBlock
       )[]
     | null;
   meta?: {
@@ -2224,6 +2299,7 @@ export interface HomeSelect<T extends boolean = true> {
         clients?: T | ClientsBlockSelect<T>;
         contact?: T | ContactBlockSelect<T>;
         map?: T | MapBlockSelect<T>;
+        linkBoxes?: T | LinkBoxesBlockSelect<T>;
       };
   meta?:
     | T
