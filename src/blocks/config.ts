@@ -278,6 +278,32 @@ export const LinkBoxesBlock: Block = {
   ],
 }
 
+/** Photos (opened in a lightbox) and videos, e.g. the portfolio gallery. */
+export const MediaGalleryBlock: Block = {
+  slug: 'mediaGallery',
+  interfaceName: 'MediaGalleryBlock',
+  labels: { singular: t('Galerija (fotografije i video)', 'Gallery (photos and video)'), plural: t('Galerije', 'Galleries') },
+  fields: [
+    heading,
+    {
+      name: 'images',
+      type: 'upload',
+      relationTo: 'media',
+      hasMany: true,
+      label: t('Fotografije', 'Photos'),
+      filterOptions: { mimeType: { contains: 'image' } },
+    },
+    {
+      name: 'videos',
+      type: 'upload',
+      relationTo: 'media',
+      hasMany: true,
+      label: t('Video snimci (MP4)', 'Videos (MP4)'),
+      filterOptions: { mimeType: { contains: 'video' } },
+    },
+  ],
+}
+
 export const RichTextBlock: Block = {
   slug: 'richText',
   interfaceName: 'RichTextBlock',
@@ -346,6 +372,7 @@ export const allBlocks: Block[] = [
   ContactBlock,
   MapBlock,
   LinkBoxesBlock,
+  MediaGalleryBlock,
 ]
 
 export function layoutField(description?: Record<string, string>): Field {

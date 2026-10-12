@@ -204,6 +204,7 @@ export interface Page {
         | ContactBlock
         | MapBlock
         | LinkBoxesBlock
+        | MediaGalleryBlock
       )[]
     | null;
   meta?: {
@@ -439,6 +440,7 @@ export interface Service {
         | ContactBlock
         | MapBlock
         | LinkBoxesBlock
+        | MediaGalleryBlock
       )[]
     | null;
   meta?: {
@@ -1124,6 +1126,18 @@ export interface LinkBoxesBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MediaGalleryBlock".
+ */
+export interface MediaGalleryBlock {
+  heading?: string | null;
+  images?: (number | Media)[] | null;
+  videos?: (number | Media)[] | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'mediaGallery';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "clients".
  */
 export interface Client {
@@ -1368,6 +1382,7 @@ export interface PagesSelect<T extends boolean = true> {
         contact?: T | ContactBlockSelect<T>;
         map?: T | MapBlockSelect<T>;
         linkBoxes?: T | LinkBoxesBlockSelect<T>;
+        mediaGallery?: T | MediaGalleryBlockSelect<T>;
       };
   meta?:
     | T
@@ -1648,6 +1663,17 @@ export interface LinkBoxesBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MediaGalleryBlock_select".
+ */
+export interface MediaGalleryBlockSelect<T extends boolean = true> {
+  heading?: T;
+  images?: T;
+  videos?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "services_select".
  */
 export interface ServicesSelect<T extends boolean = true> {
@@ -1693,6 +1719,7 @@ export interface ServicesSelect<T extends boolean = true> {
         contact?: T | ContactBlockSelect<T>;
         map?: T | MapBlockSelect<T>;
         linkBoxes?: T | LinkBoxesBlockSelect<T>;
+        mediaGallery?: T | MediaGalleryBlockSelect<T>;
       };
   meta?:
     | T
@@ -2041,6 +2068,7 @@ export interface Home {
         | ContactBlock
         | MapBlock
         | LinkBoxesBlock
+        | MediaGalleryBlock
       )[]
     | null;
   meta?: {
@@ -2300,6 +2328,7 @@ export interface HomeSelect<T extends boolean = true> {
         contact?: T | ContactBlockSelect<T>;
         map?: T | MapBlockSelect<T>;
         linkBoxes?: T | LinkBoxesBlockSelect<T>;
+        mediaGallery?: T | MediaGalleryBlockSelect<T>;
       };
   meta?:
     | T
