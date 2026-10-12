@@ -108,12 +108,6 @@ export function Footer({ locale, settings, logoUrl, dict, columns }: Props) {
           <p>
             © {year} {settings.legalName || settings.siteName}. {dict.rights}
           </p>
-          {settings.pib && (
-            <p>
-              PIB {settings.pib}
-              {settings.mb ? ` · MB ${settings.mb}` : ''}
-            </p>
-          )}
         </div>
       </div>
     </footer>
