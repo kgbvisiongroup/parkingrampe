@@ -60,6 +60,7 @@ export default buildConfig({
         Logo: '/components/admin/Brand#Logo',
         Icon: '/components/admin/Brand#Icon',
       },
+      beforeLogin: ['/components/admin/LoginIntro#LoginIntro'],
       afterNavLinks: ['/components/admin/Inbox#InboxNav'],
       beforeDashboard: ['/components/admin/Inbox#InboxDashboard'],
       views: {
@@ -70,6 +71,7 @@ export default buildConfig({
   i18n: {
     supportedLanguages: { 'rs-latin': rsLatin, en },
     fallbackLanguage: 'rs-latin',
+    translations: { 'rs-latin': { authentication: { login: 'Prijavi se' } } },
   },
   localization: {
     locales: [

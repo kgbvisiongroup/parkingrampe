@@ -7,11 +7,11 @@ const Shield = ({ size }: { size: number }) => (
 
 export function Logo() {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-      <Shield size={44} />
-      <div style={{ lineHeight: 1.1 }}>
-        <div style={{ fontSize: 26, fontWeight: 800, letterSpacing: '0.02em' }}>KGB Automation</div>
-        <div style={{ fontSize: 13, opacity: 0.6 }}>Upravljanje sajtom</div>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+      <Shield size={30} />
+      <div style={{ lineHeight: 1.05 }}>
+        <div style={{ fontSize: 17, fontWeight: 800, letterSpacing: '0.02em' }}>KGB</div>
+        <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.28em', opacity: 0.55 }}>AUTOMATION</div>
       </div>
     </div>
   )
