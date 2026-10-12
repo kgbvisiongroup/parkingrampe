@@ -1,5 +1,6 @@
 'use client'
 
+import { useAuth } from '@payloadcms/ui'
 import { useEffect, useRef, useState } from 'react'
 
 type Counts = { chats: number; inquiries: number }
@@ -96,35 +97,66 @@ export function InboxNav() {
   )
 }
 
-/** On the dashboard: two large cards that link to unread chats and new inquiries. */
+function greeting(h: number) {
+  if (h < 5 || h >= 18) return 'Dobro veče'
+  if (h < 12) return 'Dobro jutro'
+  return 'Dobar dan'
+}
+
+const icons = {
+  chat: <path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z" />,
+  inbox: <path d="M3 13h5l2 3h4l2-3h5M5 5h14l2 8v6H3v-6l2-8Z" />,
+  upload: <path d="M12 16V4m0 0-4 4m4-4 4 4M4 16v4h16v-4" />,
+}
+
+const StatIcon = ({ name }: { name: keyof typeof icons }) => (
+  <span className="kgb-stat__icon">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      {icons[name]}
+    </svg>
+  </span>
+)
+
+/** Dashboard header: date, greeting with the user's name and cards for new chats and inquiries. */
 export function InboxDashboard() {
   const counts = useCounts()
-  const card = (href: string, title: string, n: number | undefined, empty: string) => (
-    <a
-      href={href}
-      style={{
-        flex: '1 1 260px',
-        display: 'block',
-        padding: '20px 22px',
-        borderRadius: 8,
-        border: '1px solid var(--theme-elevation-150)',
-        background: n ? 'var(--theme-elevation-50)' : 'transparent',
-        color: 'inherit',
-        textDecoration: 'none',
-      }}
-    >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-        <strong style={{ fontSize: 28 }}>{n ?? '–'}</strong>
-        {!!n && <span style={badge}>novo</span>}
+  const { user } = useAuth<{ name?: string | null; email?: string }>()
+  const [now, setNow] = useState<Date | null>(null)
+  useEffect(() => setNow(new Date()), [])
+
+  const name = user?.name || user?.email?.split('@')[0] || ''
+  const date = now?.toLocaleDateString('sr-Latn-RS', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+
+  const stat = (href: string, icon: keyof typeof icons, value: number | string | undefined, label: string, badgeText?: string) => (
+    <a href={href} className="kgb-stat">
+      <div className="kgb-stat__top">
+        <StatIcon name={icon} />
+        <span className="kgb-stat__value">{value ?? '–'}</span>
+        {badgeText && <span className="kgb-stat__badge">{badgeText}</span>}
       </div>
-      <div style={{ marginTop: 4, fontWeight: 600 }}>{title}</div>
-      <div style={{ fontSize: 13, color: 'var(--theme-elevation-500)', marginTop: 2 }}>{n ? 'Kliknite da otvorite' : empty}</div>
+      <div className="kgb-stat__label">{label}</div>
     </a>
   )
+
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, marginBottom: 32 }}>
-      {card('/admin/collections/chats?where[unread][equals]=true', 'Nepročitane chat poruke', counts?.chats, 'Nema novih poruka')}
-      {card('/admin/collections/inquiries?where[status][equals]=new', 'Novi upiti sa kontakt forme', counts?.inquiries, 'Nema novih upita')}
-    </div>
+    <>
+      <div className="kgb-hero">
+        <div className="kgb-hero__date">{date ?? '\u00a0'}</div>
+        <h1 className="kgb-hero__title">
+          {now ? greeting(now.getHours()) : 'Dobrodošli'}
+          {name && (
+            <>
+              , <span>{name}</span>
+            </>
+          )}
+        </h1>
+        <div className="kgb-hero__sub">Upravljanje sajtom parkingrampe.rs na jednom mestu.</div>
+      </div>
+      <div className="kgb-stats">
+        {stat('/admin/collections/chats?where[unread][equals]=true', 'chat', counts?.chats, 'Nepročitane chat poruke', counts?.chats ? 'Novo' : undefined)}
+        {stat('/admin/collections/inquiries?where[status][equals]=new', 'inbox', counts?.inquiries, 'Novi upiti sa kontakt forme', counts?.inquiries ? 'Novo' : undefined)}
+        {stat('/admin/uvoz-proizvoda', 'upload', 'Excel', 'Uvoz proizvoda')}
+      </div>
+    </>
   )
 }

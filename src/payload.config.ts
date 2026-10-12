@@ -52,6 +52,7 @@ export default buildConfig({
   admin: {
     user: Users.slug,
     avatar: 'default',
+    theme: 'dark',
     importMap: { baseDir: path.resolve(dirname) },
     meta: { titleSuffix: '– KGB CMS' },
     components: {
