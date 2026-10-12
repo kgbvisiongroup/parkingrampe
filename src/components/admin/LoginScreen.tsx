@@ -78,11 +78,26 @@ export function LoginScreen({ redirectTo }: { redirectTo: string }) {
         return fail('Pogrešan email ili lozinka.')
       }
 
+      const login = (await res.json().catch(() => null)) as { token?: string; exp?: number } | null
+
       // The password was right. Make sure the browser kept the session cookie,
       // otherwise the admin panel would just send us back here.
-      const me = await fetch('/api/users/me', { credentials: 'include', cache: 'no-store' })
-      const meBody = await me.json().catch(() => null)
-      if (!meBody?.user) {
+      const isSignedIn = async () => {
+        const me = await fetch('/api/users/me', { credentials: 'include', cache: 'no-store' })
+        const body = await me.json().catch(() => null)
+        return !!body?.user
+      }
+      let signedIn = await isSignedIn()
+
+      // Some firewalls/proxies remove the Set-Cookie header from the response.
+      // The token is also in the response body, so set the same cookie here.
+      if (!signedIn && login?.token) {
+        const expires = login.exp ? new Date(login.exp * 1000).toUTCString() : ''
+        document.cookie = `kgb-token=${login.token}; Path=/; SameSite=Lax${expires ? `; Expires=${expires}` : ''}`
+        signedIn = await isSignedIn()
+      }
+
+      if (!signedIn) {
         // Payload accepts the session only from the site address set on the server.
         const site = (process.env.NEXT_PUBLIC_SITE_URL || '').replace(/\/$/, '')
         if (site && site !== window.location.origin) {
