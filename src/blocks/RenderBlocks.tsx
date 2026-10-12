@@ -11,7 +11,9 @@ import type {
   HeroBlock,
   ImageTilesBlock,
   IntroBandBlock,
+  LinkBoxesBlock,
   MapBlock,
+  MediaGalleryBlock,
   Product,
   ProductCategory,
   ProductTilesBlock,
@@ -24,6 +26,7 @@ import type {
 import { ClientLogos } from '@/components/ClientLogos'
 import { ContactPanel } from '@/components/ContactPanel'
 import { FaqList } from '@/components/FaqList'
+import { Gallery } from '@/components/Gallery'
 import { HeroSlider } from '@/components/HeroSlider'
 import { JsonLd } from '@/components/JsonLd'
 import { RichText } from '@/components/RichText'
@@ -39,6 +42,7 @@ const cardWidth: Record<string, string> = {
   '2': 'sm:w-[calc(50%-8px)]',
   '3': 'sm:w-[calc(50%-8px)] lg:w-[calc(33.333%-11px)]',
   '4': 'sm:w-[calc(50%-8px)] lg:w-[calc(25%-12px)]',
+  '5': 'sm:w-[calc(50%-8px)] lg:w-[calc(20%-13px)]',
 }
 
 export type LayoutBlock =
@@ -57,6 +61,8 @@ export type LayoutBlock =
   | ClientsBlock
   | ContactBlock
   | MapBlock
+  | LinkBoxesBlock
+  | MediaGalleryBlock
 
 type Ctx = { locale: Locale; settings: Setting; first: boolean }
 
@@ -103,6 +109,10 @@ async function BlockSwitch({ block, ctx }: { block: LayoutBlock; ctx: Ctx }) {
       return <ClientsSection block={block} ctx={ctx} />
     case 'contact':
       return <ContactSection block={block} ctx={ctx} />
+    case 'mediaGallery':
+      return <MediaGallery block={block} ctx={ctx} />
+    case 'linkBoxes':
+      return <LinkBoxes block={block} ctx={ctx} />
     case 'map':
       return <MapSection block={block} ctx={ctx} />
     default:
@@ -408,6 +418,79 @@ function MapSection({ block, ctx }: { block: MapBlock; ctx: Ctx }) {
         className="block w-full border-0"
         style={{ height: block.height || 440 }}
       />
+    </section>
+  )
+}
+
+function LinkBoxes({ block, ctx }: { block: LinkBoxesBlock; ctx: Ctx }) {
+  if (!block.items?.length) return null
+  return (
+    <section className="bg-white py-12 md:py-14">
+      <div className="wrap max-w-[1000px]">
+        {block.heading && <SectionHeading className="mb-6">{block.heading}</SectionHeading>}
+        <ul className="flex flex-wrap justify-center border-l border-t border-line">
+          {block.items.map((it, i) => {
+            const p = linkProps(it.link, ctx.locale)
+            const body = (
+              <>
+                <span className="block text-[13px] font-extrabold text-ink">{it.title}</span>
+                {it.text && <span className="mt-1 block text-[12.5px] leading-snug text-muted">{it.text}</span>}
+              </>
+            )
+            return (
+              <li key={it.id ?? i} className="w-1/2 border-b border-r border-line text-center sm:w-1/3 lg:flex-1">
+                {p?.href ? (
+                  <Link href={p.href} target={p.target} className="block h-full px-4 py-5 transition-colors hover:bg-band">
+                    {body}
+                  </Link>
+                ) : (
+                  <div className="px-4 py-5">{body}</div>
+                )}
+              </li>
+            )
+          })}
+        </ul>
+      </div>
+    </section>
+  )
+}
+
+function MediaGallery({ block, ctx }: { block: MediaGalleryBlock; ctx: Ctx }) {
+  const dict = getDictionary(ctx.locale)
+  const images = (block.images ?? [])
+    .map((m) => asMedia(m))
+    .filter((m): m is NonNullable<typeof m> => !!m?.url)
+    .map((m) => ({
+      src: mediaUrl(m, 'card')!,
+      full: mediaUrl(m, 'hero')!,
+      alt: m.alt || block.heading || '',
+      width: m.sizes?.card?.width ?? m.width,
+      height: m.sizes?.card?.height ?? m.height,
+    }))
+  const videos = (block.videos ?? []).map((m) => asMedia(m)).filter((m): m is NonNullable<typeof m> => !!m?.url)
+  if (!images.length && !videos.length) return null
+  return (
+    <section className="bg-white py-12 md:py-14">
+      <div className="wrap max-w-[1000px]">
+        {block.heading && <SectionHeading className="mb-7">{block.heading}</SectionHeading>}
+        {videos.length > 0 && (
+          <div className="mb-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {videos.map((v) => (
+              <video
+                key={v.id}
+                controls
+                playsInline
+                preload="metadata"
+                className="aspect-video w-full rounded-lg bg-black object-contain"
+                aria-label={v.alt || block.heading || 'Video'}
+              >
+                <source src={mediaUrl(v)!} type={v.mimeType === 'video/quicktime' ? 'video/mp4' : v.mimeType || 'video/mp4'} />
+              </video>
+            ))}
+          </div>
+        )}
+        {images.length > 0 && <Gallery images={images} closeLabel={dict.close} />}
+      </div>
     </section>
   )
 }

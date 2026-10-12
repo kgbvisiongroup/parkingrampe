@@ -32,6 +32,7 @@ import { Icon as Icon_81fda60f3e3709e861f40982a767707d } from '../../../componen
 import { Logo as Logo_81fda60f3e3709e861f40982a767707d } from '../../../components/admin/Brand'
 import { InboxNav as InboxNav_7b2a01640c5c0617f429f736e40f531c } from '../../../components/admin/Inbox'
 import { InboxDashboard as InboxDashboard_7b2a01640c5c0617f429f736e40f531c } from '../../../components/admin/Inbox'
+import { LoginIntro as LoginIntro_7b77c0a8bf5649eadd846d28c5d927eb } from '../../../components/admin/LoginIntro'
 import { ImportView as ImportView_9f4c1248a9594c235a871ba4f4fe9e66 } from '../../../components/admin/ImportView'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
@@ -71,6 +72,7 @@ export const importMap = {
   "/components/admin/Brand#Logo": Logo_81fda60f3e3709e861f40982a767707d,
   "/components/admin/Inbox#InboxNav": InboxNav_7b2a01640c5c0617f429f736e40f531c,
   "/components/admin/Inbox#InboxDashboard": InboxDashboard_7b2a01640c5c0617f429f736e40f531c,
+  "/components/admin/LoginIntro#LoginIntro": LoginIntro_7b77c0a8bf5649eadd846d28c5d927eb,
   "/components/admin/ImportView#ImportView": ImportView_9f4c1248a9594c235a871ba4f4fe9e66,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }

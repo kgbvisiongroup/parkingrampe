@@ -23,7 +23,7 @@ export const Media: CollectionConfig = {
   ],
   upload: {
     staticDir: 'media',
-    mimeTypes: ['image/*', 'application/pdf'],
+    mimeTypes: ['image/*', 'application/pdf', 'video/mp4', 'video/quicktime', 'video/webm'],
     focalPoint: true,
     formatOptions: { format: 'webp', options: { quality: 82 } },
     imageSizes: [

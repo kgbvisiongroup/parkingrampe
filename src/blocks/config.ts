@@ -103,7 +103,7 @@ export const CategoryGridBlock: Block = {
       type: 'select',
       label: t('Kolona', 'Columns'),
       defaultValue: '4',
-      options: ['2', '3', '4'],
+      options: ['2', '3', '4', '5'],
     },
   ],
 }
@@ -256,6 +256,54 @@ export const ProjectsBlock: Block = {
   ],
 }
 
+/** A row of framed boxes with a title, short text and a link (like "Risorse utili" on keyautomation.com). */
+export const LinkBoxesBlock: Block = {
+  slug: 'linkBoxes',
+  interfaceName: 'LinkBoxesBlock',
+  labels: { singular: t('Korisni linkovi', 'Useful links'), plural: t('Korisni linkovi', 'Useful links') },
+  fields: [
+    heading,
+    {
+      name: 'items',
+      type: 'array',
+      label: t('Okviri', 'Boxes'),
+      labels: { singular: t('Okvir', 'Box'), plural: t('Okviri', 'Boxes') },
+      maxRows: 6,
+      fields: [
+        { name: 'title', type: 'text', localized: true, required: true, label: t('Naslov', 'Title') },
+        { name: 'text', type: 'textarea', localized: true, label: t('Kratak tekst', 'Short text') },
+        linkGroup('link', { withLabel: false, label: t('Link', 'Link') }),
+      ],
+    },
+  ],
+}
+
+/** Photos (opened in a lightbox) and videos, e.g. the portfolio gallery. */
+export const MediaGalleryBlock: Block = {
+  slug: 'mediaGallery',
+  interfaceName: 'MediaGalleryBlock',
+  labels: { singular: t('Galerija (fotografije i video)', 'Gallery (photos and video)'), plural: t('Galerije', 'Galleries') },
+  fields: [
+    heading,
+    {
+      name: 'images',
+      type: 'upload',
+      relationTo: 'media',
+      hasMany: true,
+      label: t('Fotografije', 'Photos'),
+      filterOptions: { mimeType: { contains: 'image' } },
+    },
+    {
+      name: 'videos',
+      type: 'upload',
+      relationTo: 'media',
+      hasMany: true,
+      label: t('Video snimci (MP4)', 'Videos (MP4)'),
+      filterOptions: { mimeType: { contains: 'video' } },
+    },
+  ],
+}
+
 export const RichTextBlock: Block = {
   slug: 'richText',
   interfaceName: 'RichTextBlock',
@@ -323,6 +371,8 @@ export const allBlocks: Block[] = [
   ClientsBlock,
   ContactBlock,
   MapBlock,
+  LinkBoxesBlock,
+  MediaGalleryBlock,
 ]
 
 export function layoutField(description?: Record<string, string>): Field {
