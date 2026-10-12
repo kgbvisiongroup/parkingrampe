@@ -49,6 +49,8 @@ const email = process.env.SMTP_HOST
 
 export default buildConfig({
   serverURL: process.env.NEXT_PUBLIC_SITE_URL || '',
+  // Own cookie name: another Payload site on the same server/IP (cookies ignore the port) must not clash.
+  cookiePrefix: 'kgb',
   admin: {
     user: Users.slug,
     avatar: 'default',
