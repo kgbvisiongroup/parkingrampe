@@ -1,0 +1,561 @@
+:root {
+  --lg-bg: #070a09;
+  --lg-card: rgb(16 21 19 / 0.72);
+  --lg-line: rgb(255 255 255 / 0.08);
+  --lg-text: #eef2f0;
+  --lg-muted: #8d9a94;
+  --lg-green: #46b97a;
+  --lg-green-2: #5fd39a;
+  --lg-red: #ff6b6b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+.kgb-login-body {
+  min-height: 100vh;
+  background: var(--lg-bg);
+  color: var(--lg-text);
+  font-family: 'Plus Jakarta Sans Variable', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ---------- animated background ---------- */
+.lg-scene {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.lg-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.55;
+  will-change: transform;
+}
+
+.lg-blob--1 {
+  width: 620px;
+  height: 620px;
+  left: -160px;
+  top: -180px;
+  background: radial-gradient(circle, rgb(70 185 122 / 0.55), transparent 65%);
+  animation: lg-drift-1 18s ease-in-out infinite alternate;
+}
+
+.lg-blob--2 {
+  width: 520px;
+  height: 520px;
+  right: -140px;
+  bottom: -160px;
+  background: radial-gradient(circle, rgb(31 122 140 / 0.5), transparent 65%);
+  animation: lg-drift-2 22s ease-in-out infinite alternate;
+}
+
+.lg-blob--3 {
+  width: 380px;
+  height: 380px;
+  left: 45%;
+  top: 40%;
+  background: radial-gradient(circle, rgb(95 211 154 / 0.28), transparent 65%);
+  animation: lg-drift-3 26s ease-in-out infinite alternate;
+}
+
+.lg-grid {
+  position: absolute;
+  inset: -80px;
+  background-image:
+    linear-gradient(rgb(255 255 255 / 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.04) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse at 50% 45%, #000 15%, transparent 70%);
+  animation: lg-grid 30s linear infinite;
+}
+
+/* A barrier arm that rises and falls: a nod to what the company installs. */
+.lg-barrier {
+  position: absolute;
+  left: 8%;
+  bottom: 9%;
+  width: 260px;
+  height: 120px;
+  opacity: 0.22;
+}
+
+@media (max-width: 959px) {
+  .lg-barrier {
+    display: none;
+  }
+}
+
+.lg-barrier__arm {
+  transform-origin: 18px 96px;
+  animation: lg-arm 7s ease-in-out infinite;
+}
+
+.lg-barrier__light {
+  animation: lg-blink 7s ease-in-out infinite;
+}
+
+@keyframes lg-drift-1 {
+  to {
+    transform: translate(140px, 90px) scale(1.12);
+  }
+}
+@keyframes lg-drift-2 {
+  to {
+    transform: translate(-120px, -80px) scale(1.08);
+  }
+}
+@keyframes lg-drift-3 {
+  0% {
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+  100% {
+    transform: translate(-20%, -70%) scale(1.15);
+  }
+}
+@keyframes lg-grid {
+  to {
+    transform: translate(56px, 56px);
+  }
+}
+@keyframes lg-arm {
+  0%,
+  18% {
+    transform: rotate(0deg);
+  }
+  38%,
+  70% {
+    transform: rotate(-78deg);
+  }
+  90%,
+  100% {
+    transform: rotate(0deg);
+  }
+}
+@keyframes lg-blink {
+  0%,
+  18%,
+  90%,
+  100% {
+    fill: #ff6b6b;
+  }
+  38%,
+  70% {
+    fill: #5fd39a;
+  }
+}
+
+/* ---------- layout ---------- */
+.lg-wrap {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  min-height: 100vh;
+  grid-template-columns: 1fr;
+  align-items: center;
+  gap: 48px;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+@media (min-width: 960px) {
+  .lg-wrap {
+    grid-template-columns: 1.1fr 0.9fr;
+    padding: 40px 48px;
+  }
+}
+
+.lg-brand {
+  display: none;
+}
+
+@media (min-width: 960px) {
+  .lg-brand {
+    display: block;
+  }
+}
+
+.lg-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.lg-logo__text strong {
+  display: block;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+.lg-logo__text span {
+  display: block;
+  margin-top: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  color: var(--lg-muted);
+}
+
+.lg-headline {
+  margin: 40px 0 14px;
+  font-size: clamp(34px, 3.6vw, 50px);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+}
+
+.lg-headline em {
+  font-style: normal;
+  background: linear-gradient(90deg, var(--lg-green-2), #9be7c0 50%, var(--lg-green));
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: lg-shine 6s linear infinite;
+}
+
+@keyframes lg-shine {
+  to {
+    background-position: 200% center;
+  }
+}
+
+.lg-lead {
+  max-width: 460px;
+  margin: 0 0 30px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--lg-muted);
+}
+
+.lg-features {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lg-features li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: #c9d3ce;
+}
+
+.lg-features i {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: rgb(70 185 122 / 0.12);
+  border: 1px solid rgb(70 185 122 / 0.25);
+  color: var(--lg-green-2);
+}
+
+/* ---------- card ---------- */
+.lg-card {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 34px 30px 28px;
+  border-radius: 22px;
+  background: var(--lg-card);
+  border: 1px solid var(--lg-line);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow:
+    0 40px 100px -30px rgb(0 0 0 / 0.8),
+    inset 0 1px 0 rgb(255 255 255 / 0.05);
+}
+
+/* Glowing edge that slowly travels around the card */
+.lg-card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(from var(--lg-angle, 0deg), transparent 0 70%, rgb(95 211 154 / 0.7) 80%, transparent 90%);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: lg-spin 6s linear infinite;
+}
+
+@property --lg-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes lg-spin {
+  to {
+    --lg-angle: 360deg;
+  }
+}
+
+.lg-card__mobile-logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+@media (min-width: 960px) {
+  .lg-card__mobile-logo {
+    display: none;
+  }
+}
+
+.lg-eyebrow {
+  margin: 0;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--lg-green-2);
+}
+
+.lg-title {
+  margin: 8px 0 6px;
+  text-align: center;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.lg-sub {
+  margin: 0 0 26px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--lg-muted);
+}
+
+.lg-field {
+  display: block;
+  margin-bottom: 16px;
+}
+
+.lg-label {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #c9d3ce;
+}
+
+.lg-input-wrap {
+  position: relative;
+}
+
+.lg-input-wrap > svg {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--lg-muted);
+  transition: color 0.2s;
+  pointer-events: none;
+}
+
+.lg-input {
+  width: 100%;
+  height: 48px;
+  padding: 0 44px;
+  border-radius: 12px;
+  border: 1px solid var(--lg-line);
+  background: rgb(8 12 10 / 0.7);
+  color: var(--lg-text);
+  font: inherit;
+  font-size: 14.5px;
+  outline: none;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s,
+    background 0.2s;
+}
+
+.lg-input::placeholder {
+  color: #5d6a64;
+}
+
+.lg-input:hover {
+  border-color: rgb(255 255 255 / 0.16);
+}
+
+.lg-input:focus {
+  border-color: var(--lg-green);
+  background: rgb(8 12 10 / 0.95);
+  box-shadow: 0 0 0 4px rgb(70 185 122 / 0.16);
+}
+
+.lg-input-wrap:focus-within > svg {
+  color: var(--lg-green-2);
+}
+
+.lg-eye {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--lg-muted);
+  cursor: pointer;
+}
+
+.lg-eye:hover {
+  color: var(--lg-text);
+  background: rgb(255 255 255 / 0.05);
+}
+
+.lg-error {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 4px 0 16px;
+  padding: 11px 13px;
+  border-radius: 12px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: #ffd5d5;
+  background: rgb(255 107 107 / 0.1);
+  border: 1px solid rgb(255 107 107 / 0.3);
+}
+
+.lg-error svg {
+  flex: none;
+  margin-top: 1px;
+  color: var(--lg-red);
+}
+
+.lg-button {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  width: 100%;
+  height: 50px;
+  margin-top: 6px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--lg-green-2), var(--lg-green));
+  color: #06130c;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 14px 34px -12px rgb(70 185 122 / 0.7);
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s,
+    filter 0.2s;
+}
+
+.lg-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 18px 40px -12px rgb(70 185 122 / 0.85);
+}
+
+.lg-button:disabled {
+  cursor: progress;
+  filter: saturate(0.7);
+}
+
+/* Light sweep across the button */
+.lg-button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -60%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(100deg, transparent, rgb(255 255 255 / 0.45), transparent);
+  transform: skewX(-20deg);
+  animation: lg-sweep 4.5s ease-in-out infinite;
+}
+
+@keyframes lg-sweep {
+  0%,
+  60% {
+    left: -60%;
+  }
+  100% {
+    left: 130%;
+  }
+}
+
+.lg-button svg {
+  transition: transform 0.2s;
+}
+
+.lg-button:hover svg {
+  transform: translateX(3px);
+}
+
+.lg-spin {
+  animation: lg-rotate 0.8s linear infinite;
+}
+
+@keyframes lg-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.lg-foot {
+  margin: 22px 0 0;
+  text-align: center;
+  font-size: 12px;
+  color: #5d6a64;
+}
+
+.lg-foot a {
+  color: var(--lg-muted);
+  text-decoration: none;
+}
+
+.lg-foot a:hover {
+  color: var(--lg-green-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lg-blob,
+  .lg-grid,
+  .lg-barrier__arm,
+  .lg-barrier__light,
+  .lg-headline em,
+  .lg-card::before,
+  .lg-button::after {
+    animation: none;
+  }
+}
