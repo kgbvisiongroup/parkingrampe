@@ -31,6 +31,8 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       { source: '/', destination: '/sr', permanent: false },
+      // Our own login page (src/app/(prijava)); the ?redirect= parameter is passed along.
+      { source: '/admin/login', destination: '/prijava', permanent: false },
       ...legacyRedirects.flatMap(([from, to]) => [
         { source: from, destination: to, permanent: true },
         { source: `${from}/`, destination: to, permanent: true },
