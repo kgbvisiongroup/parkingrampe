@@ -47,16 +47,28 @@ const email = process.env.SMTP_HOST
     })
   : undefined
 
+/*
+ * Payload's CSRF check accepts the session cookie only when the request carries Origin or
+ * Sec-Fetch-Site. Browsers send Sec-Fetch-Site only over https, so on plain http (the site on
+ * an IP address before the domain) the check would reject every admin request. Over http the
+ * check is therefore off; the cookie is SameSite=Lax, so other sites still cannot use it.
+ * With an https NEXT_PUBLIC_SITE_URL the check is on again.
+ */
+const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || '').replace(/\/$/, '')
+const isHttps = siteUrl.startsWith('https://')
+
 export default buildConfig({
-  serverURL: process.env.NEXT_PUBLIC_SITE_URL || '',
+  serverURL: isHttps ? siteUrl : '',
   // Own cookie name: another Payload site on the same server/IP (cookies ignore the port) must not clash.
   cookiePrefix: 'kgb',
-  // Admin sign-in is accepted only from these addresses (plus NEXT_PUBLIC_SITE_URL), e.g.
+  // Over https, admin sign-in is accepted only from these addresses (plus NEXT_PUBLIC_SITE_URL), e.g.
   // ALLOWED_ORIGINS=http://192.168.20.102:8081,https://parkingrampe.rs
-  csrf: (process.env.ALLOWED_ORIGINS || '')
-    .split(',')
-    .map((o) => o.trim().replace(/\/$/, ''))
-    .filter(Boolean),
+  csrf: isHttps
+    ? (process.env.ALLOWED_ORIGINS || '')
+        .split(',')
+        .map((o) => o.trim().replace(/\/$/, ''))
+        .filter(Boolean)
+    : [],
   admin: {
     user: Users.slug,
     avatar: 'default',
