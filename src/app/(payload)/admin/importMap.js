@@ -26,6 +26,8 @@ import { MetaTitleComponent as MetaTitleComponent_a8a977ebc872c5d5ea7ee689724c08
 import { MetaDescriptionComponent as MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { MetaImageComponent as MetaImageComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { PreviewComponent as PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
+import { ThumbCell as ThumbCell_07f513c68167caf320c51b8dc6c45309 } from '../../../components/admin/ListCells'
+import { RowActionsCell as RowActionsCell_07f513c68167caf320c51b8dc6c45309 } from '../../../components/admin/ListCells'
 import { ImportLink as ImportLink_ca02963731c350ec54c887e190633b35 } from '../../../components/admin/ImportLink'
 import { ChatThread as ChatThread_2f1d58c3b6d98971d2f17c24484f5795 } from '../../../components/admin/ChatThread'
 import { AdminNav as AdminNav_231477f0faa4368be46fd47ffb9da4d9 } from '../../../components/admin/AdminNav'
@@ -67,6 +69,8 @@ export const importMap = {
   "@payloadcms/plugin-seo/client#MetaDescriptionComponent": MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/plugin-seo/client#MetaImageComponent": MetaImageComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/plugin-seo/client#PreviewComponent": PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
+  "/components/admin/ListCells#ThumbCell": ThumbCell_07f513c68167caf320c51b8dc6c45309,
+  "/components/admin/ListCells#RowActionsCell": RowActionsCell_07f513c68167caf320c51b8dc6c45309,
   "/components/admin/ImportLink#ImportLink": ImportLink_ca02963731c350ec54c887e190633b35,
   "/components/admin/ChatThread#ChatThread": ChatThread_2f1d58c3b6d98971d2f17c24484f5795,
   "/components/admin/AdminNav#AdminNav": AdminNav_231477f0faa4368be46fd47ffb9da4d9,
