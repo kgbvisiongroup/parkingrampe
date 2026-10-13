@@ -1052,8 +1052,9 @@ textarea,
     box-shadow 0.2s !important;
 }
 
-input:not(.kgb-palette input):focus,
-textarea:focus,
+/* Only real form inputs: not the search box inside dropdowns or the small title in section headers */
+.field-type__wrap > input:focus,
+.field-type__wrap > textarea:focus,
 .react-select .rs__control--is-focused {
   border-color: var(--kgb-green) !important;
   box-shadow: 0 0 0 4px var(--kgb-green-soft) !important;
@@ -1162,18 +1163,12 @@ textarea:focus,
   transform: translateX(3px);
 }
 
-.field-type input[type='text'],
-.field-type input[type='email'],
-.field-type input[type='number'],
-.field-type input[type='password'],
-.field-type input[type='url'],
-.field-type textarea,
-.field-type .react-select .rs__control {
+.field-type__wrap > input,
+.field-type__wrap > textarea {
   border-radius: 12px !important;
   border: 1px solid var(--kgb-line) !important;
   background: var(--theme-input-bg) !important;
   min-height: 46px;
-  padding-left: 14px;
   transition:
     border-color 0.2s,
     box-shadow 0.25s var(--kgb-ease),
@@ -1183,16 +1178,43 @@ textarea:focus,
   &:hover {
     border-color: var(--kgb-green-line) !important;
   }
+
+  &:focus {
+    box-shadow:
+      0 0 0 4px var(--kgb-green-soft),
+      0 10px 24px -16px rgb(70 185 122 / 0.6) !important;
+    transform: translateY(-1px);
+  }
 }
 
-.field-type input:focus,
-.field-type textarea:focus,
+/* Dropdowns: only the outer box is restyled; the inner search input keeps Payload's own styling */
+.field-type .react-select .rs__control {
+  border-radius: 12px !important;
+  border: 1px solid var(--kgb-line) !important;
+  background: var(--theme-input-bg) !important;
+  min-height: 46px;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.25s var(--kgb-ease) !important;
+
+  &:hover {
+    border-color: var(--kgb-green-line) !important;
+  }
+}
+
 .field-type .react-select .rs__control--is-focused {
-  border-color: var(--kgb-green) !important;
   box-shadow:
     0 0 0 4px var(--kgb-green-soft),
     0 10px 24px -16px rgb(70 185 122 / 0.6) !important;
-  transform: translateY(-1px);
+}
+
+.react-select .rs__input-container input,
+.react-select input {
+  min-height: 0 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  transform: none !important;
 }
 
 /* Rich text editor */

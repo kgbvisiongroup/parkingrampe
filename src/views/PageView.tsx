@@ -2,13 +2,12 @@ import type { Page, Setting } from '@/payload-types'
 import { RenderBlocks, type LayoutBlock } from '@/blocks/RenderBlocks'
 import { ContactPanel } from '@/components/ContactPanel'
 import { JsonLd } from '@/components/JsonLd'
-import { PortfolioGrid } from '@/components/PortfolioGrid'
 import { PortfolioSlider } from '@/components/PortfolioSlider'
 import { RichText } from '@/components/RichText'
 import { PageBanner, SectionHeading } from '@/components/ui'
 import type { Dictionary, Locale } from '@/lib/i18n'
-import { asMedia, focal, mediaUrl } from '@/lib/media'
-import { getProjects, getServices } from '@/lib/payload'
+import { asMedia, mediaUrl } from '@/lib/media'
+import { getProjects } from '@/lib/payload'
 import { paths } from '@/lib/routes'
 import { breadcrumbSchema } from '@/lib/schema'
 import { CatalogView } from './CatalogViews'
@@ -55,8 +54,7 @@ export async function PageView({ page, locale, dict, settings }: Props) {
   }
 
   if (page.template === 'portfolio') {
-    const [projects, services] = await Promise.all([getProjects(locale), getServices(locale)])
-    const used = new Set(projects.map((p) => (typeof p.service === 'object' ? p.service?.id : p.service)))
+    const projects = await getProjects(locale)
     // Slider photos: the page's photo galleries, otherwise the project covers.
     const galleryPhotos = (page.layout ?? []).flatMap((b) => (b.blockType === 'mediaGallery' ? (b.images ?? []) : []))
     const slides = (galleryPhotos.length ? galleryPhotos : projects.map((p) => p.cover))
@@ -69,28 +67,6 @@ export async function PageView({ page, locale, dict, settings }: Props) {
         {head}
         <PortfolioSlider images={slides} prevLabel={locale === 'en' ? 'Previous' : 'Prethodna'} nextLabel={locale === 'en' ? 'Next' : 'Sledeća'} />
         {intro}
-        <section className={`bg-band py-12 ${intro ? '' : ''}`}>
-          <div className="wrap max-w-[1000px]">
-            <PortfolioGrid
-              allLabel={dict.all}
-              filters={services.filter((s) => used.has(s.id)).map((s) => ({ id: s.id, title: s.title }))}
-              items={projects.map((p) => {
-                const svc = typeof p.service === 'object' ? p.service : null
-                return {
-                  id: p.id,
-                  title: p.title,
-                  href: paths.project(locale, p.slug || String(p.id)),
-                  image: mediaUrl(p.cover, 'card'),
-                  alt: asMedia(p.cover)?.alt || p.title,
-                  focal: focal(p.cover),
-                  serviceId: svc?.id ?? (typeof p.service === 'number' ? p.service : null),
-                  serviceTitle: svc?.title,
-                  location: p.location,
-                }
-              })}
-            />
-          </div>
-        </section>
         {blocks}
       </>
     )

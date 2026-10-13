@@ -41,24 +41,32 @@ export function Gallery({ images, closeLabel }: { images: GalleryImage[]; closeL
           <motion.li
             key={img.src + i}
             className="break-inside-avoid"
-            initial={{ opacity: 0, y: 40, scale: 0.92 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: true, margin: '0px 0px -60px 0px' }}
-            transition={{ duration: 0.7, ease: [0.2, 0.7, 0.2, 1], delay: (i % 3) * 0.08 }}
+            // The photo "opens" from the middle while scrolling: clip grows, image settles from a zoom.
+            initial={{ opacity: 0, clipPath: 'inset(16% 16% 16% 16% round 10px)' }}
+            whileInView={{ opacity: 1, clipPath: 'inset(0% 0% 0% 0% round 0px)' }}
+            viewport={{ once: true, margin: '0px 0px -80px 0px' }}
+            transition={{ duration: 1.2, ease: [0.16, 0.8, 0.2, 1], delay: (i % 3) * 0.12 }}
           >
             <button
               type="button"
               onClick={() => setOpen(i)}
               className="group relative block w-full overflow-hidden bg-band"
             >
-              <Image
-                src={img.src}
-                alt={img.alt}
-                width={img.width || 960}
-                height={img.height || 720}
-                sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                className="h-auto w-full transition-transform duration-700 ease-out group-hover:scale-[1.04]"
-              />
+              <motion.div
+                initial={{ scale: 1.22 }}
+                whileInView={{ scale: 1 }}
+                viewport={{ once: true, margin: '0px 0px -80px 0px' }}
+                transition={{ duration: 1.5, ease: [0.16, 0.8, 0.2, 1], delay: (i % 3) * 0.12 }}
+              >
+                <Image
+                  src={img.src}
+                  alt={img.alt}
+                  width={img.width || 960}
+                  height={img.height || 720}
+                  sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                  className="h-auto w-full transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                />
+              </motion.div>
             </button>
           </motion.li>
         ))}
