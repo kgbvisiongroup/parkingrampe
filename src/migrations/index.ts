@@ -1,3 +1,4 @@
+import * as migration_20261013_170000_pocetna_klijenti from './20261013_170000_pocetna_klijenti';
 import * as migration_20261012_143841_initial from './20261012_143841_initial';
 import * as migration_20261012_194417_home_key_layout from './20261012_194417_home_key_layout';
 import * as migration_20261012_201751_portfolio_galerija from './20261012_201751_portfolio_galerija';
@@ -23,5 +24,10 @@ export const migrations = [
     up: migration_20261012_210000_bez_mup_licence.up,
     down: migration_20261012_210000_bez_mup_licence.down,
     name: '20261012_210000_bez_mup_licence'
+  },
+  {
+    up: migration_20261013_170000_pocetna_klijenti.up,
+    down: migration_20261013_170000_pocetna_klijenti.down,
+    name: '20261013_170000_pocetna_klijenti'
   },
 ];

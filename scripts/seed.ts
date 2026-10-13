@@ -500,18 +500,8 @@ async function main() {
         ),
         link: link('pages', pageIds.contact, l('Zatražite ponudu', 'Request a quote')),
       },
+      { blockType: 'clients', heading: l('Naši klijenti', 'Our clients') },
       { blockType: 'map', heading: l('Gde smo', 'Where we are'), height: 440 },
-      {
-        blockType: 'linkBoxes',
-        heading: l('Korisni linkovi', 'Useful links'),
-        items: [
-          { title: l('Katalog proizvoda', 'Product catalogue'), text: l('Motori, rampe, oprema i datasheet-ovi', 'Motors, barriers, accessories and datasheets'), link: link('pages', pageIds.catalog) },
-          { title: l('Usluge', 'Services'), text: l('Ugradnja, servis i održavanje', 'Installation, service and maintenance'), link: link('pages', pageIds.services) },
-          { title: l('Portfolio', 'Portfolio'), text: l('Objekti na kojima smo radili', 'Sites we have worked on'), link: link('pages', pageIds.portfolio) },
-          { title: l('O nama', 'About us'), text: l('Ovlašćeni partner Key Automation', 'Authorised Key Automation partner'), link: link('pages', pageIds.about) },
-          { title: l('Kontakt', 'Contact'), text: l('Zatražite besplatnu ponudu', 'Request a free quote'), link: link('pages', pageIds.contact) },
-        ],
-      },
     ],
     meta: {
       title: l('Parking rampe, motori za kapije i kontrola pristupa | KGB Automation', 'Parking barriers, gate motors and access control | KGB Automation'),
@@ -573,7 +563,7 @@ async function main() {
     phoneDisplay: '066/510-11-50',
     email: 'office@kgb.co.rs',
     address: l('Vojvode Mišića 179, Beograd-Obrenovac', 'Vojvode Mišića 179, Belgrade-Obrenovac'),
-    workingHours: l('Ponedeljak – petak: 08–16h\nSubota i nedelja: ne radimo', 'Monday – Friday: 8am – 4pm\nSaturday and Sunday: closed'),
+    workingHours: l('Ponedeljak – petak: 08–16h\nSubota: Neradna\nNedelja: Neradna', 'Monday – Friday: 8am – 4pm\nSaturday: Closed\nSunday: Closed'),
     mapsUrl: 'https://maps.app.goo.gl/rQS1jHzXkdGGUxUa8',
     mapEmbedUrl: 'https://www.google.com/maps?q=Vojvode+Mi%C5%A1i%C4%87a+179,+Obrenovac&output=embed',
     socials: [
