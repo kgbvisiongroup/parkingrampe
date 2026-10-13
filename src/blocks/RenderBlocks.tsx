@@ -23,6 +23,7 @@ import type {
   Setting,
   TextImageBlock,
 } from '@/payload-types'
+import { AutoplayVideo } from '@/components/AutoplayVideo'
 import { ClientLogos } from '@/components/ClientLogos'
 import { ContactPanel } from '@/components/ContactPanel'
 import { FaqList } from '@/components/FaqList'
@@ -476,16 +477,13 @@ function MediaGallery({ block, ctx }: { block: MediaGalleryBlock; ctx: Ctx }) {
         {videos.length > 0 && (
           <div className="mb-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
             {videos.map((v) => (
-              <video
+              <AutoplayVideo
                 key={v.id}
-                controls
-                playsInline
-                preload="metadata"
-                className="aspect-video w-full rounded-lg bg-black object-contain"
-                aria-label={v.alt || block.heading || 'Video'}
-              >
-                <source src={mediaUrl(v)!} type={v.mimeType === 'video/quicktime' ? 'video/mp4' : v.mimeType || 'video/mp4'} />
-              </video>
+                src={mediaUrl(v)!}
+                type={v.mimeType === 'video/quicktime' ? 'video/mp4' : v.mimeType || 'video/mp4'}
+                label={v.alt || block.heading || 'Video'}
+                className="aspect-video w-full rounded-lg bg-black object-cover"
+              />
             ))}
           </div>
         )}
