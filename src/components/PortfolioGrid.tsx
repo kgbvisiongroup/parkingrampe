@@ -42,8 +42,16 @@ export function PortfolioGrid({ items, filters, allLabel }: { items: PortfolioIt
       )}
       <motion.ul layout className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
         <AnimatePresence mode="popLayout">
-          {visible.map((p) => (
-            <motion.li layout key={p.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
+          {visible.map((p, i) => (
+            <motion.li
+              layout
+              key={p.id}
+              initial={{ opacity: 0, y: 40, scale: 0.92 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              viewport={{ once: true, margin: '0px 0px -60px 0px' }}
+              transition={{ duration: 0.6, ease: [0.2, 0.7, 0.2, 1], delay: (i % 3) * 0.08 }}
+            >
               <Link href={p.href} className="tile-zoom relative block aspect-square overflow-hidden bg-[#d9d9d9]">
                 {p.image && (
                   <Image

@@ -3,6 +3,7 @@ import { RenderBlocks, type LayoutBlock } from '@/blocks/RenderBlocks'
 import { ContactPanel } from '@/components/ContactPanel'
 import { JsonLd } from '@/components/JsonLd'
 import { PortfolioGrid } from '@/components/PortfolioGrid'
+import { PortfolioSlider } from '@/components/PortfolioSlider'
 import { RichText } from '@/components/RichText'
 import { PageBanner, SectionHeading } from '@/components/ui'
 import type { Dictionary, Locale } from '@/lib/i18n'
@@ -56,9 +57,17 @@ export async function PageView({ page, locale, dict, settings }: Props) {
   if (page.template === 'portfolio') {
     const [projects, services] = await Promise.all([getProjects(locale), getServices(locale)])
     const used = new Set(projects.map((p) => (typeof p.service === 'object' ? p.service?.id : p.service)))
+    // Slider photos: the page's photo galleries, otherwise the project covers.
+    const galleryPhotos = (page.layout ?? []).flatMap((b) => (b.blockType === 'mediaGallery' ? (b.images ?? []) : []))
+    const slides = (galleryPhotos.length ? galleryPhotos : projects.map((p) => p.cover))
+      .map((m) => asMedia(m))
+      .filter((m): m is NonNullable<typeof m> => !!m?.url && !!m.mimeType?.startsWith('image'))
+      .slice(0, 24)
+      .map((m) => ({ src: mediaUrl(m, 'hero')!, alt: m.alt || page.title }))
     return (
       <>
         {head}
+        <PortfolioSlider images={slides} prevLabel={locale === 'en' ? 'Previous' : 'Prethodna'} nextLabel={locale === 'en' ? 'Next' : 'Sledeća'} />
         {intro}
         <section className={`bg-band py-12 ${intro ? '' : ''}`}>
           <div className="wrap max-w-[1000px]">

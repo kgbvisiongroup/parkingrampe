@@ -38,7 +38,14 @@ export function Gallery({ images, closeLabel }: { images: GalleryImage[]; closeL
     <>
       <ul className="columns-1 gap-2.5 sm:columns-2 lg:columns-3 [&>li]:mb-2.5">
         {images.map((img, i) => (
-          <li key={img.src + i} className="break-inside-avoid">
+          <motion.li
+            key={img.src + i}
+            className="break-inside-avoid"
+            initial={{ opacity: 0, y: 40, scale: 0.92 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true, margin: '0px 0px -60px 0px' }}
+            transition={{ duration: 0.7, ease: [0.2, 0.7, 0.2, 1], delay: (i % 3) * 0.08 }}
+          >
             <button
               type="button"
               onClick={() => setOpen(i)}
@@ -53,7 +60,7 @@ export function Gallery({ images, closeLabel }: { images: GalleryImage[]; closeL
                 className="h-auto w-full transition-transform duration-700 ease-out group-hover:scale-[1.04]"
               />
             </button>
-          </li>
+          </motion.li>
         ))}
       </ul>
 
