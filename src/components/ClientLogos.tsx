@@ -27,7 +27,9 @@ export function ClientLogos({ heading, clients }: { heading: string; clients: Cl
                 src={src}
                 alt={i < base.length ? asMedia(c.logo)?.alt || c.name : ''}
                 loading="lazy"
-                className="max-h-14 w-auto max-w-[150px] object-contain opacity-70 grayscale transition duration-300 group-hover/logo:opacity-100 group-hover/logo:grayscale-0"
+                width={150}
+                height={56}
+                className="h-auto max-h-14 w-auto max-w-[150px] object-contain opacity-70 grayscale transition duration-300 group-hover/logo:opacity-100 group-hover/logo:grayscale-0"
               />
             )
             const card = 'group/logo grid h-24 w-44 place-items-center rounded-2xl border border-line bg-white px-6 shadow-[0_10px_30px_-22px_rgb(0_0_0/0.35)] transition duration-300 hover:-translate-y-1 hover:border-accent/50 sm:h-28 sm:w-52'
