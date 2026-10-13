@@ -28,11 +28,12 @@ import { MetaImageComponent as MetaImageComponent_a8a977ebc872c5d5ea7ee689724c08
 import { PreviewComponent as PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { ImportLink as ImportLink_ca02963731c350ec54c887e190633b35 } from '../../../components/admin/ImportLink'
 import { ChatThread as ChatThread_2f1d58c3b6d98971d2f17c24484f5795 } from '../../../components/admin/ChatThread'
+import { AdminNav as AdminNav_231477f0faa4368be46fd47ffb9da4d9 } from '../../../components/admin/AdminNav'
 import { Icon as Icon_81fda60f3e3709e861f40982a767707d } from '../../../components/admin/Brand'
 import { Logo as Logo_81fda60f3e3709e861f40982a767707d } from '../../../components/admin/Brand'
-import { InboxNav as InboxNav_7b2a01640c5c0617f429f736e40f531c } from '../../../components/admin/Inbox'
-import { InboxDashboard as InboxDashboard_7b2a01640c5c0617f429f736e40f531c } from '../../../components/admin/Inbox'
+import { HeaderActions as HeaderActions_c9fcc4e841a7b22678cf4272fdcd73be } from '../../../components/admin/HeaderActions'
 import { LoginIntro as LoginIntro_7b77c0a8bf5649eadd846d28c5d927eb } from '../../../components/admin/LoginIntro'
+import { Dashboard as Dashboard_16b88e9b8c48e393fa86591406efd08f } from '../../../components/admin/Dashboard'
 import { ImportView as ImportView_9f4c1248a9594c235a871ba4f4fe9e66 } from '../../../components/admin/ImportView'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
@@ -68,11 +69,12 @@ export const importMap = {
   "@payloadcms/plugin-seo/client#PreviewComponent": PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "/components/admin/ImportLink#ImportLink": ImportLink_ca02963731c350ec54c887e190633b35,
   "/components/admin/ChatThread#ChatThread": ChatThread_2f1d58c3b6d98971d2f17c24484f5795,
+  "/components/admin/AdminNav#AdminNav": AdminNav_231477f0faa4368be46fd47ffb9da4d9,
   "/components/admin/Brand#Icon": Icon_81fda60f3e3709e861f40982a767707d,
   "/components/admin/Brand#Logo": Logo_81fda60f3e3709e861f40982a767707d,
-  "/components/admin/Inbox#InboxNav": InboxNav_7b2a01640c5c0617f429f736e40f531c,
-  "/components/admin/Inbox#InboxDashboard": InboxDashboard_7b2a01640c5c0617f429f736e40f531c,
+  "/components/admin/HeaderActions#HeaderActions": HeaderActions_c9fcc4e841a7b22678cf4272fdcd73be,
   "/components/admin/LoginIntro#LoginIntro": LoginIntro_7b77c0a8bf5649eadd846d28c5d927eb,
+  "/components/admin/Dashboard#Dashboard": Dashboard_16b88e9b8c48e393fa86591406efd08f,
   "/components/admin/ImportView#ImportView": ImportView_9f4c1248a9594c235a871ba4f4fe9e66,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }

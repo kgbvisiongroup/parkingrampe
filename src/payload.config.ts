@@ -72,7 +72,8 @@ export default buildConfig({
   admin: {
     user: Users.slug,
     avatar: 'default',
-    theme: 'dark',
+    // Light and dark; dark is the default (set in HeaderActions until the user picks one).
+    theme: 'all',
     importMap: { baseDir: path.resolve(dirname) },
     meta: { titleSuffix: '– KGB CMS' },
     components: {
@@ -81,9 +82,10 @@ export default buildConfig({
         Icon: '/components/admin/Brand#Icon',
       },
       beforeLogin: ['/components/admin/LoginIntro#LoginIntro'],
-      afterNavLinks: ['/components/admin/Inbox#InboxNav'],
-      beforeDashboard: ['/components/admin/Inbox#InboxDashboard'],
+      Nav: '/components/admin/AdminNav#AdminNav',
+      actions: ['/components/admin/HeaderActions#HeaderActions'],
       views: {
+        dashboard: { Component: '/components/admin/Dashboard#Dashboard' },
         importProducts: { Component: '/components/admin/ImportView#ImportView', path: '/uvoz-proizvoda' },
       },
     },
