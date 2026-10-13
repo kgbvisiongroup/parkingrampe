@@ -39,10 +39,10 @@ import { paths } from '@/lib/routes'
 import { faqSchema } from '@/lib/schema'
 
 const cardWidth: Record<string, string> = {
-  '2': 'sm:w-[calc(50%-8px)]',
-  '3': 'sm:w-[calc(50%-8px)] lg:w-[calc(33.333%-11px)]',
-  '4': 'sm:w-[calc(50%-8px)] lg:w-[calc(25%-12px)]',
-  '5': 'sm:w-[calc(50%-8px)] lg:w-[calc(20%-13px)]',
+  '2': 'w-[calc(50%-6px)] sm:w-[calc(50%-8px)]',
+  '3': 'w-[calc(50%-6px)] sm:w-[calc(50%-8px)] lg:w-[calc(33.333%-11px)]',
+  '4': 'w-[calc(50%-6px)] sm:w-[calc(50%-8px)] lg:w-[calc(25%-12px)]',
+  '5': 'w-[calc(50%-6px)] sm:w-[calc(50%-8px)] lg:w-[calc(20%-13px)]',
 }
 
 export type LayoutBlock =
@@ -161,9 +161,9 @@ async function CategoryGrid({ block, ctx }: { block: CategoryGridBlock; ctx: Ctx
       <div className="wrap">
         {block.heading && <SectionHeading className="mb-7">{block.heading}</SectionHeading>}
         {/* Flex rows so a last, shorter row stays centred. */}
-        <div className="flex flex-wrap justify-center gap-x-4 gap-y-8">
+        <div className="flex flex-wrap justify-center gap-x-3 gap-y-6 sm:gap-x-4 sm:gap-y-8">
           {cats.map((c) => (
-            <div key={c.id} className={`w-full ${cardWidth[block.columns ?? '4']}`}>
+            <div key={c.id} className={cardWidth[block.columns ?? '4']}>
               <CategoryCard category={c} locale={ctx.locale} />
             </div>
           ))}
@@ -189,7 +189,7 @@ async function ProductTiles({ block, ctx }: { block: ProductTilesBlock; ctx: Ctx
     <Band tone={block.tone ?? 'grey'} className="py-10 md:py-12">
       <div className="wrap max-w-[1000px]">
         {block.heading && <SectionHeading className="mb-6">{block.heading}</SectionHeading>}
-        <div className={`grid grid-cols-1 gap-3 ${gridCols[block.columns ?? '3']}`}>
+        <div className={`grid grid-cols-2 gap-2.5 sm:gap-3 ${gridCols[block.columns ?? '3']}`}>
           {products.map((p) => (
             <ProductTile key={p.id} product={p} locale={ctx.locale} />
           ))}
@@ -205,7 +205,7 @@ function ImageTiles({ block, ctx }: { block: ImageTilesBlock; ctx: Ctx }) {
     <section className="bg-band py-10 md:py-12">
       <div className="wrap max-w-[1000px]">
         {block.heading && <SectionHeading className="mb-6">{block.heading}</SectionHeading>}
-        <div className={`grid grid-cols-1 gap-2.5 ${gridCols[block.columns ?? '3']}`}>
+        <div className={`grid grid-cols-2 gap-2 sm:gap-2.5 ${gridCols[block.columns ?? '3']}`}>
           {block.tiles.map((t, i) => {
             const p = linkProps(t.link, ctx.locale)
             return <PhotoTile key={t.id ?? i} image={t.image} title={t.title} href={p?.href} target={p?.target} />
@@ -314,7 +314,7 @@ async function Projects({ block, ctx }: { block: ProjectsBlock; ctx: Ctx }) {
     <section className="bg-band py-10 md:py-12">
       <div className="wrap max-w-[1000px]">
         {block.heading && <SectionHeading className="mb-6">{block.heading}</SectionHeading>}
-        <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-2 gap-2 sm:gap-2.5 lg:grid-cols-3">
           {projects.map((p) => (
             <PhotoTile key={p.id} image={p.cover} title={p.location || p.title} href={paths.project(ctx.locale, p.slug || '')} />
           ))}

@@ -1,6 +1,6 @@
 'use client'
 
-import { useTheme, useTranslation } from '@payloadcms/ui'
+import { useLocale, useTheme, useTranslation } from '@payloadcms/ui'
 import { Bell, CornerDownLeft, Moon, Search, Sun } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { tx } from './adminText'
@@ -48,6 +48,26 @@ export function HeaderActions() {
   useEffect(() => {
     if (!document.cookie.split('; ').some((c) => c.startsWith('kgb-theme='))) setTheme('dark')
   }, [setTheme])
+
+  // One switch for both: the admin language and the language of the content being edited.
+  const locale = useLocale()
+  const wanted = lang === 'en' ? 'en' : 'sr'
+  const activeCode = lang === 'en' ? 'en' : 'rs-latin'
+  useEffect(() => {
+    // Payload remembers the last content language; keep it in step with the admin language.
+    if (locale?.code && locale.code !== wanted) {
+      const url = new URL(window.location.href)
+      url.searchParams.set('locale', wanted)
+      window.location.replace(url.toString())
+    }
+  }, [locale?.code, wanted])
+  const switchAll = async (code: 'rs-latin' | 'en') => {
+    if (code === lang) return
+    await switchLanguage?.(code)
+    const url = new URL(window.location.href)
+    url.searchParams.set('locale', code === 'en' ? 'en' : 'sr')
+    window.location.assign(url.toString())
+  }
 
   const [open, setOpen] = useState(false)
   const [q, setQ] = useState('')
@@ -108,9 +128,9 @@ export function HeaderActions() {
           <button
             key={code}
             type="button"
-            className={lang === code ? 'is-active' : ''}
-            aria-pressed={lang === code}
-            onClick={() => lang !== code && void switchLanguage?.(code)}
+            className={activeCode === code ? 'is-active' : ''}
+            aria-pressed={activeCode === code}
+            onClick={() => void switchAll(code)}
           >
             {code === 'en' ? 'EN' : 'SR'}
           </button>

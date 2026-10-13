@@ -1,6 +1,7 @@
 import type { CollectionBeforeChangeHook, CollectionConfig } from 'payload'
 import { anyone, loggedIn } from '../access'
 import { slugField } from '../fields/slug'
+import { actionsColumn, thumbColumn } from '../fields/listColumns'
 import { orderField, t } from '../fields/shared'
 import { revalidateAfterChange, revalidateAfterDelete } from '../hooks/revalidate'
 import { normalizeSearch } from '../lib/searchText'
@@ -43,7 +44,7 @@ export const Products: CollectionConfig = {
   labels: { singular: t('Proizvod', 'Product'), plural: t('Proizvodi', 'Products') },
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'category', 'code', 'availability', 'featured'],
+    defaultColumns: ['thumb', 'title', 'code', 'category', 'availability', 'rowActions'],
     group: t('Proizvodi', 'Products'),
     listSearchableFields: ['title', 'code', 'excerpt'],
     components: { beforeList: ['/components/admin/ImportLink#ImportLink'] },
@@ -230,5 +231,7 @@ export const Products: CollectionConfig = {
       admin: { position: 'sidebar' },
       filterOptions: ({ id }) => (id ? { id: { not_equals: id } } : true),
     },
+    thumbColumn,
+    actionsColumn,
   ],
 }

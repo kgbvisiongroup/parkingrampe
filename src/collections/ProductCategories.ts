@@ -1,6 +1,7 @@
 import type { CollectionBeforeChangeHook, CollectionConfig } from 'payload'
 import { anyone, loggedIn } from '../access'
 import { slugField } from '../fields/slug'
+import { actionsColumn, thumbColumn } from '../fields/listColumns'
 import { orderField, t } from '../fields/shared'
 import { revalidateAfterChange, revalidateAfterDelete } from '../hooks/revalidate'
 import { normalizeSearch } from '../lib/searchText'
@@ -28,7 +29,7 @@ export const ProductCategories: CollectionConfig = {
   labels: { singular: t('Kategorija proizvoda', 'Product category'), plural: t('Kategorije proizvoda', 'Product categories') },
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'parent', 'order', 'showInMenu'],
+    defaultColumns: ['thumb', 'title', 'parent', 'order', 'showInMenu', 'rowActions'],
     group: t('Proizvodi', 'Products'),
     description: t(
       'Glavne kategorije i potkategorije. Potkategoriji izaberite „Nadređenu kategoriju”. Prikazuju se u meniju „Proizvodi”.',
@@ -72,5 +73,7 @@ export const ProductCategories: CollectionConfig = {
     { name: 'description', label: t('Kratak opis (kartica)', 'Short description (card)'), type: 'textarea', localized: true },
     { name: 'content', label: t('Tekst na strani kategorije', 'Category page text'), type: 'richText', localized: true },
     { name: 'searchText', type: 'text', localized: true, index: true, admin: { hidden: true } },
+    thumbColumn,
+    actionsColumn,
   ],
 }
