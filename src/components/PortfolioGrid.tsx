@@ -40,7 +40,7 @@ export function PortfolioGrid({ items, filters, allLabel }: { items: PortfolioIt
           ))}
         </div>
       )}
-      <motion.ul layout className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
+      <motion.ul layout className="grid grid-cols-2 gap-2 sm:gap-2.5 lg:grid-cols-3">
         <AnimatePresence mode="popLayout">
           {visible.map((p, i) => (
             <motion.li
@@ -64,12 +64,12 @@ export function PortfolioGrid({ items, filters, allLabel }: { items: PortfolioIt
                   />
                 )}
                 <span className="absolute inset-x-0 top-0 h-1/3 bg-gradient-to-b from-black/45 to-transparent" />
-                <span className="absolute left-5 right-5 top-3 text-[clamp(18px,2.1vw,24px)] font-extrabold uppercase leading-tight text-white text-shadow">
+                <span className="absolute left-3 right-3 top-2.5 text-[clamp(14px,2.1vw,24px)] font-extrabold uppercase leading-tight text-white text-shadow sm:left-5 sm:right-5 sm:top-3">
                   {p.location || p.title}
                 </span>
-                <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent px-5 pb-4 pt-10 text-white">
+                <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent px-3 pb-3 pt-8 text-white sm:px-5 sm:pb-4 sm:pt-10">
                   {p.serviceTitle && <span className="label-caps block text-white/75">{p.serviceTitle}</span>}
-                  <span className="block text-[14px] font-bold">{p.title}</span>
+                  <span className="block text-[12.5px] font-bold sm:text-[14px]">{p.title}</span>
                 </span>
               </Link>
             </motion.li>

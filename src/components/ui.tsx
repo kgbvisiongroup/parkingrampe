@@ -102,16 +102,16 @@ export function CategoryCard({ category, locale, sizes }: { category: ProductCat
             src={src}
             alt={asMedia(category.image)?.alt || category.title}
             fill
-            sizes={sizes || '(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw'}
+            sizes={sizes || '(min-width: 1024px) 25vw, 50vw'}
             className={contain ? 'object-contain p-4' : 'object-cover'}
             style={contain ? undefined : { objectPosition: focal(category.image) }}
           />
         )}
       </div>
-      <h3 className="mt-3 px-2 text-[13px] font-extrabold uppercase tracking-[0.04em] text-ink group-hover:underline group-hover:underline-offset-4">
+      <h3 className="mt-2.5 px-1 text-[12px] font-extrabold uppercase tracking-[0.04em] text-ink group-hover:underline group-hover:underline-offset-4 sm:mt-3 sm:px-2 sm:text-[13px]">
         {category.title}
       </h3>
-      {category.description && <p className="mt-1 px-2 text-[13px] leading-snug text-muted">{category.description}</p>}
+      {category.description && <p className="mt-1 hidden px-2 text-[13px] leading-snug text-muted sm:block">{category.description}</p>}
     </Link>
   )
 }
@@ -137,13 +137,13 @@ export function ProductTile({ product, locale, sizes }: { product: Product; loca
             alt={asMedia(img)?.alt || product.title}
             fill
             sizes={sizes || '(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw'}
-            className="object-contain p-6"
+            className="object-contain p-3 sm:p-6"
           />
         )}
       </div>
-      <div className="border-t border-line px-4 py-3 text-center">
-        {code && <p className="text-[12px] font-extrabold uppercase tracking-[0.06em] text-accent">{code}</p>}
-        <p className="mt-0.5 line-clamp-2 text-[13.5px] font-bold leading-snug text-ink group-hover:underline group-hover:underline-offset-4">{name}</p>
+      <div className="border-t border-line px-2.5 py-2.5 text-center sm:px-4 sm:py-3">
+        {code && <p className="text-[11px] font-extrabold uppercase tracking-[0.06em] text-accent sm:text-[12px]">{code}</p>}
+        <p className="mt-0.5 line-clamp-2 text-[12.5px] font-bold leading-snug text-ink group-hover:underline group-hover:underline-offset-4 sm:text-[13.5px]">{name}</p>
       </div>
     </Link>
   )
@@ -191,7 +191,7 @@ export function PhotoTile({ image, title, href, target, sizes }: { image: MediaR
       {title && (
         <>
           <span className="absolute inset-x-0 top-0 h-1/3 bg-gradient-to-b from-black/45 to-transparent" />
-          <span className="absolute left-5 right-5 top-3 text-[clamp(18px,2.1vw,26px)] font-extrabold uppercase leading-tight text-white text-shadow">{title}</span>
+          <span className="absolute left-3 right-3 top-2.5 text-[clamp(14px,2.1vw,26px)] font-extrabold uppercase leading-tight text-white text-shadow sm:left-5 sm:right-5 sm:top-3">{title}</span>
         </>
       )}
     </>

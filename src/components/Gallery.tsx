@@ -36,7 +36,7 @@ export function Gallery({ images, closeLabel }: { images: GalleryImage[]; closeL
 
   return (
     <>
-      <ul className="columns-1 gap-2.5 sm:columns-2 lg:columns-3 [&>li]:mb-2.5">
+      <ul className="columns-2 gap-2 sm:gap-2.5 lg:columns-3 [&>li]:mb-2 sm:[&>li]:mb-2.5">
         {images.map((img, i) => (
           <motion.li
             key={img.src + i}
