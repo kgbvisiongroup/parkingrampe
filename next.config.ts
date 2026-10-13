@@ -28,9 +28,15 @@ const nextConfig: NextConfig = {
     deviceSizes: [480, 768, 1080, 1440, 1920],
   },
   poweredByHeader: false,
+  // Tailwind CSS is small: put it in the page instead of a separate render-blocking file.
+  experimental: { inlineCss: true },
+  // The Serbian home page is served directly at "/" (no redirect = ~0.8 s faster on mobile).
+  // Its canonical address stays /sr.
+  async rewrites() {
+    return { beforeFiles: [{ source: '/', destination: '/sr' }], afterFiles: [], fallback: [] }
+  },
   async redirects() {
     return [
-      { source: '/', destination: '/sr', permanent: false },
       // Our own login page (src/app/(prijava)); the ?redirect= parameter is passed along.
       { source: '/admin/login', destination: '/prijava', permanent: false },
       ...legacyRedirects.flatMap(([from, to]) => [

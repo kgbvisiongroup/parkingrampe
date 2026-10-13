@@ -21,15 +21,30 @@ export function HeroSlider({ slides, height = 'large', interval = 3.5 }: { slide
   const DURATION = Math.min(15, Math.max(2, interval)) * 1000
   const [index, setIndex] = useState(0)
   const [paused, setPaused] = useState(false)
+  // Autoplay waits for the visitor's first scroll/tap/key (or 10 s). Changing the slide while the
+  // page is still loading makes Google measure the second photo as the "largest paint" (slow LCP).
+  const [started, setStarted] = useState(false)
   const reduce = useReducedMotion()
   const count = slides.length
   const go = useCallback((i: number) => setIndex(((i % count) + count) % count), [count])
 
   useEffect(() => {
-    if (count < 2 || paused || reduce) return
+    if (count < 2 || started) return
+    const start = () => setStarted(true)
+    const events = ['pointerdown', 'keydown', 'scroll', 'wheel', 'touchstart'] as const
+    events.forEach((e) => window.addEventListener(e, start, { once: true, passive: true }))
+    const t = setTimeout(start, 10000)
+    return () => {
+      clearTimeout(t)
+      events.forEach((e) => window.removeEventListener(e, start))
+    }
+  }, [count, started])
+
+  useEffect(() => {
+    if (count < 2 || paused || reduce || !started) return
     const t = setTimeout(() => go(index + 1), DURATION)
     return () => clearTimeout(t)
-  }, [index, paused, reduce, count, go, DURATION])
+  }, [index, paused, reduce, count, go, DURATION, started])
 
   if (!count) return null
   const s = slides[index]
@@ -57,7 +72,7 @@ export function HeroSlider({ slides, height = 'large', interval = 3.5 }: { slide
               animate={{ scale: 1 }}
               transition={{ duration: reduce ? 0 : DURATION / 1000 + 1, ease: 'linear' }}
             >
-              <Image src={s.image} alt={s.alt} fill priority={index === 0} sizes="100vw" className="object-cover" style={{ objectPosition: s.focal }} />
+              <Image src={s.image} alt={s.alt} fill preload={index === 0} fetchPriority={index === 0 ? 'high' : 'auto'} sizes="100vw" className="object-cover" style={{ objectPosition: s.focal }} />
             </motion.div>
           )}
         </motion.div>
