@@ -199,10 +199,23 @@ export async function ProductView({ locale, dict, settings, product, contactHref
             <ProductGallery images={images} />
             <div>
               {category && <p className="label-caps text-muted">{category.title}</p>}
-              {product.code && <p className="mt-3 text-[13px] font-extrabold uppercase tracking-[0.08em] text-accent">{product.code}</p>}
-              <h1 className="mt-1 text-[clamp(22px,2.8vw,30px)] font-extrabold leading-tight">{productName(product).name}</h1>
-              {product.excerpt && <p className="mt-5 text-[15px] leading-relaxed">{product.excerpt}</p>}
-              <div className="mt-6 flex flex-wrap items-end gap-x-8 gap-y-3 border-t border-line pt-5">
+              {/* Same layout as the Key Automation product pages: dark bar with the code, text, specification list. */}
+              <h1 className="mt-3 bg-dark px-5 py-4 text-white sm:px-7 sm:py-5">
+                <span className="block text-[clamp(22px,2.6vw,30px)] font-extrabold leading-tight">{product.code || productName(product).name}</span>
+                {product.code && <span className="mt-1 block text-[14px] font-semibold leading-snug text-white/70">{productName(product).name}</span>}
+              </h1>
+              {product.excerpt && <p className="mt-5 text-[16px] leading-relaxed text-ink">{product.excerpt}</p>}
+              {!!product.specs?.length && (
+                <dl className="mt-8 border-b border-ink pb-6">
+                  {product.specs.map((s) => (
+                    <div key={s.id} className="flex items-baseline justify-between gap-6 py-1.5 text-[15px] sm:text-[16px]">
+                      <dt className="shrink-0 text-ink">{s.label}</dt>
+                      <dd className="text-right font-extrabold text-ink tabular-nums">{s.value}</dd>
+                    </div>
+                  ))}
+                </dl>
+              )}
+              <div className={`mt-6 flex flex-wrap items-end gap-x-8 gap-y-3 ${product.specs?.length ? '' : 'border-t border-line pt-5'}`}>
                 <div>
                   <p className="label-caps text-muted">{dict.price}</p>
                   <p className="mt-1 text-[22px] font-extrabold text-ink tabular-nums">
@@ -237,7 +250,7 @@ export async function ProductView({ locale, dict, settings, product, contactHref
                   )}
                 </dl>
               )}
-              {!!product.highlights?.length && (
+              {!product.specs?.length && !!product.highlights?.length && (
                 <ul className="mt-6 divide-y divide-line border-y border-line">
                   {product.highlights.map((h) => (
                     <li key={h.id} className="flex items-start gap-3 py-2.5 text-[14px] text-ink">
@@ -286,26 +299,6 @@ export async function ProductView({ locale, dict, settings, product, contactHref
                 className="absolute inset-0 size-full border-0"
               />
             </div>
-          </div>
-        </section>
-      )}
-
-      {!!product.specs?.length && (
-        <section className="py-12">
-          <div className="wrap-narrow">
-            <SectionHeading className="mb-5">{dict.specs}</SectionHeading>
-            <table className="w-full border-collapse text-[14px]">
-              <tbody>
-                {product.specs.map((s, i) => (
-                  <tr key={s.id} className={i % 2 ? 'bg-white' : 'bg-band'}>
-                    <th scope="row" className="w-1/2 px-4 py-2.5 text-left font-bold text-ink">
-                      {s.label}
-                    </th>
-                    <td className="px-4 py-2.5 tabular-nums">{s.value}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
           </div>
         </section>
       )}

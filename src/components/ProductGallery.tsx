@@ -10,10 +10,10 @@ export function ProductGallery({ images }: { images: { src: string; thumb: strin
   const cur = images[i]
   return (
     <div>
-      <div className="relative aspect-square overflow-hidden border border-line bg-white">
+      <div className="relative aspect-[4/3] overflow-hidden bg-[#ececec]">
         <AnimatePresence mode="wait" initial={false}>
           <motion.div key={i} className="absolute inset-0" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.25 }}>
-            <Image src={cur.src} alt={cur.alt} fill priority sizes="(min-width: 1024px) 50vw, 100vw" className="object-scale-down p-8" />
+            <Image src={cur.src} alt={cur.alt} fill priority sizes="(min-width: 1024px) 50vw, 100vw" className="object-contain p-6 mix-blend-multiply sm:p-10" />
           </motion.div>
         </AnimatePresence>
       </div>
@@ -26,9 +26,9 @@ export function ProductGallery({ images }: { images: { src: string; thumb: strin
                 onClick={() => setI(n)}
                 aria-label={img.alt}
                 aria-current={n === i}
-                className={`relative block aspect-square w-full overflow-hidden border border-line bg-white outline-offset-0 ${n === i ? 'outline outline-2 outline-dark' : 'opacity-70 hover:opacity-100'}`}
+                className={`relative block aspect-square w-full overflow-hidden bg-[#ececec] outline-offset-0 ${n === i ? 'outline outline-2 outline-dark' : 'opacity-70 hover:opacity-100'}`}
               >
-                <Image src={img.thumb} alt="" fill sizes="120px" className="object-contain p-1.5" />
+                <Image src={img.thumb} alt="" fill sizes="120px" className="object-contain p-1.5 mix-blend-multiply" />
               </button>
             </li>
           ))}
