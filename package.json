@@ -18,7 +18,8 @@
     "admin:password": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/set-admin-password.ts",
     "import:portfolio": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/import-portfolio.ts",
     "images:products": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/crop-product-images.ts",
-    "products:specs": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/product-specs.ts"
+    "products:specs": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/product-specs.ts",
+    "products:english": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/product-english.ts"
   },
   "dependencies": {
     "@fontsource-variable/plus-jakarta-sans": "^5.3.0",
