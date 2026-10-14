@@ -48,7 +48,7 @@ export async function CatalogView({ locale, dict, settings, page }: Base & { pag
             </SectionHeading>
             {cat.description && <p className="mx-auto mb-7 max-w-[560px] text-center text-[13.5px]">{cat.description}</p>}
             {cat.children.length > 0 ? (
-              <div className="grid grid-cols-2 gap-x-3 gap-y-6 sm:gap-x-4 sm:gap-y-8 lg:grid-cols-4">
+              <div className="grid grid-cols-3 gap-x-2.5 gap-y-5 sm:gap-x-4 sm:gap-y-8 lg:grid-cols-4">
                 {cat.children.map((c) => (
                   <CategoryCard key={c.id} category={c} locale={locale} />
                 ))}
@@ -68,7 +68,7 @@ async function CategoryProducts({ locale, categoryIds, emptyText }: { locale: Lo
   const products = await getProducts(locale, { categoryIds })
   if (!products.length) return emptyText ? <p className="py-6 text-center text-muted">{emptyText}</p> : null
   return (
-    <div className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 lg:grid-cols-4">
+    <div className="grid grid-cols-3 gap-x-2.5 gap-y-6 sm:gap-x-4 sm:gap-y-8 lg:grid-cols-4">
       {products.map((p) => (
         <ProductCard key={p.id} product={p} locale={locale} />
       ))}
@@ -128,7 +128,7 @@ export async function CategoryView({ locale, dict, category }: Base & { category
         <section className="py-12">
           <div className="wrap">
             <SectionHeading className="mb-7">{dict.subcategories}</SectionHeading>
-            <div className="grid grid-cols-2 gap-x-3 gap-y-6 sm:gap-x-4 sm:gap-y-8 lg:grid-cols-4">
+            <div className="grid grid-cols-3 gap-x-2.5 gap-y-5 sm:gap-x-4 sm:gap-y-8 lg:grid-cols-4">
               {children.map((c) => (
                 <CategoryCard key={c.id} category={c} locale={locale} />
               ))}
@@ -334,8 +334,8 @@ export async function ProductView({ locale, dict, settings, product, contactHref
             <SectionHeading className="mb-6">{dict.related}</SectionHeading>
             <div className="flex flex-wrap justify-center gap-3">
               {related.map((p) => (
-                <div key={p.id} className="w-[calc(50%-6px)] lg:w-[calc(25%-9px)]">
-                  <ProductTile product={p} locale={locale} sizes="(min-width: 1024px) 25vw, 50vw" />
+                <div key={p.id} className="w-[calc(33.333%-8px)] lg:w-[calc(25%-9px)]">
+                  <ProductTile product={p} locale={locale} sizes="(min-width: 1024px) 25vw, 33vw" />
                 </div>
               ))}
             </div>

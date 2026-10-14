@@ -52,7 +52,7 @@ export default async function SearchPage({ params, searchParams }: Props) {
           {r.products.length > 0 && (
             <div className="mt-10">
               <SectionHeading className="mb-6">{dict.catalog}</SectionHeading>
-              <div className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 lg:grid-cols-4">
+              <div className="grid grid-cols-3 gap-x-2.5 gap-y-6 sm:gap-x-4 sm:gap-y-8 lg:grid-cols-4">
                 {r.products.map((p) => (
                   <ProductCard key={p.id} product={p} locale={locale} />
                 ))}
@@ -62,7 +62,7 @@ export default async function SearchPage({ params, searchParams }: Props) {
           {r.categories.length > 0 && (
             <div className="mt-12">
               <SectionHeading className="mb-6">{dict.categories}</SectionHeading>
-              <div className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="grid grid-cols-3 gap-x-2.5 gap-y-6 sm:gap-x-4 sm:gap-y-8 lg:grid-cols-4">
                 {r.categories.map((c) => (
                   <CategoryCard key={c.id} category={c} locale={locale} />
                 ))}

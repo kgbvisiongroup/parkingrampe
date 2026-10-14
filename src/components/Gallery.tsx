@@ -36,7 +36,7 @@ export function Gallery({ images, closeLabel }: { images: GalleryImage[]; closeL
 
   return (
     <>
-      <ul className="columns-2 gap-2 sm:gap-2.5 lg:columns-3 [&>li]:mb-2 sm:[&>li]:mb-2.5">
+      <ul className="columns-3 gap-1.5 sm:gap-2.5 [&>li]:mb-1.5 sm:[&>li]:mb-2.5">
         {images.map((img, i) => (
           <motion.li
             key={img.src + i}
@@ -63,7 +63,7 @@ export function Gallery({ images, closeLabel }: { images: GalleryImage[]; closeL
                   alt={img.alt}
                   width={img.width || 960}
                   height={img.height || 720}
-                  sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                  sizes="33vw"
                   className="h-auto w-full transition-transform duration-700 ease-out group-hover:scale-[1.04]"
                 />
               </motion.div>
