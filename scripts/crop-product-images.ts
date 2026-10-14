@@ -10,6 +10,10 @@
  *
  * Run on the server:   npm run images:products
  * Running it again skips images that were already processed (file name ends with "-hd").
+ *
+ * Better photos (e.g. downloaded from keyautomation.com) can be imported from a folder; each file
+ * must be named after the product code, e.g. KRAY2524EK.jpg:
+ *   npm run images:products -- /putanja/do/foldera
  */
 import 'dotenv/config'
 import path from 'node:path'
@@ -97,7 +101,43 @@ export async function enhanceProductPhoto(input: Buffer) {
   return { out, badge, width: canvasW, height: canvasH }
 }
 
+/** Folder mode: replaces each product's main photo with a better one named after its code (e.g. KRAY2524EK.jpg). */
+async function importFolder(dir: string) {
+  const fs = await import('node:fs')
+  const norm = (s: string) => s.toUpperCase().replace(/[^A-Z0-9]/g, '')
+  const files = new Map<string, string>()
+  for (const f of fs.readdirSync(dir)) if (/\.(jpe?g|png|webp|avif|tiff?)$/i.test(f)) files.set(norm(f.replace(/\.[^.]+$/, '')), path.join(dir, f))
+  console.log(`U folderu ${dir}: ${files.size} slika.`)
+
+  const payload = await getPayload({ config })
+  const products = await payload.find({ collection: 'products', depth: 0, limit: 1000, pagination: false })
+  let done = 0, missing = 0
+  for (const p of products.docs) {
+    const file = p.code ? files.get(norm(p.code)) : undefined
+    if (!file) { missing++; continue }
+    const input = await sharp(file).toBuffer()
+    const res = await enhanceProductPhoto(input)
+    // Photos without a white background are only resized and converted.
+    const out = res?.out ?? (await sharp(input).resize(1600, 1600, { fit: 'inside', withoutEnlargement: true }).webp({ quality: 88 }).toBuffer())
+    const name = `${norm(p.code!)}-hd.webp`
+    const first = (p.images ?? [])[0] as number | { id: number } | undefined
+    const firstId = typeof first === 'object' ? first?.id : first
+    const upload = { data: out, mimetype: 'image/webp', name, size: out.length }
+    if (firstId) await payload.update({ collection: 'media', id: firstId, data: {}, file: upload })
+    else {
+      const m = await payload.create({ collection: 'media', data: { alt: p.title }, file: upload })
+      await payload.update({ collection: 'products', id: p.id, data: { images: [m.id] } })
+    }
+    done++
+    console.log(`✓ ${p.code} ← ${path.basename(file)}`)
+  }
+  console.log(`\nGotovo: zamenjeno ${done} slika, ${missing} proizvoda nema sliku u folderu.`)
+  process.exit(0)
+}
+
 async function run() {
+  const folder = process.argv[2]
+  if (folder) return importFolder(path.resolve(folder))
   const payload = await getPayload({ config })
   const products = await payload.find({ collection: 'products', depth: 0, limit: 1000, pagination: false })
   const ids = new Set<number>()
