@@ -41,9 +41,9 @@ import { faqSchema } from '@/lib/schema'
 
 const cardWidth: Record<string, string> = {
   '2': 'w-[calc(50%-6px)] sm:w-[calc(50%-8px)]',
-  '3': 'w-[calc(50%-6px)] sm:w-[calc(50%-8px)] lg:w-[calc(33.333%-11px)]',
-  '4': 'w-[calc(50%-6px)] sm:w-[calc(50%-8px)] lg:w-[calc(25%-12px)]',
-  '5': 'w-[calc(50%-6px)] sm:w-[calc(50%-8px)] lg:w-[calc(20%-13px)]',
+  '3': 'w-[calc(33.333%-8px)] sm:w-[calc(33.333%-11px)]',
+  '4': 'w-[calc(33.333%-8px)] sm:w-[calc(33.333%-11px)] lg:w-[calc(25%-12px)]',
+  '5': 'w-[calc(33.333%-8px)] sm:w-[calc(33.333%-11px)] lg:w-[calc(20%-13px)]',
 }
 
 export type LayoutBlock =
@@ -190,7 +190,7 @@ async function ProductTiles({ block, ctx }: { block: ProductTilesBlock; ctx: Ctx
     <Band tone={block.tone ?? 'grey'} className="py-10 md:py-12">
       <div className="wrap max-w-[1000px]">
         {block.heading && <SectionHeading className="mb-6">{block.heading}</SectionHeading>}
-        <div className={`grid grid-cols-2 gap-2.5 sm:gap-3 ${gridCols[block.columns ?? '3']}`}>
+        <div className={`grid gap-2 sm:gap-3 ${gridCols[block.columns ?? '3']}`}>
           {products.map((p) => (
             <ProductTile key={p.id} product={p} locale={ctx.locale} />
           ))}
@@ -206,7 +206,7 @@ function ImageTiles({ block, ctx }: { block: ImageTilesBlock; ctx: Ctx }) {
     <section className="bg-band py-10 md:py-12">
       <div className="wrap max-w-[1000px]">
         {block.heading && <SectionHeading className="mb-6">{block.heading}</SectionHeading>}
-        <div className={`grid grid-cols-2 gap-2 sm:gap-2.5 ${gridCols[block.columns ?? '3']}`}>
+        <div className={`grid gap-2 sm:gap-2.5 ${gridCols[block.columns ?? '3']}`}>
           {block.tiles.map((t, i) => {
             const p = linkProps(t.link, ctx.locale)
             return <PhotoTile key={t.id ?? i} image={t.image} title={t.title} href={p?.href} target={p?.target} />
@@ -275,7 +275,7 @@ async function Services({ block, ctx }: { block: ServicesBlock; ctx: Ctx }) {
       <div className="wrap">
         {block.heading && <SectionHeading>{block.heading}</SectionHeading>}
         {block.intro && <p className="mx-auto mt-3 max-w-[560px] text-center text-[13.5px]">{block.intro}</p>}
-        <div className="mt-7 grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-7 grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-3">
           {services.map((s) => {
             const src = mediaUrl(s.heroImage, 'card')
             return (
@@ -286,7 +286,7 @@ async function Services({ block, ctx }: { block: ServicesBlock; ctx: Ctx }) {
                       src={src}
                       alt={asMedia(s.heroImage)?.alt || s.title}
                       fill
-                      sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                      sizes="(min-width: 640px) 33vw, 100vw"
                       className="object-cover"
                       style={{ objectPosition: focal(s.heroImage) }}
                     />
@@ -315,7 +315,7 @@ async function Projects({ block, ctx }: { block: ProjectsBlock; ctx: Ctx }) {
     <section className="bg-band py-10 md:py-12">
       <div className="wrap max-w-[1000px]">
         {block.heading && <SectionHeading className="mb-6">{block.heading}</SectionHeading>}
-        <div className="grid grid-cols-2 gap-2 sm:gap-2.5 lg:grid-cols-3">
+        <div className="grid grid-cols-3 gap-2 sm:gap-2.5">
           {projects.map((p) => (
             <PhotoTile key={p.id} image={p.cover} title={p.location || p.title} href={paths.project(ctx.locale, p.slug || '')} />
           ))}

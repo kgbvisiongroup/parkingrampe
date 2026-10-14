@@ -156,7 +156,7 @@ export async function ServiceView({ service, locale, dict, settings, contactHref
         <section className="bg-band py-12">
           <div className="wrap max-w-[1000px]">
             <SectionHeading className="mb-6">{dict.products}</SectionHeading>
-            <div className="grid grid-cols-2 gap-2.5 sm:gap-3 lg:grid-cols-3">
+            <div className="grid grid-cols-3 gap-2 sm:gap-3">
               {products.map((p) => (
                 <ProductTile key={p.id} product={p} locale={locale} />
               ))}
@@ -176,7 +176,7 @@ export async function ServiceView({ service, locale, dict, settings, contactHref
         <section className="py-12">
           <div className="wrap max-w-[1000px]">
             <SectionHeading className="mb-6">{dict.relatedProjects}</SectionHeading>
-            <div className="grid grid-cols-2 gap-2 sm:gap-2.5 lg:grid-cols-3">
+            <div className="grid grid-cols-3 gap-2 sm:gap-2.5">
               {projects.map((p) => (
                 <PhotoTile key={p.id} image={p.cover} title={p.location || p.title} href={paths.project(locale, p.slug || '')} />
               ))}
