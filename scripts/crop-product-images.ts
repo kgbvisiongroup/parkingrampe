@@ -21,8 +21,8 @@ import { getPayload } from 'payload'
 import sharp from 'sharp'
 import config from '../src/payload.config'
 
-const MAX_W = 1000
-const MAX_H = 800
+const MAX_W = 1200
+const MAX_H = 960
 const MARGIN = 0.07 // empty space around the product, as a share of the canvas
 const MAX_UPSCALE = 3
 
@@ -119,7 +119,9 @@ async function importFolder(dir: string) {
     const res = await enhanceProductPhoto(input)
     // Photos without a white background are only resized and converted.
     const out = res?.out ?? (await sharp(input).resize(1600, 1600, { fit: 'inside', withoutEnlargement: true }).webp({ quality: 88 }).toBuffer())
-    const name = `${norm(p.code!)}-hd.webp`
+    // A new name for every new picture, otherwise browsers and the image cache keep showing the old one.
+    const { createHash } = await import('node:crypto')
+    const name = `${norm(p.code!)}-${createHash('sha1').update(out).digest('hex').slice(0, 8)}.webp`
     const first = (p.images ?? [])[0] as number | { id: number } | undefined
     const firstId = typeof first === 'object' ? first?.id : first
     const upload = { data: out, mimetype: 'image/webp', name, size: out.length }
