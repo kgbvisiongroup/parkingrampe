@@ -137,7 +137,7 @@ export function ProductTile({ product, locale, sizes }: { product: Product; loca
             alt={asMedia(img)?.alt || product.title}
             fill
             sizes={sizes || '(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw'}
-            className="object-contain p-3 sm:p-6"
+            className="object-contain p-1 sm:p-2"
           />
         )}
       </div>
