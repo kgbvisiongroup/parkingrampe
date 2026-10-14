@@ -188,9 +188,10 @@ export function shortName(name: string): string {
 
 /** Feature clauses and kit contents from the long Key Automation description. */
 export function splitDescription(name: string): { features: string[]; contents: string[] } {
-  const [main, kit] = name.split(/Sadrži:|Sadrzi:|Contains:/i)
+  const [main, kit] = name.split(/Sadrži:|Sadrzi:|Contains:|Includes:/i)
+  // Split on ", " and ". " – decimal commas ("2,3 m") have no space after them.
   const clauses = main
-    .split(/(?<!\d),(?!\d)|\.\s/)
+    .split(/,\s+|\.\s/)
     .map((s) => s.replace(/\.$/, '').trim())
     .filter(Boolean)
   const features = clauses.slice(1).map((s) => s.charAt(0).toUpperCase() + s.slice(1))
@@ -203,7 +204,7 @@ export function splitDescription(name: string): { features: string[]; contents: 
   return { features, contents }
 }
 
-function lexical(paragraphs: string[], list: string[] = [], listTitle?: string) {
+export function lexical(paragraphs: string[], list: string[] = [], listTitle?: string) {
   const text = (t: string) => ({ type: 'text', text: t, format: 0, detail: 0, mode: 'normal', style: '', version: 1 })
   const p = (t: string) => ({ type: 'paragraph', children: [text(t)], direction: 'ltr', format: '', indent: 0, textFormat: 0, version: 1 })
   const children: unknown[] = paragraphs.map(p)
