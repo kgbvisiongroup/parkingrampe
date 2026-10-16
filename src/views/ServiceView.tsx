@@ -8,11 +8,12 @@ import { Gallery } from '@/components/Gallery'
 import { Icon } from '@/components/Icon'
 import { JsonLd } from '@/components/JsonLd'
 import { OpenChatButton } from '@/components/OpenChatButton'
+import { PhonePromo } from '@/components/PhonePromo'
 import { RichText } from '@/components/RichText'
-import { PageBanner, PhotoTile, ProductTile, SectionHeading } from '@/components/ui'
+import { PageBanner, ProductTile, SectionHeading } from '@/components/ui'
 import type { Dictionary, Locale } from '@/lib/i18n'
 import { asMedia, focal, mediaUrl } from '@/lib/media'
-import { getChildCategories, getProducts, getProjects } from '@/lib/payload'
+import { getAllSlugs, getChildCategories, getProductBySlug, getProducts } from '@/lib/payload'
 import { absolute, paths } from '@/lib/routes'
 import { breadcrumbSchema, faqSchema } from '@/lib/schema'
 
@@ -32,14 +33,16 @@ export async function ServiceView({ service, locale, dict, settings, contactHref
   const catId = typeof service.productCategory === 'object' ? service.productCategory?.id : service.productCategory
   const category = typeof service.productCategory === 'object' ? service.productCategory : null
 
-  const [products, projects] = await Promise.all([
+  const [products, slugs] = await Promise.all([
     catId
       ? getChildCategories(locale, catId).then((kids) => getProducts(locale, { categoryIds: [catId, ...kids.map((k) => k.id)], limit: 8 }))
       : Promise.resolve([]),
-    getProjects(locale, 100).then((all) =>
-      all.filter((p) => (typeof p.service === 'object' ? p.service?.id : p.service) === service.id).slice(0, 6),
-    ),
+    getAllSlugs('services', service.id),
   ])
+  // Access control: the gallery ends with a tile promoting opening from the phone (KUBEW module).
+  const kubew = slugs.sr === 'kontrola-pristupa' ? await getProductBySlug(locale, 'kubew') : null
+  // …and KUBEW completes the last row of the product tiles when it is not full.
+  const tiles = kubew && products.length % 3 !== 0 && !products.some((p) => p.id === kubew.id) ? [...products, kubew] : products
 
   const gallery = (service.gallery ?? [])
     .map((g) => asMedia(g))
@@ -157,7 +160,7 @@ export async function ServiceView({ service, locale, dict, settings, contactHref
           <div className="wrap max-w-[1000px]">
             <SectionHeading className="mb-6">{dict.products}</SectionHeading>
             <div className="grid grid-cols-3 gap-2 sm:gap-3">
-              {products.map((p) => (
+              {tiles.map((p) => (
                 <ProductTile key={p.id} product={p} locale={locale} />
               ))}
             </div>
@@ -172,24 +175,16 @@ export async function ServiceView({ service, locale, dict, settings, contactHref
         </section>
       )}
 
-      {projects.length > 0 && (
-        <section className="py-12">
-          <div className="wrap max-w-[1000px]">
-            <SectionHeading className="mb-6">{dict.relatedProjects}</SectionHeading>
-            <div className="grid grid-cols-3 gap-2 sm:gap-2.5">
-              {projects.map((p) => (
-                <PhotoTile key={p.id} image={p.cover} title={p.location || p.title} href={paths.project(locale, p.slug || '')} />
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
       {gallery.length > 0 && (
         <section className="bg-band py-12">
           <div className="wrap max-w-[1000px]">
             <SectionHeading className="mb-6">{dict.gallery}</SectionHeading>
-            <Gallery images={gallery} closeLabel={dict.close} />
+            <Gallery
+              images={gallery}
+              closeLabel={dict.close}
+              layout="grid"
+              extra={kubew ? <PhonePromo locale={locale} href={paths.catalogItem(locale, kubew.slug || 'kubew')} image={mediaUrl(kubew.images?.[0], 'thumb')} /> : undefined}
+            />
           </div>
         </section>
       )}
