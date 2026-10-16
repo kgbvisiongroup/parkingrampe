@@ -19,7 +19,8 @@
     "import:portfolio": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/import-portfolio.ts",
     "images:products": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/crop-product-images.ts",
     "products:specs": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/product-specs.ts",
-    "products:english": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/product-english.ts"
+    "products:english": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/product-english.ts",
+    "videos:optimize": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/optimize-videos.ts"
   },
   "dependencies": {
     "@fontsource-variable/plus-jakarta-sans": "^5.3.0",
@@ -47,6 +48,7 @@
     "@types/node": "22.19.9",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
+    "ffmpeg-static": "^5.2.0",
     "tailwindcss": "^4.1.0",
     "tsx": "4.22.4",
     "typescript": "5.7.3"

@@ -23,7 +23,7 @@ import type {
   Setting,
   TextImageBlock,
 } from '@/payload-types'
-import { AutoplayVideo } from '@/components/AutoplayVideo'
+import { VideoGallery } from '@/components/AutoplayVideo'
 import { ClientLogos } from '@/components/ClientLogos'
 import { ContactPanel } from '@/components/ContactPanel'
 import { FaqList } from '@/components/FaqList'
@@ -472,19 +472,19 @@ function MediaGallery({ block, ctx }: { block: MediaGalleryBlock; ctx: Ctx }) {
   if (!images.length && !videos.length) return null
   return (
     <section className="bg-white py-12 md:py-14">
-      <div className="wrap max-w-[1000px]">
-        {block.heading && <SectionHeading className="mb-7">{block.heading}</SectionHeading>}
+      {block.heading && <SectionHeading className="wrap mb-7">{block.heading}</SectionHeading>}
+      {/* Full width of the screen, with a thin edge. */}
+      <div className="px-1.5 sm:px-2.5">
         {videos.length > 0 && (
-          <div className="mb-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
-            {videos.map((v) => (
-              <AutoplayVideo
-                key={v.id}
-                src={mediaUrl(v)!}
-                type={v.mimeType === 'video/quicktime' ? 'video/mp4' : v.mimeType || 'video/mp4'}
-                label={v.alt || block.heading || 'Video'}
-                className="aspect-video w-full rounded-lg bg-black object-cover"
-              />
-            ))}
+          <div className="mb-1.5 sm:mb-2.5">
+            <VideoGallery
+              closeLabel={dict.close}
+              videos={videos.map((v) => ({
+                src: mediaUrl(v)!,
+                type: v.mimeType === 'video/quicktime' ? 'video/mp4' : v.mimeType || 'video/mp4',
+                label: v.alt || block.heading || 'Video',
+              }))}
+            />
           </div>
         )}
         {images.length > 0 && <Gallery images={images} closeLabel={dict.close} />}

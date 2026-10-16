@@ -3,11 +3,26 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import Image from 'next/image'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState, type ReactNode } from 'react'
 
 export type GalleryImage = { src: string; full: string; alt: string; width?: number | null; height?: number | null }
 
-export function Gallery({ images, closeLabel }: { images: GalleryImage[]; closeLabel: string }) {
+/**
+ * masonry: photos keep their own shape (portfolio).
+ * grid: equal 4:3 tiles in rows of three, so every row is symmetric; `extra` is an additional tile at the end.
+ */
+export function Gallery({
+  images,
+  closeLabel,
+  layout = 'masonry',
+  extra,
+}: {
+  images: GalleryImage[]
+  closeLabel: string
+  layout?: 'masonry' | 'grid'
+  extra?: ReactNode
+}) {
+  const grid = layout === 'grid'
   const [open, setOpen] = useState<number | null>(null)
   const count = images.length
 
@@ -36,7 +51,7 @@ export function Gallery({ images, closeLabel }: { images: GalleryImage[]; closeL
 
   return (
     <>
-      <ul className="columns-3 gap-1.5 sm:gap-2.5 [&>li]:mb-1.5 sm:[&>li]:mb-2.5">
+      <ul className={grid ? 'grid grid-cols-3 gap-1.5 sm:gap-2.5' : 'columns-3 gap-1.5 sm:gap-2.5 [&>li]:mb-1.5 sm:[&>li]:mb-2.5'}>
         {images.map((img, i) => (
           <motion.li
             key={img.src + i}
@@ -50,9 +65,10 @@ export function Gallery({ images, closeLabel }: { images: GalleryImage[]; closeL
             <button
               type="button"
               onClick={() => setOpen(i)}
-              className="group relative block w-full overflow-hidden bg-band"
+              className={`group relative block w-full overflow-hidden bg-band ${grid ? 'aspect-[4/3]' : ''}`}
             >
               <motion.div
+                className={grid ? 'absolute inset-0' : undefined}
                 initial={{ scale: 1.22 }}
                 whileInView={{ scale: 1 }}
                 viewport={{ once: true, margin: '0px 0px -80px 0px' }}
@@ -64,12 +80,22 @@ export function Gallery({ images, closeLabel }: { images: GalleryImage[]; closeL
                   width={img.width || 960}
                   height={img.height || 720}
                   sizes="33vw"
-                  className="h-auto w-full transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                  className={`w-full transition-transform duration-700 ease-out group-hover:scale-[1.04] ${grid ? 'h-full object-cover' : 'h-auto'}`}
                 />
               </motion.div>
             </button>
           </motion.li>
         ))}
+        {extra && (
+          <motion.li
+            initial={{ opacity: 0, clipPath: 'inset(16% 16% 16% 16% round 10px)' }}
+            whileInView={{ opacity: 1, clipPath: 'inset(0% 0% 0% 0% round 0px)' }}
+            viewport={{ once: true, margin: '0px 0px -80px 0px' }}
+            transition={{ duration: 1.2, ease: [0.16, 0.8, 0.2, 1], delay: (count % 3) * 0.12 }}
+          >
+            {extra}
+          </motion.li>
+        )}
       </ul>
 
       <AnimatePresence>
