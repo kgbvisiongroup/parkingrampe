@@ -13,18 +13,20 @@ import path from 'node:path'
 import { getPayload } from 'payload'
 import config from '../src/payload.config'
 
-function ffmpegPath() {
+async function ffmpegPath() {
   try {
     execFileSync('ffmpeg', ['-version'], { stdio: 'ignore' })
     return 'ffmpeg'
   } catch {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    return require('ffmpeg-static') as string
+    // No ffmpeg on the server: use the copy installed by npm (ffmpeg-static).
+    const mod = (await import('ffmpeg-static')) as unknown as { default: string | null }
+    if (!mod.default) throw new Error('ffmpeg nije pronađen. Pokrenite npm install.')
+    return mod.default
   }
 }
 
 async function run() {
-  const ffmpeg = ffmpegPath()
+  const ffmpeg = await ffmpegPath()
   const payload = await getPayload({ config })
   const videos = await payload.find({ collection: 'media', where: { mimeType: { like: 'video/' } }, depth: 0, limit: 200, pagination: false })
   const staticDir = path.resolve('media')
