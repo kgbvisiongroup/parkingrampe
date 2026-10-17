@@ -23,7 +23,7 @@ export function PhonePromo({ href, image, locale }: { href: string; image?: stri
         {image && (
           <img
             src={image}
-            alt=""
+            alt="KUBEW"
             loading="lazy"
             className="hidden h-16 w-auto rounded-lg bg-white p-1.5 shadow-lg transition-transform duration-700 group-hover:-translate-y-1 sm:block lg:h-20"
           />

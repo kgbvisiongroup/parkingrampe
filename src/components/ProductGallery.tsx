@@ -28,7 +28,7 @@ export function ProductGallery({ images }: { images: { src: string; thumb: strin
                 aria-current={n === i}
                 className={`relative block aspect-square w-full overflow-hidden bg-[#ececec] outline-offset-0 ${n === i ? 'outline outline-2 outline-dark' : 'opacity-70 hover:opacity-100'}`}
               >
-                <Image src={img.thumb} alt="" fill sizes="120px" className="object-contain p-1.5 mix-blend-multiply" />
+                <Image src={img.thumb} alt={img.alt} fill sizes="120px" className="object-contain p-1.5 mix-blend-multiply" />
               </button>
             </li>
           ))}

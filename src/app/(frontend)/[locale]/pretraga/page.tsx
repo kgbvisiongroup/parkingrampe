@@ -12,7 +12,11 @@ type Props = { params: Promise<{ locale: string }>; searchParams: Promise<{ q?: 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params
   if (!isLocale(locale)) return {}
-  return { title: getDictionary(locale).searchResults, robots: { index: false, follow: true } }
+  const description =
+    locale === 'en'
+      ? 'Search KGB Automation products, services and projects: parking barriers, gate motors and access control.'
+      : 'Pretraga proizvoda, usluga i projekata KGB Automation: parking rampe, motori za kapije i kontrola pristupa.'
+  return { title: getDictionary(locale).searchResults, description, robots: { index: false, follow: true } }
 }
 
 export default async function SearchPage({ params, searchParams }: Props) {

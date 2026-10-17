@@ -6,6 +6,7 @@ import type { ReactNode } from 'react'
 
 export const metadata: Metadata = {
   title: 'Prijava – KGB Admin Panel',
+  description: 'Prijava u administraciju sajta parkingrampe.rs.',
   robots: { index: false, follow: false },
   icons: { icon: '/favicon.png' },
 }

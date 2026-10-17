@@ -25,7 +25,7 @@ export function ClientLogos({ heading, clients }: { heading: string; clients: Cl
             const img = (
               <img
                 src={src}
-                alt={i < base.length ? asMedia(c.logo)?.alt || c.name : ''}
+                alt={asMedia(c.logo)?.alt || c.name}
                 loading="lazy"
                 width={150}
                 height={56}

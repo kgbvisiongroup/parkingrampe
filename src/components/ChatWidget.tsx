@@ -182,7 +182,7 @@ export function ChatWidget({ locale, labels, agentName, agentTitle, avatarUrl, g
 
   const avatar = (size: string) =>
     avatarUrl ? (
-      <img src={avatarUrl} alt="" className={`${size} rounded-full object-cover`} />
+      <img src={avatarUrl} alt={agentName} className={`${size} rounded-full object-cover`} />
     ) : (
       <span className={`${size} grid place-items-center rounded-full bg-accent text-white`}>
         <MessageCircle className="size-1/2" aria-hidden />
