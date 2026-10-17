@@ -298,7 +298,7 @@ export function Header({ locale, siteName, logoUrl, phone, phoneDisplay, items, 
                         <li key={p.href}>
                           <Link href={p.href} className="flex items-center gap-3 rounded-lg p-2 transition-colors hover:bg-white/10">
                             <span className="grid size-12 shrink-0 place-items-center overflow-hidden rounded bg-white">
-                              {p.image && <img src={p.image} alt="" className="max-h-full max-w-full object-contain p-0.5" />}
+                              {p.image && <img src={p.image} alt={p.title} className="max-h-full max-w-full object-contain p-0.5" />}
                             </span>
                             <span className="min-w-0">
                               {p.code && <span className="block text-[11px] font-bold uppercase tracking-wider text-accent">{p.code}</span>}
@@ -405,7 +405,7 @@ export function Header({ locale, siteName, logoUrl, phone, phoneDisplay, items, 
                           <motion.img
                             key={group.image}
                             src={group.image}
-                            alt=""
+                            alt={group.label}
                             initial={{ opacity: 0, scale: 1.06 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0 }}
