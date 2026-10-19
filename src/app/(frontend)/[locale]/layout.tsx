@@ -45,6 +45,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   }
 }
 
+// Google Tag Manager container (can be changed with NEXT_PUBLIC_GTM_ID in .env; empty value turns it off).
+const GTM_ID = (process.env.NEXT_PUBLIC_GTM_ID ?? 'GTM-5BKPZCJ7').replace(/[^A-Z0-9-]/gi, '')
+
 const hex = (v: string | null | undefined, fallback: string) => (v && /^#[0-9a-fA-F]{6}$/.test(v) ? v : fallback)
 
 export default async function LocaleLayout({ children, params }: { children: ReactNode; params: Promise<{ locale: string }> }) {
@@ -61,9 +64,23 @@ export default async function LocaleLayout({ children, params }: { children: Rea
   return (
     <html lang={htmlLang[locale]}>
       <head>
+        {GTM_ID && (
+          <script
+            // Google Tag Manager
+            dangerouslySetInnerHTML={{
+              __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${GTM_ID}');`,
+            }}
+          />
+        )}
         <style dangerouslySetInnerHTML={{ __html: theme }} />
       </head>
       <body className="min-h-dvh">
+        {GTM_ID && (
+          <noscript>
+            {/* Google Tag Manager (noscript) */}
+            <iframe src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`} height="0" width="0" style={{ display: 'none', visibility: 'hidden' }} />
+          </noscript>
+        )}
         <AlternatesProvider>
           <Header
             locale={locale}
