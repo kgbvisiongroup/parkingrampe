@@ -3,7 +3,12 @@
 import { headers } from 'next/headers'
 import { getPayloadClient } from '@/lib/payload'
 
-export type InquiryState = { status: 'idle' | 'success' | 'error'; fieldErrors?: Record<string, string> }
+export type InquiryState = {
+  status: 'idle' | 'success' | 'error'
+  fieldErrors?: Record<string, string>
+  /** Set only when a real inquiry was saved (not for spam), so analytics count real leads. */
+  lead?: { id: string; service: string }
+}
 
 const hits = new Map<string, number[]>()
 
@@ -44,12 +49,12 @@ export async function submitInquiry(_prev: InquiryState, form: FormData): Promis
 
   try {
     const payload = await getPayloadClient()
-    await payload.create({
+    const doc = await payload.create({
       collection: 'inquiries',
       overrideAccess: true,
       data: { name, email: email || undefined, phone, service, message, locale, pageUrl, status: 'new' },
     })
-    return { status: 'success' }
+    return { status: 'success', lead: { id: String(doc.id), service } }
   } catch (err) {
     console.error('Inquiry failed', err)
     return { status: 'error' }

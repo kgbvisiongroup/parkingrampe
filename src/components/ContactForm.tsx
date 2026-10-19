@@ -21,8 +21,24 @@ export function ContactForm({ locale, labels, services, defaultService }: Props)
     setPageUrl(window.location.pathname)
   }, [])
   useEffect(() => {
-    if (state.status === 'success') formRef.current?.reset()
-  }, [state])
+    if (state.status !== 'success') return
+    formRef.current?.reset()
+    // GA4 / Google Tag Manager: one event per saved inquiry. No personal data (name, phone, email) is sent.
+    if (state.lead) {
+      const w = window as unknown as { dataLayer?: Record<string, unknown>[] }
+      w.dataLayer = w.dataLayer || []
+      w.dataLayer.push({
+        event: 'form_submit',
+        form_id: 'contact',
+        form_name: 'Kontakt forma',
+        form_destination: 'office@kgb.co.rs',
+        form_service: state.lead.service || undefined,
+        form_page: window.location.pathname,
+        lead_id: state.lead.id,
+        language: locale,
+      })
+    }
+  }, [state, locale])
 
   const err = (field: string) => {
     const code = state.fieldErrors?.[field]
