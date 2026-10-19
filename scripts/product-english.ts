@@ -34,12 +34,18 @@ async function run() {
     } else {
       highlights = ((p.highlights ?? []) as { id?: string; text?: string }[]).map((h, i) => ({ id: h.id, text: features[i] ?? h.text ?? '' }))
     }
+    const titleEn = `${p.code} – ${shortName(text)}`
+    // English alt text for the product photos (the Serbian one stays for the Serbian pages).
+    for (const img of (p.images ?? []) as (number | { id: number })[]) {
+      const id = typeof img === 'object' ? img.id : img
+      await payload.update({ collection: 'media', id, locale: 'en', data: { alt: titleEn } }).catch(() => {})
+    }
     await payload.update({
       collection: 'products',
       id: p.id,
       locale: 'en',
       data: {
-        title: `${p.code} – ${shortName(text)}`,
+        title: titleEn,
         excerpt: text.slice(0, 300),
         highlights,
         description: lexical([text], contents, contents.length ? 'Kit contents' : undefined) as never,

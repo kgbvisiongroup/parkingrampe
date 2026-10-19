@@ -202,6 +202,8 @@ export async function ProductView({ locale, dict, settings, product, contactHref
               {/* Same layout as the Key Automation product pages: dark bar with the code, text, specification list. */}
               <h1 className="mt-3 bg-dark px-5 py-4 text-white sm:px-7 sm:py-5">
                 <span className="block text-[clamp(22px,2.6vw,30px)] font-extrabold leading-tight">{product.code || productName(product).name}</span>
+                {/* Hidden separator: search engines read "CODE – Name" instead of "CODEName". */}
+                {product.code && <span className="sr-only"> – </span>}
                 {product.code && <span className="mt-1 block text-[14px] font-semibold leading-snug text-white/70">{productName(product).name}</span>}
               </h1>
               {product.excerpt && <p className="mt-5 text-[16px] leading-relaxed text-ink">{product.excerpt}</p>}
