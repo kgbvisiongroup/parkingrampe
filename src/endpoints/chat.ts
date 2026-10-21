@@ -1,5 +1,6 @@
 import crypto from 'node:crypto'
 import type { Endpoint, PayloadRequest } from 'payload'
+import { receivedAt, renderNotification, siteAddress } from '../lib/notificationEmail'
 
 const MAX_TEXT = 2000
 const hits = new Map<string, number[]>()
@@ -44,12 +45,43 @@ async function chatForVisitor(req: PayloadRequest, id: unknown, token: unknown) 
   return chat
 }
 
-async function notify(req: PayloadRequest, subject: string, text: string) {
+type ChatInfo = { id: number | string; visitorName: string; contact?: string | null; locale?: string | null; page?: string | null }
+
+const isEmail = (s?: string | null) => !!s && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.trim())
+
+/** E-mail to the office about a chat message; "Reply" goes to the visitor when they left an e-mail. */
+async function notify(req: PayloadRequest, chat: ChatInfo, text: string, first: boolean) {
   try {
     const settings = await req.payload.findGlobal({ slug: 'settings', depth: 0 })
-    const to = settings.chat?.notifyEmail || process.env.CONTACT_EMAIL_TO || 'office@kgb.co.rs'
+    const to = settings.chat?.notifyEmail || process.env.CONTACT_EMAIL_TO || 'office@parkingrampe.rs'
     if (!to || !process.env.SMTP_HOST) return
-    await req.payload.sendEmail({ to, subject, text })
+    const contact = (chat.contact || '').trim()
+    const { html, text: plain } = renderNotification({
+      eyebrow: first ? 'Novi chat' : 'Nova chat poruka',
+      title: first ? 'Poruka iz chata na sajtu' : 'Posetilac je ponovo pisao u chatu',
+      intro: 'Posetilac sajta vam je pisao preko chat ikonice. Odgovorite u admin panelu – odgovor vidi odmah na sajtu.',
+      rows: [
+        { label: 'Ime', value: chat.visitorName },
+        {
+          label: 'Kontakt',
+          value: contact,
+          href: isEmail(contact) ? `mailto:${contact}` : contact ? `tel:${contact.replace(/[^\d+]/g, '')}` : undefined,
+        },
+        { label: 'Jezik', value: String(chat.locale || '').toUpperCase() },
+        { label: 'Stranica', value: chat.page || '' },
+        { label: 'Primljeno', value: receivedAt() },
+      ],
+      messageLabel: 'Poruka',
+      message: text,
+      button: { label: `Odgovori u admin panelu — ${chat.visitorName}`, href: `${siteAddress()}/admin/collections/chats/${chat.id}` },
+    })
+    await req.payload.sendEmail({
+      to,
+      replyTo: isEmail(contact) ? `${chat.visitorName} <${contact.trim()}>` : undefined,
+      subject: `${first ? 'Novi chat' : 'Chat poruka'} na sajtu: ${chat.visitorName}`,
+      html,
+      text: plain,
+    })
   } catch (err) {
     req.payload.logger.error({ err, msg: 'Chat e-mail obaveštenje nije poslato' })
   }
@@ -92,7 +124,7 @@ export const chatEndpoints: Endpoint[] = [
         overrideAccess: true,
         data: { chat: chat.id, from: 'visitor', text },
       })
-      void notify(req, `Novi chat na sajtu: ${name}`, `${name} (${chat.contact || 'bez kontakta'}) piše:\n\n${text}\n\nOdgovorite u admin panelu: /admin/collections/chats/${chat.id}`)
+      void notify(req, chat, text, true)
       return Response.json({ id: chat.id, token, messages: [publicMessage(msg)] })
     },
   },
@@ -118,6 +150,10 @@ export const chatEndpoints: Endpoint[] = [
         context: { chatEndpoint: true },
         data: { unread: true, status: 'open', lastMessage: text.slice(0, 140), lastMessageAt: new Date().toISOString() },
       })
+      // E-mail for a new message, but not for every line of a running conversation:
+      // only when the chat was already read in the admin or the last message is older than 10 minutes.
+      const last = chat.lastMessageAt ? new Date(chat.lastMessageAt).getTime() : 0
+      if (!chat.unread || Date.now() - last > 10 * 60_000) void notify(req, chat, text, false)
       return Response.json({ message: publicMessage(msg) })
     },
   },
