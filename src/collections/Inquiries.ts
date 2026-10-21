@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { loggedIn } from '../access'
 import { t } from '../fields/shared'
+import { receivedAt, renderNotification, siteAddress } from '../lib/notificationEmail'
 
 export const Inquiries: CollectionConfig = {
   slug: 'inquiries',
@@ -16,22 +17,33 @@ export const Inquiries: CollectionConfig = {
   hooks: {
     afterChange: [
       async ({ doc, operation, req }) => {
-        const to = process.env.CONTACT_EMAIL_TO || 'office@kgb.co.rs'
+        const to = process.env.CONTACT_EMAIL_TO || 'office@parkingrampe.rs'
         if (operation !== 'create' || !to || !process.env.SMTP_HOST) return doc
         try {
+          const { html, text } = renderNotification({
+            eyebrow: 'Novi upit',
+            title: 'Poruka sa kontakt forme',
+            intro: 'Neko vas je upravo kontaktirao putem sajta. Detalji su ispod.',
+            rows: [
+              { label: 'Ime', value: doc.name },
+              { label: 'Email', value: doc.email || '', href: doc.email ? `mailto:${doc.email}` : undefined },
+              { label: 'Telefon', value: doc.phone || '', href: doc.phone ? `tel:${String(doc.phone).replace(/[^\d+]/g, '')}` : undefined },
+              { label: 'Usluga', value: doc.service || '' },
+              { label: 'Jezik', value: String(doc.locale || '').toUpperCase() },
+              { label: 'Stranica', value: doc.pageUrl || '' },
+              { label: 'Primljeno', value: receivedAt(new Date(doc.createdAt)) },
+            ],
+            messageLabel: 'Poruka',
+            message: doc.message,
+            button: { label: `Otvori u admin panelu — ${doc.name}`, href: `${siteAddress()}/admin/collections/inquiries/${doc.id}` },
+          })
+          // "Reply" in the mail program answers the customer directly.
           await req.payload.sendEmail({
             to,
-            replyTo: doc.email || undefined,
-            subject: `Novi upit sa sajta: ${doc.name}`,
-            text: [
-              `Ime: ${doc.name}`,
-              `Telefon: ${doc.phone || '-'}`,
-              `E-mail: ${doc.email || '-'}`,
-              `Usluga: ${doc.service || '-'}`,
-              `Jezik: ${doc.locale}`,
-              '',
-              doc.message,
-            ].join('\n'),
+            replyTo: doc.email ? `${doc.name} <${doc.email}>` : undefined,
+            subject: `Novi upit sa sajta: ${doc.name}${doc.service ? ` – ${doc.service}` : ''}`,
+            html,
+            text,
           })
         } catch (err) {
           req.payload.logger.error({ err, msg: 'Slanje e-maila za upit nije uspelo' })
