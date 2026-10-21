@@ -20,6 +20,7 @@ import { Products } from './collections/Products'
 import { Projects } from './collections/Projects'
 import { Services } from './collections/Services'
 import { Users } from './collections/Users'
+import { withActionButtons } from './fields/listColumns'
 import { t } from './fields/shared'
 import { chatEndpoints } from './endpoints/chat'
 import { importEndpoints } from './endpoints/import'
@@ -116,7 +117,7 @@ export default buildConfig({
     ChatMessages,
     Inquiries,
     Users,
-  ],
+  ].map(withActionButtons),
   globals: [Home, Navigation, SiteSettings],
   endpoints: [...chatEndpoints, ...importEndpoints, searchEndpoint],
   editor: lexicalEditor(),
