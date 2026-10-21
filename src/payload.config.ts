@@ -119,6 +119,22 @@ export default buildConfig({
     Users,
   ].map(withActionButtons),
   globals: [Home, Navigation, SiteSettings],
+  // Lists whose columns were saved before the "Akcije" column existed don't show it by themselves:
+  // add it once to those saved column settings (a column turned off by hand stays off).
+  onInit: async (payload) => {
+    try {
+      const slugs = payload.config.collections.filter((c) => c.fields.some((f) => 'name' in f && f.name === 'rowActions')).map((c) => c.slug)
+      const prefs = await payload.find({ collection: 'payload-preferences', where: { key: { in: slugs.map((s) => `collection-${s}`) } }, depth: 0, limit: 1000, pagination: false })
+      for (const pref of prefs.docs) {
+        const value = pref.value as { columns?: { accessor: string; active: boolean }[] } | null
+        if (!value?.columns?.length || value.columns.some((c) => c.accessor === 'rowActions')) continue
+        // Straight to the database: only the saved value changes, the owner of the setting stays as it is.
+        await payload.db.updateOne({ collection: 'payload-preferences', id: pref.id, data: { value: { ...value, columns: [...value.columns, { accessor: 'rowActions', active: true }] } } })
+      }
+    } catch (err) {
+      payload.logger.error({ err, msg: 'Kolona Akcije nije dodata u sačuvana podešavanja lista' })
+    }
+  },
   endpoints: [...chatEndpoints, ...importEndpoints, searchEndpoint],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
