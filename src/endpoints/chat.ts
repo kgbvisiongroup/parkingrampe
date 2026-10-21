@@ -73,7 +73,7 @@ async function notify(req: PayloadRequest, chat: ChatInfo, text: string, first: 
       ],
       messageLabel: 'Poruka',
       message: text,
-      button: { label: `Odgovori u admin panelu — ${chat.visitorName}`, href: `${siteAddress()}/admin/collections/chats/${chat.id}` },
+      button: { label: 'Odgovori odmah na poruku', href: `${siteAddress()}/admin/collections/chats/${chat.id}` },
     })
     await req.payload.sendEmail({
       to,

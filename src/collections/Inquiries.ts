@@ -35,7 +35,15 @@ export const Inquiries: CollectionConfig = {
             ],
             messageLabel: 'Poruka',
             message: doc.message,
-            button: { label: `Otvori u admin panelu — ${doc.name}`, href: `${siteAddress()}/admin/collections/inquiries/${doc.id}` },
+            // Opens a reply to the customer straight away (subject and quoted message filled in).
+            button: {
+              label: 'Odgovori odmah na poruku',
+              href: doc.email
+                ? `mailto:${doc.email}?subject=${encodeURIComponent(`Re: Upit sa sajta${doc.service ? ` – ${doc.service}` : ''}`)}&body=${encodeURIComponent(
+                    `Poštovani/a ${doc.name},\n\n\n\n---\nVaša poruka:\n${String(doc.message).slice(0, 1500)}`,
+                  )}`
+                : `${siteAddress()}/admin/collections/inquiries/${doc.id}`,
+            },
           })
           // "Reply" in the mail program answers the customer directly.
           await req.payload.sendEmail({
