@@ -75,6 +75,8 @@ export default buildConfig({
     avatar: 'default',
     // Light and dark; dark is the default (set in HeaderActions until the user picks one).
     theme: 'all',
+    // Short Serbian date in lists and the edit view: 22.10.2026. 09:28
+    dateFormat: 'dd.MM.yyyy. HH:mm',
     importMap: { baseDir: path.resolve(dirname) },
     meta: { titleSuffix: '– KGB CMS' },
     components: {

@@ -1420,15 +1420,15 @@ textarea,
 .kgb-row-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  height: 32px;
-  padding: 0 12px;
+  gap: 5px;
+  height: 30px;
+  padding: 0 10px;
   border: 1px solid var(--kgb-line);
   border-radius: 999px;
   background: var(--kgb-hover);
   color: var(--kgb-text);
   font: inherit;
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 700;
   line-height: 1;
   cursor: pointer;
@@ -1504,15 +1504,21 @@ html[data-theme='light'] .kgb-row-btn.is-edit:not(:hover) {
   color: #1f8a55;
 }
 
-@media (max-width: 900px) {
+/* When the list is narrow (13" laptop with the menu open, tablet) the row buttons become round icons,
+   so the whole table fits without scrolling sideways. */
+@container kgb-list (max-width: 960px) {
   .kgb-row-actions:not(.kgb-doc-delete) .kgb-row-btn:not(.is-solid) > span {
     display: none;
   }
 
   .kgb-row-actions:not(.kgb-doc-delete) .kgb-row-btn:not(.is-solid) {
-    width: 32px;
+    width: 30px;
     padding: 0;
     justify-content: center;
+  }
+
+  .kgb-row-actions {
+    gap: 6px;
   }
 }
 
@@ -1589,5 +1595,135 @@ html[data-theme='light'] .kgb-row-btn.is-edit:not(:hover) {
   .kgb-dot {
     top: -4px;
     right: -4px;
+  }
+}
+
+/* ================= compact list tables (fit a 13" laptop) ================= */
+.collection-list .table {
+  container: kgb-list / inline-size;
+}
+
+.collection-list .table table {
+  /* Payload gives every column at least 150 px; let narrow columns (status, phone) take only what they need */
+  th,
+  td {
+    min-width: 0;
+    padding: 10px;
+  }
+
+  td {
+    font-size: 14px;
+    line-height: 1.35;
+    white-space: normal;
+    overflow-wrap: break-word;
+  }
+
+  /* header label may go to two lines instead of widening the column */
+  th .sort-column {
+    gap: 4px;
+  }
+
+  th .sort-column__label {
+    white-space: normal;
+  }
+
+  /* checkbox and buttons never wrap or shrink */
+  td:first-child,
+  th:first-child,
+  td:last-child {
+    width: 1%;
+    white-space: nowrap;
+    overflow-wrap: normal;
+  }
+}
+
+/* ================= buttons shown when rows are selected ("2 selected — Izmeni  Obriši") ================= */
+.list-selection {
+  gap: 10px;
+  font-size: 13px;
+
+  &__actions {
+    gap: 8px;
+  }
+
+  &__button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 32px;
+    padding: 0 14px !important;
+    border: 1px solid var(--kgb-green-line) !important;
+    border-radius: 999px;
+    background: var(--kgb-green-soft) !important;
+    color: var(--kgb-green-bright) !important;
+    font-size: 12.5px !important;
+    font-weight: 700;
+    line-height: 1;
+    text-decoration: none !important;
+    transition:
+      color 0.2s,
+      border-color 0.2s,
+      background 0.2s,
+      box-shadow 0.2s,
+      transform 0.2s var(--kgb-ease);
+
+    &::before {
+      flex: none;
+      width: 14px;
+      height: 14px;
+      background: currentColor;
+      -webkit-mask: var(--kgb-icon) center / contain no-repeat;
+      mask: var(--kgb-icon) center / contain no-repeat;
+    }
+
+    &:hover {
+      color: #fff !important;
+      border-color: var(--kgb-green) !important;
+      background: var(--kgb-green) !important;
+      box-shadow: 0 6px 18px -8px rgb(70 185 122 / 0.7);
+      transform: translateY(-1px);
+    }
+  }
+
+  /* icon only on Izmeni and Obriši (not on "Izaberi sve") */
+  .edit-many &__button::before,
+  .delete-documents__toggle::before {
+    content: '';
+  }
+
+  /* pencil */
+  .edit-many &__button {
+    --kgb-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21.17 6.81a1 1 0 0 0-3.99-3.99L3.84 16.17a2 2 0 0 0-.5.83l-1.32 4.35a.5.5 0 0 0 .62.62l4.35-1.32a2 2 0 0 0 .83-.5z'/%3E%3Cpath d='m15 5 4 4'/%3E%3C/svg%3E");
+  }
+
+  /* trash, red */
+  .delete-documents__toggle {
+    --kgb-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 6h18'/%3E%3Cpath d='M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6'/%3E%3Cpath d='M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2'/%3E%3Cpath d='M10 11v6'/%3E%3Cpath d='M14 11v6'/%3E%3C/svg%3E");
+    color: #ef4444 !important;
+    border-color: rgb(239 68 68 / 0.35) !important;
+    background: rgb(239 68 68 / 0.08) !important;
+
+    &:hover {
+      color: #fff !important;
+      border-color: #ef4444 !important;
+      background: #ef4444 !important;
+      box-shadow: 0 6px 18px -8px rgb(239 68 68 / 0.7);
+    }
+  }
+}
+
+html[data-theme='light'] .list-selection__button:not(:hover):not(.delete-documents__toggle) {
+  color: #1f8a55 !important;
+}
+
+/* delete confirmation window: the confirm button is red */
+.confirmation-modal[class*='delete'] #confirm-action {
+  border-color: #ef4444;
+  background: linear-gradient(135deg, #f87171, #ef4444) !important;
+  color: #fff !important;
+  box-shadow: 0 8px 22px -10px rgb(239 68 68 / 0.8);
+
+  &:hover {
+    background: #dc2626 !important;
   }
 }
