@@ -16,10 +16,13 @@ const RULES: Record<'sr' | 'en', [RegExp, string][]> = {
     [/u Beogradu i (širom )?Srbij[ie]/g, 'u Beogradu i okolini do 100 km'],
     [/,? ?širom Srbije/g, ' u Beogradu i okolini do 100 km'],
     [/na teritoriji (cele )?Srbije/g, 'u Beogradu i okolini do 100 km'],
+    [/za celu Srbiju/g, 'za Beograd i okolinu do 100 km'],
   ],
   en: [
     [/in Belgrade and (across|throughout) Serbia/g, 'in Belgrade and up to 100 km around'],
-    [/,? ?(across|throughout) Serbia/g, ' in Belgrade and up to 100 km around'],
+    [/in Belgrade and Serbia/g, 'in Belgrade and up to 100 km around'],
+    [/,? ?(across|throughout|anywhere in) Serbia/g, ' in Belgrade and up to 100 km around'],
+    [/for all of Serbia/g, 'for Belgrade and up to 100 km around'],
   ],
 }
 

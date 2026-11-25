@@ -182,7 +182,7 @@ export const services = [
     slug: l('automatske-rampe', 'automatic-barriers'),
     tagline: l(
       'Ugrađujemo automatske Key Automation rampe za parking sa otvaranjem na daljinski ili preko telefona i sigurnosnim senzorima u Beogradu i okolini do 100 km.',
-      'We install Key Automation parking barriers that open by remote or phone, with safety sensors, anywhere in Serbia.',
+      'We install Key Automation parking barriers that open by remote or phone, with safety sensors in Belgrade and up to 100 km around.',
     ),
     heroImage: 'heroBarrier' as ImageKey,
     introHeading: l('Šta su automatske rampe za parking?', 'What is an automatic parking barrier?'),
@@ -268,7 +268,7 @@ export const services = [
     slug: l('motori-za-kapije', 'gate-motors'),
     tagline: l(
       'Ugrađujemo Key Automation motore za klizne i krilne kapije, sa otvaranjem na daljinski ili preko telefona u Beogradu i okolini do 100 km.',
-      'We install Key Automation motors for sliding and swing gates, opening by remote or phone, anywhere in Serbia.',
+      'We install Key Automation motors for sliding and swing gates, opening by remote or phone in Belgrade and up to 100 km around.',
     ),
     heroImage: 'heroGate' as ImageKey,
     introHeading: l('Šta je motor za kapiju i kako radi?', 'What is a gate motor and how does it work?'),
@@ -352,7 +352,7 @@ export const services = [
     slug: l('kontrola-pristupa', 'access-control'),
     tagline: l(
       'Evidencija ulaza i izlaza zaposlenih, posetilaca i vozila pomoću kartica, PIN koda, otiska prsta i mobilnog telefona u Beogradu i okolini do 100 km.',
-      'Record entries and exits of staff, visitors and vehicles with cards, PIN, fingerprint or phone, anywhere in Serbia.',
+      'Record entries and exits of staff, visitors and vehicles with cards, PIN, fingerprint or phone in Belgrade and up to 100 km around.',
     ),
     heroImage: 'heroAccess' as ImageKey,
     introHeading: l('Šta je kontrola pristupa?', 'What is access control?'),

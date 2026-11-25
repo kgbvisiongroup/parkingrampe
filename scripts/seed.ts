@@ -340,7 +340,7 @@ async function main() {
         title: l('Usluge – ugradnja rampi, kapija i kontrole pristupa', 'Services – barrier, gate and access control installation'),
         description: l(
           'Ugradnja parking rampi, motora za kapije i sistema kontrole pristupa u Beogradu i okolini do 100 km. Key Automation oprema i servis.',
-          'Installation of parking barriers, gate motors and access control systems in Belgrade and Serbia. Key Automation equipment and service.',
+          'Installation of parking barriers, gate motors and access control systems in Belgrade and up to 100 km around. Key Automation equipment and service.',
         ),
       },
     })
@@ -367,8 +367,8 @@ async function main() {
       slug: l('o-nama', 'about'),
       template: 'about',
       lead: l(
-        'Projektujemo, ugrađujemo i održavamo tehničke sisteme zaštite i automatizaciju kapija. Kapije i rampe kojima upravljate telefonom, iz Obrenovca za celu Srbiju.',
-        'We design, install and maintain technical security systems and gate automation. Gates and barriers you control from your phone, from Obrenovac for all of Serbia.',
+        'Projektujemo, ugrađujemo i održavamo tehničke sisteme zaštite i automatizaciju kapija. Kapije i rampe kojima upravljate telefonom, iz Obrenovca za Beograd i okolinu do 100 km.',
+        'We design, install and maintain technical security systems and gate automation. Gates and barriers you control from your phone, from Obrenovac for Belgrade and up to 100 km around.',
       ),
       heroImage: img.heroGate,
       highlights: [
@@ -409,7 +409,7 @@ async function main() {
               p: 'We connect every gate and barrier to your phone: open it from the app, share access with family or staff and see who passed and when. We work with proven brands, and for gate and barrier automation exclusively with Key Automation equipment.',
             },
             {
-              p: 'We keep expanding our services and invest in training our team. Our goal is to give every client – from a house to an apartment building or a company – a modern, reliable and long-lasting solution, anywhere in Serbia.',
+              p: 'We keep expanding our services and invest in training our team. Our goal is to give every client – from a house to an apartment building or a company – a modern, reliable and long-lasting solution in Belgrade and up to 100 km around.',
             },
             { h: 'What sets us apart' },
             {
@@ -591,7 +591,7 @@ async function main() {
     titleTemplate: '| KGB Automation',
     defaultDescription: l(
       'Parking rampe, motori za kapije i kontrola pristupa – Key Automation oprema sa ugradnjom i servisom u Beogradu i okolini do 100 km.',
-      'Parking barriers, gate motors and access control – Key Automation equipment with installation and service in Belgrade and Serbia.',
+      'Parking barriers, gate motors and access control – Key Automation equipment with installation and service in Belgrade and up to 100 km around.',
     ),
     defaultOgImage: img.heroBarrier,
     keywords: l(
