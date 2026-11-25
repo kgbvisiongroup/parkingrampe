@@ -6,7 +6,8 @@ import { ContactPanel } from './ContactPanel'
 import { RichText } from './RichText'
 import { SectionHeading } from './ui'
 import { type Locale } from '@/lib/i18n'
-import { mediaUrl } from '@/lib/media'
+import { asMedia, mediaUrl } from '@/lib/media'
+import { projectAlt } from '@/lib/projectText'
 import { paths } from '@/lib/routes'
 import { formatPrice } from '@/lib/seoTitles'
 
@@ -109,13 +110,13 @@ export function mergeFaqs(inline?: { question: string; answer: string }[] | null
   return out
 }
 
-export function RelatedProjects({ projects, locale, portfolioHref }: { projects: Project[]; locale: Locale; portfolioHref?: string | null }) {
+export function RelatedProjects({ projects, locale, portfolioHref, heading }: { projects: Project[]; locale: Locale; portfolioHref?: string | null; heading?: string }) {
   if (!projects.length) return null
   const t = txt[locale]
   return (
     <section className="bg-band py-12">
       <div className="wrap max-w-[1000px]">
-        <SectionHeading className="mb-6">{t.projects}</SectionHeading>
+        <SectionHeading className="mb-6">{heading || t.projects}</SectionHeading>
         <ul className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           {projects.map((p) => {
             const img = mediaUrl(p.cover, 'card')
@@ -125,7 +126,7 @@ export function RelatedProjects({ projects, locale, portfolioHref }: { projects:
                 <Link href={paths.project(locale, p.slug || '')} className="group block bg-white">
                   {img && (
                     <div className="aspect-[4/3] overflow-hidden">
-                      <img src={img} alt={[p.title, place].filter(Boolean).join(' – ')} loading="lazy" width={600} height={450} className="size-full object-cover transition-transform duration-500 group-hover:scale-[1.04]" />
+                      <img src={img} alt={projectAlt(p, asMedia(p.cover)?.alt)} loading="lazy" width={600} height={450} className="size-full object-cover transition-transform duration-500 group-hover:scale-[1.04]" />
                     </div>
                   )}
                   <div className="p-4">

@@ -37,6 +37,7 @@ import { linkProps } from '@/lib/links'
 import { asMedia, focal, mediaUrl } from '@/lib/media'
 import { getCategoryTree, getClients, getHomeFaqs, getProducts, getProjects, getServices } from '@/lib/payload'
 import { paths } from '@/lib/routes'
+import { projectAlt } from '@/lib/projectText'
 import { faqSchema } from '@/lib/schema'
 
 const cardWidth: Record<string, string> = {
@@ -317,7 +318,7 @@ async function Projects({ block, ctx }: { block: ProjectsBlock; ctx: Ctx }) {
         {block.heading && <SectionHeading className="mb-6">{block.heading}</SectionHeading>}
         <div className="grid grid-cols-3 gap-2 sm:gap-2.5">
           {projects.map((p) => (
-            <PhotoTile key={p.id} image={p.cover} title={p.location || p.title} href={paths.project(ctx.locale, p.slug || '')} />
+            <PhotoTile key={p.id} image={p.cover} title={p.city || p.location || p.title} alt={projectAlt(p, asMedia(p.cover)?.alt)} href={paths.project(ctx.locale, p.slug || '')} />
           ))}
         </div>
         <div className="mt-6 text-center">
