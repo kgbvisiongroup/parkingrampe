@@ -57,3 +57,32 @@ export const faqField: Field = {
     { name: 'answer', label: t('Odgovor', 'Answer'), type: 'textarea', localized: true, required: true },
   ],
 }
+
+/**
+ * One keyword = one page: the main search phrase of a category or service page.
+ * Used in the SEO title and H1; saving is refused if another category or service already uses it.
+ */
+export const keywordField: Field = {
+  name: 'keyword',
+  label: t('Glavna ključna reč (SEO)', 'Main keyword (SEO)'),
+  type: 'text',
+  localized: true,
+  admin: {
+    position: 'sidebar',
+    description: t(
+      'Npr. „Rampe za parking”. Ide u naslov za Google i H1. Svaka strana ima svoju – ista reč ne može na dve strane.',
+      'E.g. "Parking barriers". Used in the Google title and H1. One keyword per page – it cannot be used on two pages.',
+    ),
+  },
+  validate: async (value: unknown, { req, id, collectionSlug }: { req: { payload: import('payload').Payload; locale?: string | null }; id?: number | string; collectionSlug?: string }) => {
+    const kw = typeof value === 'string' ? value.trim().toLowerCase() : ''
+    if (!kw) return true
+    const locale = (req.locale === 'en' ? 'en' : 'sr') as 'sr' | 'en'
+    for (const collection of ['services', 'product-categories'] as const) {
+      const res = await req.payload.find({ collection, locale, depth: 0, limit: 200, pagination: false, select: { keyword: true, title: true } })
+      const clash = res.docs.find((d) => (d as { keyword?: string | null }).keyword?.trim().toLowerCase() === kw && !(collection === collectionSlug && d.id === id))
+      if (clash) return `„${value}” već koristi strana „${(clash as { title?: string }).title}”. Jedna ključna reč = jedna strana.`
+    }
+    return true
+  },
+}

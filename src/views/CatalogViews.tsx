@@ -10,6 +10,7 @@ import type { Dictionary, Locale } from '@/lib/i18n'
 import { asMedia, mediaUrl } from '@/lib/media'
 import { getCategoryTree, getChildCategories, getProducts } from '@/lib/payload'
 import { absolute, paths } from '@/lib/routes'
+import { listingHeading } from '@/lib/seoTitles'
 import { breadcrumbSchema } from '@/lib/schema'
 
 type Base = { locale: Locale; dict: Dictionary; settings: Setting }
@@ -95,7 +96,7 @@ export async function CategoryView({ locale, dict, category }: Base & { category
     <>
       <JsonLd data={breadcrumbSchema(crumbs.map((c) => ({ name: c.label, path: c.href ?? paths.catalogItem(locale, category.slug || '') })))} />
       <PageBanner
-        title={category.title}
+        title={listingHeading({ title: category.title, keyword: category.keyword, heading: category.heading }, locale)}
         lead={category.description}
         // Product packshots are not used as a banner photo; the parent category photo is used instead.
         image={category.imageFit === 'contain' ? (parent && parent.imageFit !== 'contain' ? parent.image : null) : category.image}

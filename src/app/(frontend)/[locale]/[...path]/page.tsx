@@ -16,6 +16,7 @@ import {
 } from '@/lib/payload'
 import { docPath, paths } from '@/lib/routes'
 import { buildMetadata } from '@/lib/seo'
+import { isAutoDescription, isAutoTitle, listingDescription, listingTitle, lowestPrice, productDescription, productTitle } from '@/lib/seoTitles'
 import { CatalogView, CategoryView, ProductView } from '@/views/CatalogViews'
 import { PageView } from '@/views/PageView'
 import { ProjectView } from '@/views/ProjectView'
@@ -88,13 +89,32 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     case 'catalog':
       return buildMetadata({ ...base, fallbackTitle: dict.catalog })
     case 'service':
-      return buildMetadata({ ...base, meta: found.doc.meta, fallbackTitle: found.doc.title, fallbackDescription: found.doc.tagline, fallbackImage: found.doc.heroImage })
+    case 'category': {
+      // Pattern title/description unless one was typed by hand in the CMS (see lib/seoTitles).
+      const d = found.doc
+      const listing = { title: d.title, keyword: d.keyword, heading: d.heading, priceFrom: lowestPrice(d.priceTable) }
+      const autoTitle = isAutoTitle(d.meta?.title, d.title)
+      const source = found.kind === 'service' ? found.doc.tagline : found.doc.description
+      const meta = {
+        ...d.meta,
+        title: autoTitle ? listingTitle(listing, locale) : d.meta?.title,
+        description: isAutoDescription(d.meta?.description, source) ? listingDescription(listing, locale) : d.meta?.description,
+      }
+      const image = found.kind === 'service' ? found.doc.heroImage : found.doc.image
+      return buildMetadata({ ...base, meta, fallbackTitle: d.title, fallbackImage: image, absoluteTitle: autoTitle })
+    }
     case 'project':
       return buildMetadata({ ...base, meta: found.doc.meta, fallbackTitle: found.doc.title, fallbackDescription: found.doc.summary, fallbackImage: found.doc.cover, type: 'article' })
-    case 'category':
-      return buildMetadata({ ...base, meta: found.doc.meta, fallbackTitle: found.doc.title, fallbackDescription: found.doc.description, fallbackImage: found.doc.image })
-    case 'product':
-      return buildMetadata({ ...base, meta: found.doc.meta, fallbackTitle: found.doc.title, fallbackDescription: found.doc.excerpt, fallbackImage: found.doc.images?.[0] })
+    case 'product': {
+      const p = found.doc
+      const autoTitle = isAutoTitle(p.meta?.title, p.title)
+      const meta = {
+        ...p.meta,
+        title: autoTitle ? productTitle(p) : p.meta?.title,
+        description: isAutoDescription(p.meta?.description, p.excerpt) ? productDescription(p, locale) : p.meta?.description,
+      }
+      return buildMetadata({ ...base, meta, fallbackTitle: p.title, fallbackImage: p.images?.[0], absoluteTitle: autoTitle })
+    }
     case 'page':
       return buildMetadata({ ...base, meta: found.doc.meta, fallbackTitle: found.doc.title, fallbackDescription: found.doc.lead, fallbackImage: found.doc.heroImage })
   }
