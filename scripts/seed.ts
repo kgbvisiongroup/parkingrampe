@@ -323,8 +323,8 @@ async function main() {
     meta: {
       title: l('Proizvodi – rampe, motori za kapije, kontrola pristupa', 'Products – barriers, gate motors, access control'),
       description: l(
-        'Katalog Key Automation opreme: parking rampe, motori za klizne i krilne kapije, kontrola pristupa i dodatna oprema. Ugradnja u Beogradu i Srbiji.',
-        'Key Automation catalogue: parking barriers, sliding and swing gate motors, access control and accessories. Installation in Belgrade and Serbia.',
+        'Katalog Key Automation opreme: parking rampe, motori za klizne i krilne kapije, kontrola pristupa i dodatna oprema. Ugradnja u Beogradu i okolini do 100 km.',
+        'Key Automation catalogue: parking barriers, sliding and swing gate motors, access control and accessories. Installation in Belgrade and up to 100 km around.',
       ),
     },
   })
@@ -339,7 +339,7 @@ async function main() {
       meta: {
         title: l('Usluge – ugradnja rampi, kapija i kontrole pristupa', 'Services – barrier, gate and access control installation'),
         description: l(
-          'Ugradnja parking rampi, motora za kapije i sistema kontrole pristupa u Beogradu i Srbiji. Key Automation oprema i servis.',
+          'Ugradnja parking rampi, motora za kapije i sistema kontrole pristupa u Beogradu i okolini do 100 km. Key Automation oprema i servis.',
           'Installation of parking barriers, gate motors and access control systems in Belgrade and Serbia. Key Automation equipment and service.',
         ),
       },
@@ -471,8 +471,8 @@ async function main() {
         blockType: 'introBand',
         tone: 'grey',
         text: l(
-          'Projektujemo, ugrađujemo i održavamo Key Automation motore za klizne i krilne kapije, rampe za parking i kontrolu pristupa širom Srbije. Upravljanje telefonom i besplatna ponuda za 48h.',
-          'We design, install and maintain Key Automation sliding and swing gate motors, parking barriers and access control across Serbia. Phone control and a free quote within 48 hours.',
+          'Projektujemo, ugrađujemo i održavamo Key Automation motore za klizne i krilne kapije, rampe za parking i kontrolu pristupa u Beogradu i okolini do 100 km. Upravljanje telefonom i besplatna ponuda za 48h.',
+          'We design, install and maintain Key Automation sliding and swing gate motors, parking barriers and access control in Belgrade and up to 100 km around. Phone control and a free quote within 48 hours.',
         ),
         link: link('pages', pageIds.catalog, l('Pogledajte katalog proizvoda', 'Browse the product catalogue')),
       },
@@ -506,8 +506,8 @@ async function main() {
     meta: {
       title: l('Parking rampe, motori za kapije i kontrola pristupa | KGB Automation', 'Parking barriers, gate motors and access control | KGB Automation'),
       description: l(
-        'Ugradnja Key Automation parking rampi, motora za kapije i kontrole pristupa u Beogradu i Srbiji. Montaža, servis i podrška. Pozovite 066/510-11-50.',
-        'Key Automation parking barriers, gate motors and access control installed in Belgrade and across Serbia. Installation, service and support.',
+        'Ugradnja Key Automation parking rampi, motora za kapije i kontrole pristupa u Beogradu i okolini do 100 km. Montaža, servis i podrška. Pozovite 066/510-11-50.',
+        'Key Automation parking barriers, gate motors and access control installed in Belgrade and up to 100 km around. Installation, service and support.',
       ),
       image: img.heroBarrier,
     },
@@ -590,7 +590,7 @@ async function main() {
     bankAccount: '170-0030024686000-06',
     titleTemplate: '| KGB Automation',
     defaultDescription: l(
-      'Parking rampe, motori za kapije i kontrola pristupa – Key Automation oprema sa ugradnjom i servisom u Beogradu i Srbiji.',
+      'Parking rampe, motori za kapije i kontrola pristupa – Key Automation oprema sa ugradnjom i servisom u Beogradu i okolini do 100 km.',
       'Parking barriers, gate motors and access control – Key Automation equipment with installation and service in Belgrade and Serbia.',
     ),
     defaultOgImage: img.heroBarrier,

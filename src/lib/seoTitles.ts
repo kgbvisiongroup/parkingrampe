@@ -34,7 +34,7 @@ export function isAutoTitle(metaTitle: string | null | undefined, title: string)
 export function isAutoDescription(metaDescription: string | null | undefined, source?: string | null) {
   const d = (metaDescription ?? '').trim()
   if (!d) return true
-  if (/Prodaja, ugradnja i servis( – KGB Automation| u Beogradu i Srbiji)\.?$|Sales, installation and service – KGB Automation\.?$/.test(d)) return true
+  if (/Prodaja, ugradnja i servis( – KGB Automation| u Beogradu i Srbiji| u Beogradu i okolini do 100 km)\.?$|Sales, installation and service – KGB Automation\.?$/.test(d)) return true
   const s = (source ?? '').trim()
   if (!s) return false
   // Old defaults: the short text itself, possibly clipped to 160 characters with "…".

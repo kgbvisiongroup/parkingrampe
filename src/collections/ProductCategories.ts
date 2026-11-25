@@ -15,7 +15,7 @@ const categoryBeforeChange: CollectionBeforeChangeHook = ({ data, originalDoc })
   const meta = { ...(originalDoc?.meta ?? {}), ...(data.meta ?? {}) }
   if (!meta.title && title) meta.title = `${title} – Key Automation`
   if (!meta.description && title) {
-    meta.description = (description ? `${description} ` : `${title}: Key Automation oprema. `) + 'Prodaja, ugradnja i servis u Beogradu i Srbiji.'
+    meta.description = (description ? `${description} ` : `${title}: Key Automation oprema. `) + 'Prodaja, ugradnja i servis u Beogradu i okolini do 100 km.'
   }
   if (!meta.image && (data.image ?? originalDoc?.image)) {
     const img = data.image ?? originalDoc?.image

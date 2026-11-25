@@ -181,7 +181,7 @@ export const services = [
     title: l('Rampe za parking', 'Parking barriers'),
     slug: l('automatske-rampe', 'automatic-barriers'),
     tagline: l(
-      'Ugrađujemo automatske Key Automation rampe za parking sa otvaranjem na daljinski ili preko telefona i sigurnosnim senzorima, širom Srbije.',
+      'Ugrađujemo automatske Key Automation rampe za parking sa otvaranjem na daljinski ili preko telefona i sigurnosnim senzorima u Beogradu i okolini do 100 km.',
       'We install Key Automation parking barriers that open by remote or phone, with safety sensors, anywhere in Serbia.',
     ),
     heroImage: 'heroBarrier' as ImageKey,
@@ -227,7 +227,7 @@ export const services = [
     features: [
       { icon: 'car', title: l('Besplatan izlazak na teren', 'Free site visit'), text: l('Obilazimo lokaciju pre ponude.', 'We visit the site before quoting.') },
       { icon: 'timer', title: l('Ponuda za 48h', 'Quote within 48h'), text: l('Ponuda sa tačnom cenom opreme i ugradnje.', 'An exact price for equipment and installation.') },
-      { icon: 'shield', title: l('Garancija i servis', 'Warranty and service'), text: l('Garancija na opremu i ugradnju, servis širom Srbije.', 'Warranty on equipment and installation, service across Serbia.') },
+      { icon: 'shield', title: l('Garancija i servis', 'Warranty and service'), text: l('Garancija na opremu i ugradnju, servis u Beogradu i okolini do 100 km.', 'Warranty on equipment and installation, service in Belgrade and up to 100 km around.') },
       { icon: 'smartphone', title: l('Upravljanje telefonom', 'Phone control'), text: l('Key Automation aplikacija za rampe i kapije.', 'One Key Automation app for barriers and gates.') },
     ],
     whyHeading: l('Zašto ugradnja rampe sa KGB Vision Group?', 'Why choose KGB Vision Group?'),
@@ -267,7 +267,7 @@ export const services = [
     title: l('Motori za kapije', 'Gate motors'),
     slug: l('motori-za-kapije', 'gate-motors'),
     tagline: l(
-      'Ugrađujemo Key Automation motore za klizne i krilne kapije, sa otvaranjem na daljinski ili preko telefona, širom Srbije.',
+      'Ugrađujemo Key Automation motore za klizne i krilne kapije, sa otvaranjem na daljinski ili preko telefona u Beogradu i okolini do 100 km.',
       'We install Key Automation motors for sliding and swing gates, opening by remote or phone, anywhere in Serbia.',
     ),
     heroImage: 'heroGate' as ImageKey,
@@ -351,7 +351,7 @@ export const services = [
     title: l('Kontrola pristupa', 'Access control'),
     slug: l('kontrola-pristupa', 'access-control'),
     tagline: l(
-      'Evidencija ulaza i izlaza zaposlenih, posetilaca i vozila pomoću kartica, PIN koda, otiska prsta i mobilnog telefona, širom Srbije.',
+      'Evidencija ulaza i izlaza zaposlenih, posetilaca i vozila pomoću kartica, PIN koda, otiska prsta i mobilnog telefona u Beogradu i okolini do 100 km.',
       'Record entries and exits of staff, visitors and vehicles with cards, PIN, fingerprint or phone, anywhere in Serbia.',
     ),
     heroImage: 'heroAccess' as ImageKey,
