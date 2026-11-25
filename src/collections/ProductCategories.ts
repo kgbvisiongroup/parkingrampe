@@ -3,6 +3,7 @@ import { anyone, loggedIn } from '../access'
 import { slugField } from '../fields/slug'
 import { actionsColumn, thumbColumn } from '../fields/listColumns'
 import { orderField, t } from '../fields/shared'
+import { faqField, guideField, headingField, priceTableField } from '../fields/seoContent'
 import { revalidateAfterChange, revalidateAfterDelete } from '../hooks/revalidate'
 import { normalizeSearch } from '../lib/searchText'
 
@@ -71,7 +72,11 @@ export const ProductCategories: CollectionConfig = {
       ],
     },
     { name: 'description', label: t('Kratak opis (kartica)', 'Short description (card)'), type: 'textarea', localized: true },
-    { name: 'content', label: t('Tekst na strani kategorije', 'Category page text'), type: 'richText', localized: true },
+    headingField,
+    { name: 'content', label: t('Uvod (iznad proizvoda)', 'Intro (above the products)'), type: 'richText', localized: true },
+    guideField,
+    priceTableField,
+    faqField,
     { name: 'searchText', type: 'text', localized: true, index: true, admin: { hidden: true } },
     thumbColumn,
     actionsColumn,
