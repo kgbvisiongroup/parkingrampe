@@ -18,6 +18,7 @@ import {
 } from '@/lib/payload'
 import { docPath, paths } from '@/lib/routes'
 import { buildMetadata } from '@/lib/seo'
+import { equipmentCodes } from '@/lib/projectText'
 import { isAutoDescription, isAutoTitle, listingDescription, listingTitle, lowestPrice, productDescription, productTitle } from '@/lib/seoTitles'
 import { CatalogView, CategoryView, ProductView } from '@/views/CatalogViews'
 import { PageView } from '@/views/PageView'
@@ -114,8 +115,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       const image = found.kind === 'service' ? found.doc.heroImage : found.doc.image
       return buildMetadata({ ...base, meta, fallbackTitle: d.title, fallbackImage: image, absoluteTitle: autoTitle })
     }
-    case 'project':
-      return buildMetadata({ ...base, meta: found.doc.meta, fallbackTitle: found.doc.title, fallbackDescription: found.doc.summary, fallbackImage: found.doc.cover, type: 'article' })
+    case 'project': {
+      // "Parking rampa ALT4K – hotel, Šabac" when no SEO title was typed.
+      const pr = found.doc
+      const codes = equipmentCodes(pr)
+      const place = [pr.objectType, pr.city].filter(Boolean).join(', ')
+      const title = isAutoTitle(pr.meta?.title, pr.title) ? [codes ? `${pr.title} ${codes}` : pr.title, place].filter(Boolean).join(' – ') : pr.meta?.title
+      return buildMetadata({ ...base, meta: { ...pr.meta, title }, fallbackTitle: pr.title, fallbackDescription: pr.summary, fallbackImage: pr.cover, type: 'article' })
+    }
     case 'product': {
       const p = found.doc
       const autoTitle = isAutoTitle(p.meta?.title, p.title)

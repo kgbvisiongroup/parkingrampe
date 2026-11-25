@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import type { Client } from '@/payload-types'
-import { asMedia, mediaUrl } from '@/lib/media'
+import { mediaUrl } from '@/lib/media'
 
 /** Client logos in an endless, slowly moving strip (pauses on hover). */
 export function ClientLogos({ heading, clients }: { heading: string; clients: Client[] }) {
@@ -25,7 +25,7 @@ export function ClientLogos({ heading, clients }: { heading: string; clients: Cl
             const img = (
               <img
                 src={src}
-                alt={asMedia(c.logo)?.alt || c.name}
+                alt={c.name}
                 loading="lazy"
                 width={150}
                 height={56}

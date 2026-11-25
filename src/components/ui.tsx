@@ -174,14 +174,14 @@ export function ProductCard({ product, locale }: { product: Product; locale: Loc
 }
 
 /** Square photo with a big uppercase title in the top-left corner ("Key Automation Live"). */
-export function PhotoTile({ image, title, href, target, sizes }: { image: MediaRef; title?: string | null; href?: string | null; target?: string; sizes?: string }) {
+export function PhotoTile({ image, title, href, target, sizes, alt }: { image: MediaRef; title?: string | null; href?: string | null; target?: string; sizes?: string; alt?: string }) {
   const src = mediaUrl(image, 'card')
   const inner = (
     <>
       {src && (
         <Image
           src={src}
-          alt={asMedia(image)?.alt || title || ''}
+          alt={alt || asMedia(image)?.alt || title || ''}
           fill
           sizes={sizes || '33vw'}
           className="object-cover"
