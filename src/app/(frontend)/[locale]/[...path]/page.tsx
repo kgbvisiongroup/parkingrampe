@@ -7,6 +7,8 @@ import { getNavigation } from '@/lib/nav'
 import {
   getAllSlugs,
   getCategoryBySlug,
+  getCityBySlug,
+  isCityIndexable,
   getPageBySlug,
   getPageByTemplate,
   getProductBySlug,
@@ -21,6 +23,7 @@ import { CatalogView, CategoryView, ProductView } from '@/views/CatalogViews'
 import { PageView } from '@/views/PageView'
 import { ProjectView } from '@/views/ProjectView'
 import { ServiceView } from '@/views/ServiceView'
+import { CityView, cityHeading, cityTitle } from '@/views/CityView'
 
 type Props = { params: Promise<{ locale: string; path: string[] }> }
 
@@ -38,6 +41,11 @@ const resolve = cache(async (locale: Locale, path: string[]) => {
     const page = await getPageBySlug(locale, segs[0])
     if (page) return { kind: 'page', doc: page } as const
     if (segs[0] === routeBase.products[locale]) return { kind: 'catalog', doc: null } as const
+    const prefix = routeBase.cityPrefix[locale]
+    if (segs[0].startsWith(prefix)) {
+      const city = await getCityBySlug(locale, segs[0].slice(prefix.length))
+      if (city) return { kind: 'city', doc: city } as const
+    }
     return null
   }
   if (segs.length === 2) {
@@ -65,6 +73,7 @@ const collectionOf = {
   project: 'projects',
   category: 'product-categories',
   product: 'products',
+  city: 'cities',
 } as const
 
 async function alternatePaths(found: NonNullable<Awaited<ReturnType<typeof resolve>>>) {
@@ -73,6 +82,8 @@ async function alternatePaths(found: NonNullable<Awaited<ReturnType<typeof resol
   const slugs = await getAllSlugs(collection, found.doc.id)
   const out: Partial<Record<Locale, string>> = {}
   for (const l of locales) if (slugs[l]) out[l] = docPath(collection, l, slugs[l])
+  // City pages: no hreflang to a language version that is still hidden from Google.
+  if (found.kind === 'city') for (const l of locales) if (out[l] && !(await isCityIndexable(l, found.doc.id))) delete out[l]
   return out
 }
 
@@ -117,6 +128,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
     case 'page':
       return buildMetadata({ ...base, meta: found.doc.meta, fallbackTitle: found.doc.title, fallbackDescription: found.doc.lead, fallbackImage: found.doc.heroImage })
+    case 'city': {
+      const c = found.doc
+      const autoTitle = isAutoTitle(c.meta?.title, c.city)
+      const meta = {
+        ...c.meta,
+        title: autoTitle ? cityTitle(c, locale) : c.meta?.title,
+        description: c.meta?.description || listingDescription({ title: cityHeading(c, locale) }, locale),
+        // Hidden from Google until it is marked ready and has its own text (no city-name copies).
+        noIndex: c.meta?.noIndex || !(await isCityIndexable(locale, c.id)),
+      }
+      return buildMetadata({ ...base, meta, fallbackTitle: c.city, absoluteTitle: autoTitle })
+    }
   }
 }
 
@@ -158,6 +181,9 @@ export default async function CatchAllPage({ params }: Props) {
       break
     case 'page':
       view = <PageView {...base} page={found.doc} contactHref={nav.contactHref} />
+      break
+    case 'city':
+      view = <CityView {...base} city={found.doc} />
       break
   }
 

@@ -4,7 +4,9 @@ import { getPayload, type Where } from 'payload'
 import { cache } from 'react'
 import type { Locale } from './i18n'
 import { searchCatalog } from './search'
+import { cityIsIndexable } from './cityPage'
 import type {
+  City,
   Client,
   Faq,
   Home,
@@ -144,6 +146,26 @@ export const getRelatedProjects = cache(
   },
 )
 
+export const getCityBySlug = cache(async (locale: Locale, slug: string): Promise<City | null> => {
+  const payload = await getPayloadClient()
+  const res = await payload.find({ collection: 'cities', locale, where: { slug: { equals: slug } }, depth: 1, limit: 1 })
+  return res.docs[0] ?? null
+})
+
+/** City pages that may be shown and linked (ready + enough own text in this language, without the Serbian fallback). */
+export const getReadyCities = cache(async (locale: Locale): Promise<City[]> => {
+  const payload = await getPayloadClient()
+  const res = await payload.find({ collection: 'cities', locale, fallbackLocale: false, where: { ready: { equals: true } }, depth: 0, limit: 50, sort: 'order' })
+  return res.docs.filter((c) => cityIsIndexable(c) && c.slug && c.city)
+})
+
+/** Whether one city page may be indexed in this language (its own text, not the Serbian fallback). */
+export const isCityIndexable = cache(async (locale: Locale, id: number) => {
+  const payload = await getPayloadClient()
+  const own = await payload.findByID({ collection: 'cities', id, locale, fallbackLocale: false, depth: 0 }).catch(() => null)
+  return !!own && cityIsIndexable(own)
+})
+
 export const getProjectBySlug = cache(async (locale: Locale, slug: string): Promise<Project | null> => {
   const payload = await getPayloadClient()
   const res = await payload.find({ collection: 'projects', locale, depth: 2, limit: 1, where: { slug: { equals: slug } } })
@@ -174,7 +196,7 @@ export const getClients = cache(async (): Promise<Client[]> => {
   return res.docs
 })
 
-type Sluggable = 'pages' | 'services' | 'projects' | 'products' | 'product-categories'
+type Sluggable = 'pages' | 'services' | 'projects' | 'products' | 'product-categories' | 'cities'
 
 /** Slugs of one document in every language, for hreflang and the language switch. */
 export const getAllSlugs = cache(async (collection: Sluggable, id: number): Promise<Partial<Record<Locale, string>>> => {

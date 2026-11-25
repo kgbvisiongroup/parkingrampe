@@ -3,7 +3,7 @@ import { cache } from 'react'
 import type { Locale } from './i18n'
 import { linkHref } from './links'
 import { mediaUrl } from './media'
-import { getCategoryTree, getNavigationGlobal, getPageByTemplate, getProducts, getServices } from './payload'
+import { getCategoryTree, getNavigationGlobal, getPageByTemplate, getProducts, getReadyCities, getServices } from './payload'
 import { paths } from './routes'
 
 export type NavLink = { label: string; href: string; badge?: string | null }
@@ -81,6 +81,14 @@ export const getNavigation = cache(async (locale: Locale) => {
       .map((l) => ({ label: l.label, href: linkHref(l.link, locale) ?? '' }))
       .filter((l) => l.href),
   }))
+  // City pages appear in the footer once they are ready (own text, see Cities collection).
+  const cities = await getReadyCities(locale)
+  if (cities.length) {
+    footerColumns.push({
+      title: locale === 'en' ? 'Where we work' : 'Gde radimo',
+      links: cities.map((c) => ({ label: locale === 'en' ? `Barriers and gate motors – ${c.city}` : `Rampe i motori za kapije – ${c.city}`, href: paths.city(locale, c.slug || '') })),
+    })
+  }
 
   return {
     items,
@@ -89,6 +97,7 @@ export const getNavigation = cache(async (locale: Locale) => {
     showPhone: nav.showPhone !== false,
     contactHref,
     footerColumns,
+    cities: cities.map((c) => ({ label: c.city, href: paths.city(locale, c.slug || '') })),
     services: services.filter((s) => s.slug).map((s) => ({ label: s.title, href: paths.service(locale, s.slug!) })),
   }
 })
