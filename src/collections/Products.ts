@@ -5,6 +5,7 @@ import { actionsColumn, thumbColumn } from '../fields/listColumns'
 import { orderField, t } from '../fields/shared'
 import { revalidateAfterChange, revalidateAfterDelete } from '../hooks/revalidate'
 import { normalizeSearch } from '../lib/searchText'
+import { seriesFromCode } from '../lib/series'
 
 const clip = (s: string, n: number) => (s.length > n ? s.slice(0, n - 1).replace(/\s+\S*$/, '') + '…' : s)
 
@@ -24,6 +25,11 @@ const productBeforeChange: CollectionBeforeChangeHook = async ({ data, originalD
   data.searchText = normalizeSearch(
     `${code} ${code.replace(/[^a-z0-9]/gi, '')} ${title} ${excerpt} ${data.brand ?? originalDoc?.brand ?? ''} ${categoryTitle}`,
   )
+
+  if (!(data.series ?? originalDoc?.series)) {
+    const series = seriesFromCode(code)
+    if (series) data.series = series
+  }
 
   const meta = { ...(originalDoc?.meta ?? {}), ...(data.meta ?? {}) }
   if (!meta.title && title) meta.title = clip(title, 60)
@@ -98,6 +104,18 @@ export const Products: CollectionConfig = {
               type: 'richText',
               localized: true,
               admin: { description: t('Možete koristiti naslove, liste, podebljan tekst i linkove.', 'You can use headings, lists, bold text and links.') },
+            },
+            {
+              name: 'seoText',
+              label: t('Opširan opis (prikazuje se ispod specifikacije)', 'Long description (shown below the specifications)'),
+              type: 'richText',
+              localized: true,
+              admin: {
+                description: t(
+                  'Vaš tekst o proizvodu: za šta je, kome odgovara, ugradnja. Uvoz cenovnika ga nikada ne menja.',
+                  'Your own text about the product: what it is for, who it suits, installation. Price-list imports never change it.',
+                ),
+              },
             },
             {
               name: 'videoUrl',
@@ -219,6 +237,12 @@ export const Products: CollectionConfig = {
       admin: { position: 'sidebar', description: t('Prikazuje se u sekciji „Izdvojeni proizvodi”.', 'Shown in "Featured products".') },
     },
     { name: 'code', label: t('Šifra / model', 'Code / model'), type: 'text', admin: { position: 'sidebar' } },
+    {
+      name: 'series',
+      label: t('Serija (npr. TURBO S, SUN, ALT)', 'Series (e.g. TURBO S, SUN, ALT)'),
+      type: 'text',
+      admin: { position: 'sidebar', description: t('Prazno = popunjava se iz šifre kada je to sigurno.', 'Empty = filled from the code when certain.') },
+    },
     { name: 'brand', label: t('Proizvođač', 'Brand'), type: 'text', defaultValue: 'Key Automation', admin: { position: 'sidebar' } },
     orderField,
     { name: 'searchText', type: 'text', localized: true, index: true, admin: { hidden: true } },

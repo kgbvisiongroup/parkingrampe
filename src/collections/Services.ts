@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 import { anyone, loggedIn } from '../access'
 import { slugField } from '../fields/slug'
 import { iconField, orderField, t } from '../fields/shared'
+import { faqField, guideField, headingField, priceTableField } from '../fields/seoContent'
 import { layoutField } from '../blocks/config'
 import { revalidateAfterChange, revalidateAfterDelete } from '../hooks/revalidate'
 
@@ -41,6 +42,7 @@ export const Services: CollectionConfig = {
       relationTo: 'media',
       required: true,
     },
+    headingField,
     {
       name: 'introHeading',
       label: t('Naslov uvoda', 'Intro heading'),
@@ -93,9 +95,12 @@ export const Services: CollectionConfig = {
       relationTo: 'media',
       filterOptions: { mimeType: { equals: 'application/pdf' } },
     },
+    guideField,
+    priceTableField,
+    faqField,
     {
       name: 'faqs',
-      label: t('Pitanja za ovu uslugu', 'FAQ for this service'),
+      label: t('Pitanja iz zajedničke liste (opciono)', 'Questions from the shared FAQ list (optional)'),
       type: 'relationship',
       relationTo: 'faqs',
       hasMany: true,

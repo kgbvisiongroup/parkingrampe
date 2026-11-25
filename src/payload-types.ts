@@ -349,6 +349,10 @@ export interface Service {
   badge?: string | null;
   tagline: string;
   heroImage: number | Media;
+  /**
+   * The main heading visitors see. Should contain the keyword but differ from the SEO title. Empty = automatic.
+   */
+  heading?: string | null;
   introHeading?: string | null;
   intro?: {
     root: {
@@ -418,6 +422,46 @@ export interface Service {
   productCategory?: (number | null) | ProductCategory;
   gallery?: (number | Media)[] | null;
   brochure?: (number | null) | Media;
+  /**
+   * Longer text for buyers and Google: how to choose, installation, service.
+   */
+  guide?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Enter real prices only. An empty table is not shown.
+   */
+  priceTable?:
+    | {
+        item: string;
+        priceFrom?: number | null;
+        priceTo?: number | null;
+        note?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Shown on the page and as FAQ data for Google.
+   */
+  faq?:
+    | {
+        question: string;
+        answer: string;
+        id?: string | null;
+      }[]
+    | null;
   faqs?: (number | Faq)[] | null;
   /**
    * Extra sections at the bottom of the service page (optional).
@@ -484,6 +528,10 @@ export interface ProductCategory {
   image?: (number | null) | Media;
   imageFit?: ('cover' | 'contain') | null;
   description?: string | null;
+  /**
+   * The main heading visitors see. Should contain the keyword but differ from the SEO title. Empty = automatic.
+   */
+  heading?: string | null;
   content?: {
     root: {
       type: string;
@@ -499,6 +547,46 @@ export interface ProductCategory {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * Longer text for buyers and Google: how to choose, installation, service.
+   */
+  guide?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Enter real prices only. An empty table is not shown.
+   */
+  priceTable?:
+    | {
+        item: string;
+        priceFrom?: number | null;
+        priceTo?: number | null;
+        note?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Shown on the page and as FAQ data for Google.
+   */
+  faq?:
+    | {
+        question: string;
+        answer: string;
+        id?: string | null;
+      }[]
+    | null;
   searchText?: string | null;
   meta?: {
     title?: string | null;
@@ -612,6 +700,24 @@ export interface Product {
     [k: string]: unknown;
   } | null;
   /**
+   * Your own text about the product: what it is for, who it suits, installation. Price-list imports never change it.
+   */
+  seoText?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
    * E.g. https://www.youtube.com/watch?v=…
    */
   videoUrl?: string | null;
@@ -672,6 +778,10 @@ export interface Product {
    */
   featured?: boolean | null;
   code?: string | null;
+  /**
+   * Empty = filled from the code when certain.
+   */
+  series?: string | null;
   brand?: string | null;
   /**
    * Lower numbers are shown first.
@@ -698,8 +808,21 @@ export interface Project {
    */
   order?: number | null;
   service?: (number | null) | Service;
+  /**
+   * E.g. Šabac
+   */
+  city?: string | null;
   location?: string | null;
   year?: number | null;
+  /**
+   * E.g. hotel, residential building, business car park
+   */
+  objectType?: string | null;
+  client?: string | null;
+  /**
+   * Catalogue products; on the project page they link to the product page.
+   */
+  equipment?: (number | Product)[] | null;
   cover: number | Media;
   summary?: string | null;
   body?: {
@@ -1683,6 +1806,7 @@ export interface ServicesSelect<T extends boolean = true> {
   badge?: T;
   tagline?: T;
   heroImage?: T;
+  heading?: T;
   introHeading?: T;
   intro?: T;
   features?:
@@ -1699,6 +1823,23 @@ export interface ServicesSelect<T extends boolean = true> {
   productCategory?: T;
   gallery?: T;
   brochure?: T;
+  guide?: T;
+  priceTable?:
+    | T
+    | {
+        item?: T;
+        priceFrom?: T;
+        priceTo?: T;
+        note?: T;
+        id?: T;
+      };
+  faq?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
   faqs?: T;
   layout?:
     | T
@@ -1746,7 +1887,25 @@ export interface ProductCategoriesSelect<T extends boolean = true> {
   image?: T;
   imageFit?: T;
   description?: T;
+  heading?: T;
   content?: T;
+  guide?: T;
+  priceTable?:
+    | T
+    | {
+        item?: T;
+        priceFrom?: T;
+        priceTo?: T;
+        note?: T;
+        id?: T;
+      };
+  faq?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
   searchText?: T;
   meta?:
     | T
@@ -1775,6 +1934,7 @@ export interface ProductsSelect<T extends boolean = true> {
         id?: T;
       };
   description?: T;
+  seoText?: T;
   videoUrl?: T;
   specs?:
     | T
@@ -1808,6 +1968,7 @@ export interface ProductsSelect<T extends boolean = true> {
   category?: T;
   featured?: T;
   code?: T;
+  series?: T;
   brand?: T;
   order?: T;
   searchText?: T;
@@ -1824,8 +1985,12 @@ export interface ProjectsSelect<T extends boolean = true> {
   slug?: T;
   order?: T;
   service?: T;
+  city?: T;
   location?: T;
   year?: T;
+  objectType?: T;
+  client?: T;
+  equipment?: T;
   cover?: T;
   summary?: T;
   body?: T;
