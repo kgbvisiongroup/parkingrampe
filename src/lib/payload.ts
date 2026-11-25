@@ -100,6 +100,15 @@ export const getProducts = cache(
   },
 )
 
+/** Product code → slug, to link kit parts ("LUMY24L", "FT33"…) to their own pages. */
+export const getProductCodeIndex = cache(async (locale: Locale): Promise<Map<string, string>> => {
+  const payload = await getPayloadClient()
+  const res = await payload.find({ collection: 'products', locale, depth: 0, limit: 2000, pagination: false, select: { code: true, slug: true } })
+  const map = new Map<string, string>()
+  for (const d of res.docs) if (d.code && d.slug) map.set(d.code.trim().toUpperCase(), d.slug)
+  return map
+})
+
 export const getProductBySlug = cache(async (locale: Locale, slug: string): Promise<Product | null> => {
   const payload = await getPayloadClient()
   const res = await payload.find({ collection: 'products', locale, depth: 2, limit: 1, where: { slug: { equals: slug } } })
