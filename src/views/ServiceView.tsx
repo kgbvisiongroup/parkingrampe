@@ -16,6 +16,7 @@ import { asMedia, focal, mediaUrl } from '@/lib/media'
 import { getAllSlugs, getChildCategories, getProductBySlug, getProducts } from '@/lib/payload'
 import { absolute, paths } from '@/lib/routes'
 import { breadcrumbSchema, faqSchema } from '@/lib/schema'
+import { listingHeading } from '@/lib/seoTitles'
 
 type Props = {
   service: Service
@@ -76,7 +77,7 @@ export async function ServiceView({ service, locale, dict, settings, contactHref
       {faqLd && <JsonLd data={faqLd} />}
 
       <PageBanner
-        title={service.title}
+        title={listingHeading({ title: service.title, keyword: service.keyword, heading: service.heading }, locale)}
         lead={service.tagline}
         image={service.heroImage}
         crumbs={[{ label: dict.home, href: `/${locale}` }, { label: dict.services, href: servicesHref || undefined }, { label: service.title }]}

@@ -2,7 +2,7 @@ import type { CollectionConfig } from 'payload'
 import { anyone, loggedIn } from '../access'
 import { slugField } from '../fields/slug'
 import { iconField, orderField, t } from '../fields/shared'
-import { faqField, guideField, headingField, priceTableField } from '../fields/seoContent'
+import { faqField, guideField, headingField, keywordField, priceTableField } from '../fields/seoContent'
 import { layoutField } from '../blocks/config'
 import { revalidateAfterChange, revalidateAfterDelete } from '../hooks/revalidate'
 
@@ -42,6 +42,7 @@ export const Services: CollectionConfig = {
       relationTo: 'media',
       required: true,
     },
+    keywordField,
     headingField,
     {
       name: 'introHeading',

@@ -16,5 +16,19 @@ export const Home: GlobalConfig = {
   },
   access: { read: anyone, update: loggedIn },
   hooks: { afterChange: [revalidateGlobal] },
-  fields: [layoutField()],
+  fields: [
+    {
+      name: 'heading',
+      label: t('Glavni naslov strane (H1)', 'Main page heading (H1)'),
+      type: 'text',
+      localized: true,
+      admin: {
+        description: t(
+          'Ne vidi se na ekranu (prvi je slajder), ali ga čita Google. Treba da se razlikuje od SEO naslova. Prazno = automatski.',
+          'Not visible (the slider comes first) but read by Google. Should differ from the SEO title. Empty = automatic.',
+        ),
+      },
+    },
+    layoutField(),
+  ],
 }

@@ -4,6 +4,7 @@ import * as migration_20261012_201751_portfolio_galerija from './20261012_201751
 import * as migration_20261012_210000_bez_mup_licence from './20261012_210000_bez_mup_licence';
 import * as migration_20261013_170000_pocetna_klijenti from './20261013_170000_pocetna_klijenti';
 import * as migration_20261125_213505_seo_polja from './20261125_213505_seo_polja';
+import * as migration_20261125_213749_kljucne_reci from './20261125_213749_kljucne_reci';
 
 export const migrations = [
   {
@@ -34,6 +35,11 @@ export const migrations = [
   {
     up: migration_20261125_213505_seo_polja.up,
     down: migration_20261125_213505_seo_polja.down,
-    name: '20261125_213505_seo_polja'
+    name: '20261125_213505_seo_polja',
+  },
+  {
+    up: migration_20261125_213749_kljucne_reci.up,
+    down: migration_20261125_213749_kljucne_reci.down,
+    name: '20261125_213749_kljucne_reci'
   },
 ];

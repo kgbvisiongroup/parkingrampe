@@ -350,6 +350,10 @@ export interface Service {
   tagline: string;
   heroImage: number | Media;
   /**
+   * E.g. "Parking barriers". Used in the Google title and H1. One keyword per page – it cannot be used on two pages.
+   */
+  keyword?: string | null;
+  /**
    * The main heading visitors see. Should contain the keyword but differ from the SEO title. Empty = automatic.
    */
   heading?: string | null;
@@ -528,6 +532,10 @@ export interface ProductCategory {
   image?: (number | null) | Media;
   imageFit?: ('cover' | 'contain') | null;
   description?: string | null;
+  /**
+   * E.g. "Parking barriers". Used in the Google title and H1. One keyword per page – it cannot be used on two pages.
+   */
+  keyword?: string | null;
   /**
    * The main heading visitors see. Should contain the keyword but differ from the SEO title. Empty = automatic.
    */
@@ -1806,6 +1814,7 @@ export interface ServicesSelect<T extends boolean = true> {
   badge?: T;
   tagline?: T;
   heroImage?: T;
+  keyword?: T;
   heading?: T;
   introHeading?: T;
   intro?: T;
@@ -1887,6 +1896,7 @@ export interface ProductCategoriesSelect<T extends boolean = true> {
   image?: T;
   imageFit?: T;
   description?: T;
+  keyword?: T;
   heading?: T;
   content?: T;
   guide?: T;
@@ -2213,6 +2223,10 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 export interface Home {
   id: number;
   /**
+   * Not visible (the slider comes first) but read by Google. Should differ from the SEO title. Empty = automatic.
+   */
+  heading?: string | null;
+  /**
    * Build the page from sections: add, drag to reorder or remove.
    */
   layout?:
@@ -2474,6 +2488,7 @@ export interface Setting {
  * via the `definition` "home_select".
  */
 export interface HomeSelect<T extends boolean = true> {
+  heading?: T;
   layout?:
     | T
     | {
