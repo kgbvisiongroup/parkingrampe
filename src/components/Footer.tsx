@@ -105,7 +105,7 @@ export function Footer({ locale, settings, logoUrl, dict, columns }: Props) {
       <div className="border-t border-white/10">
         <div className="wrap flex flex-col gap-1 py-5 text-[12px] text-white/45 sm:flex-row sm:justify-between">
           <p>
-            © {year} {BRAND_LINE[locale]}. {dict.rights}
+            © {year} {BRAND_LINE[locale]} {dict.rights}
           </p>
         </div>
       </div>
