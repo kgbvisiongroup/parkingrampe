@@ -1,9 +1,10 @@
-import { FileDown, MessageCircle, Phone } from 'lucide-react'
+import { FileDown, MessageCircle } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import type { Faq, Service, Setting } from '@/payload-types'
+import type { Service, Setting } from '@/payload-types'
 import { RenderBlocks, type LayoutBlock } from '@/blocks/RenderBlocks'
 import { FaqList } from '@/components/FaqList'
+import { CallBand, Guide, InquirySection, mergeFaqs, PriceTable, RelatedProjects } from '@/components/ListingSections'
 import { Gallery } from '@/components/Gallery'
 import { Icon } from '@/components/Icon'
 import { JsonLd } from '@/components/JsonLd'
@@ -13,7 +14,7 @@ import { RichText } from '@/components/RichText'
 import { PageBanner, ProductTile, SectionHeading } from '@/components/ui'
 import type { Dictionary, Locale } from '@/lib/i18n'
 import { asMedia, focal, mediaUrl } from '@/lib/media'
-import { getAllSlugs, getChildCategories, getProductBySlug, getProducts } from '@/lib/payload'
+import { getAllSlugs, getChildCategories, getPageByTemplate, getProductBySlug, getProducts, getRelatedProjects } from '@/lib/payload'
 import { absolute, paths } from '@/lib/routes'
 import { breadcrumbSchema, faqSchema } from '@/lib/schema'
 import { listingHeading } from '@/lib/seoTitles'
@@ -29,17 +30,19 @@ type Props = {
 
 export async function ServiceView({ service, locale, dict, settings, contactHref, servicesHref }: Props) {
   const selfPath = paths.service(locale, service.slug || '')
-  const faqs = (service.faqs ?? []).filter((f): f is Faq => typeof f === 'object' && !!f)
+  const faqs = mergeFaqs(service.faq, service.faqs)
   const brochure = asMedia(service.brochure)
   const catId = typeof service.productCategory === 'object' ? service.productCategory?.id : service.productCategory
   const category = typeof service.productCategory === 'object' ? service.productCategory : null
 
-  const [products, slugs] = await Promise.all([
+  const [products, slugs, portfolioPage] = await Promise.all([
     catId
       ? getChildCategories(locale, catId).then((kids) => getProducts(locale, { categoryIds: [catId, ...kids.map((k) => k.id)], limit: 8 }))
       : Promise.resolve([]),
     getAllSlugs('services', service.id),
+    getPageByTemplate(locale, 'portfolio'),
   ])
+  const projects = await getRelatedProjects(locale, { serviceIds: [service.id], productIds: products.map((p) => p.id), fill: true })
   // Access control: the gallery ends with a tile promoting opening from the phone (KUBEW module).
   const kubew = slugs.sr === 'kontrola-pristupa' ? await getProductBySlug(locale, 'kubew') : null
   // …and KUBEW completes the last row of the product tiles when it is not full.
@@ -83,26 +86,15 @@ export async function ServiceView({ service, locale, dict, settings, contactHref
         crumbs={[{ label: dict.home, href: `/${locale}` }, { label: dict.services, href: servicesHref || undefined }, { label: service.title }]}
       />
 
-      {/* Quick actions band */}
-      <section className="bg-band py-5">
-        <div className="wrap flex flex-wrap items-center justify-center gap-3">
-          <Link href={contactHref} className="btn-accent btn-accent-lg">
-            {dict.requestQuote}
-          </Link>
-          {settings.phone && (
-            <a href={`tel:${settings.phone}`} className="btn-dark px-5 py-3">
-              <Phone className="size-4" aria-hidden />
-              {settings.phoneDisplay || settings.phone}
-            </a>
-          )}
-          {settings.chat?.enabled !== false && (
-            <OpenChatButton className="btn-dark px-5 py-3">
-              <MessageCircle className="size-4" aria-hidden />
-              {dict.askAboutProduct}
-            </OpenChatButton>
-          )}
-        </div>
-      </section>
+      {/* Call and inquiry near the top */}
+      <CallBand locale={locale} settings={settings}>
+        {settings.chat?.enabled !== false && (
+          <OpenChatButton className="btn-dark px-5 py-3">
+            <MessageCircle className="size-4" aria-hidden />
+            {dict.askAboutProduct}
+          </OpenChatButton>
+        )}
+      </CallBand>
 
       {(service.introHeading || service.intro) && (
         <section className="py-12 md:py-14">
@@ -176,6 +168,9 @@ export async function ServiceView({ service, locale, dict, settings, contactHref
         </section>
       )}
 
+      <PriceTable rows={service.priceTable} locale={locale} />
+      <Guide data={service.guide} />
+
       {gallery.length > 0 && (
         <section className="bg-band py-12">
           <div className="wrap max-w-[1000px]">
@@ -194,12 +189,17 @@ export async function ServiceView({ service, locale, dict, settings, contactHref
         <section className="py-12">
           <div className="wrap-narrow">
             <SectionHeading className="mb-6">{dict.faq}</SectionHeading>
-            <FaqList items={faqs.map((f) => ({ question: f.question, answer: f.answer }))} />
+            <FaqList items={faqs} />
           </div>
         </section>
       )}
 
+      <RelatedProjects projects={projects} locale={locale} portfolioHref={portfolioPage?.slug ? paths.page(locale, portfolioPage.slug) : null} />
+
       <RenderBlocks blocks={service.layout as LayoutBlock[] | undefined} locale={locale} settings={settings} />
+
+      <CallBand locale={locale} settings={settings} tone="white" />
+      <InquirySection locale={locale} settings={settings} defaultService={service.title} />
     </>
   )
 }

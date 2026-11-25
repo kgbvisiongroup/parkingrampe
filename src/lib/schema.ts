@@ -31,7 +31,7 @@ export function localBusinessSchema(settings: Setting, locale: Locale) {
   }
 }
 
-export function faqSchema(faqs: Faq[]) {
+export function faqSchema(faqs: Pick<Faq, 'question' | 'answer'>[]) {
   if (!faqs.length) return null
   return {
     '@context': 'https://schema.org',

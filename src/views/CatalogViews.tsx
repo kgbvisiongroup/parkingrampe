@@ -8,11 +8,13 @@ import { RichText } from '@/components/RichText'
 import { Breadcrumbs, CategoryCard, type Crumb, PageBanner, ProductCard, productName, ProductTile, SectionHeading } from '@/components/ui'
 import type { Dictionary, Locale } from '@/lib/i18n'
 import { asMedia, mediaUrl } from '@/lib/media'
-import { getCategoryTree, getChildCategories, getProductCodeIndex, getProducts } from '@/lib/payload'
+import { getCategoryTree, getChildCategories, getPageByTemplate, getProductCodeIndex, getProducts, getRelatedProjects, getServices } from '@/lib/payload'
 import { descriptionWithoutRepeats } from '@/lib/lexicalText'
 import { absolute, paths } from '@/lib/routes'
 import { listingHeading } from '@/lib/seoTitles'
-import { breadcrumbSchema } from '@/lib/schema'
+import { breadcrumbSchema, faqSchema } from '@/lib/schema'
+import { FaqList } from '@/components/FaqList'
+import { CallBand, Guide, InquirySection, mergeFaqs, PriceTable, RelatedProjects } from '@/components/ListingSections'
 
 type Base = { locale: Locale; dict: Dictionary; settings: Setting }
 
@@ -80,7 +82,7 @@ async function CategoryProducts({ locale, categoryIds, emptyText }: { locale: Lo
 
 /* ---------- category ---------- */
 
-export async function CategoryView({ locale, dict, category }: Base & { category: ProductCategory }) {
+export async function CategoryView({ locale, dict, settings, category }: Base & { category: ProductCategory }) {
   const [children, tree] = await Promise.all([getChildCategories(locale, category.id), getCategoryTree(locale)])
   const parent = catOf(category.parent)
   const crumbs: Crumb[] = [
@@ -92,10 +94,18 @@ export async function CategoryView({ locale, dict, category }: Base & { category
   // Sibling tabs: the parent's children, or the top-level categories.
   const siblings = parent ? tree.find((t) => t.id === parent.id)?.children ?? [] : tree
   const ids = [category.id, ...children.map((c) => c.id)]
+  const [inCategory, services, portfolioPage] = await Promise.all([getProducts(locale, { categoryIds: ids }), getServices(locale), getPageByTemplate(locale, 'portfolio')])
+  const catIdOf = (x: unknown) => (typeof x === 'object' && x ? (x as { id: number }).id : (x as number | null | undefined))
+  // The service for this category (or its parent): default topic of the inquiry form and source of projects.
+  const service = services.find((s) => catIdOf(s.productCategory) === category.id) ?? services.find((s) => parent && catIdOf(s.productCategory) === parent.id)
+  const projects = await getRelatedProjects(locale, { productIds: inCategory.map((p) => p.id), serviceIds: service ? [service.id] : [] })
+  const faqs = mergeFaqs(category.faq)
+  const faqLd = faqSchema(faqs)
 
   return (
     <>
       <JsonLd data={breadcrumbSchema(crumbs.map((c) => ({ name: c.label, path: c.href ?? paths.catalogItem(locale, category.slug || '') })))} />
+      {faqLd && <JsonLd data={faqLd} />}
       <PageBanner
         title={listingHeading({ title: category.title, keyword: category.keyword, heading: category.heading }, locale)}
         lead={category.description}
@@ -119,6 +129,7 @@ export async function CategoryView({ locale, dict, category }: Base & { category
           </ul>
         </nav>
       )}
+      <CallBand locale={locale} settings={settings} />
       {category.content && (
         <section className="pt-10">
           <div className="wrap-narrow text-center text-[14.5px]">
@@ -144,6 +155,19 @@ export async function CategoryView({ locale, dict, category }: Base & { category
           <CategoryProducts locale={locale} categoryIds={ids} emptyText={dict.noProducts} />
         </div>
       </section>
+      <PriceTable rows={category.priceTable} locale={locale} />
+      <Guide data={category.guide} />
+      {faqs.length > 0 && (
+        <section className="py-12">
+          <div className="wrap-narrow">
+            <SectionHeading className="mb-6">{dict.faq}</SectionHeading>
+            <FaqList items={faqs} />
+          </div>
+        </section>
+      )}
+      <RelatedProjects projects={projects} locale={locale} portfolioHref={portfolioPage?.slug ? paths.page(locale, portfolioPage.slug) : null} />
+      <CallBand locale={locale} settings={settings} tone="white" />
+      <InquirySection locale={locale} settings={settings} defaultService={service?.title} />
     </>
   )
 }
