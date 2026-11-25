@@ -2610,6 +2610,40 @@ export interface Setting {
   activityCode?: string | null;
   bankAccount?: string | null;
   /**
+   * Empty fields use defaults: Vojvode Mišića 179, 11500 Obrenovac, Belgrade; Mon–Fri 8–16h.
+   */
+  business?: {
+    streetAddress?: string | null;
+    postalCode?: string | null;
+    addressLocality?: string | null;
+    addressRegion?: string | null;
+    /**
+     * Google Maps → right-click the location → first number.
+     */
+    latitude?: number | null;
+    /**
+     * Second number.
+     */
+    longitude?: number | null;
+    /**
+     * E.g. "$$". Empty = not shown.
+     */
+    priceRange?: string | null;
+    /**
+     * Empty = Monday–Friday 08:00–16:00. Should match the footer.
+     */
+    openingHours?:
+      | {
+          days: ('Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday' | 'Sunday')[];
+          opens: string;
+          closes: string;
+          id?: string | null;
+        }[]
+      | null;
+    areaServed?: string | null;
+    googleBusinessUrl?: string | null;
+  };
+  /**
    * Appended to every page title.
    */
   titleTemplate?: string | null;
@@ -2777,6 +2811,27 @@ export interface SettingsSelect<T extends boolean = true> {
   mb?: T;
   activityCode?: T;
   bankAccount?: T;
+  business?:
+    | T
+    | {
+        streetAddress?: T;
+        postalCode?: T;
+        addressLocality?: T;
+        addressRegion?: T;
+        latitude?: T;
+        longitude?: T;
+        priceRange?: T;
+        openingHours?:
+          | T
+          | {
+              days?: T;
+              opens?: T;
+              closes?: T;
+              id?: T;
+            };
+        areaServed?: T;
+        googleBusinessUrl?: T;
+      };
   titleTemplate?: T;
   defaultDescription?: T;
   defaultOgImage?: T;

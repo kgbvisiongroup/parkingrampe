@@ -146,6 +146,93 @@ export const SiteSettings: GlobalConfig = {
             { name: 'mb', label: t('Matični broj', 'Registration number'), type: 'text' },
             { name: 'activityCode', label: t('Šifra delatnosti', 'Activity code'), type: 'text' },
             { name: 'bankAccount', label: t('Tekući račun', 'Bank account'), type: 'text' },
+            {
+              name: 'business',
+              label: t('Podaci za Google (LocalBusiness)', 'Data for Google (LocalBusiness)'),
+              type: 'group',
+              admin: {
+                description: t(
+                  'Prazna polja koriste podrazumevane vrednosti: Vojvode Mišića 179, 11500 Obrenovac, Beograd; pon–pet 08–16h.',
+                  'Empty fields use defaults: Vojvode Mišića 179, 11500 Obrenovac, Belgrade; Mon–Fri 8–16h.',
+                ),
+              },
+              fields: [
+                {
+                  type: 'row',
+                  fields: [
+                    { name: 'streetAddress', label: t('Ulica i broj', 'Street and number'), type: 'text', admin: { width: '40%', placeholder: 'Vojvode Mišića 179' } },
+                    { name: 'postalCode', label: t('Poštanski broj', 'Postal code'), type: 'text', admin: { width: '20%', placeholder: '11500' } },
+                    { name: 'addressLocality', label: t('Mesto', 'Locality'), type: 'text', admin: { width: '20%', placeholder: 'Obrenovac' } },
+                    { name: 'addressRegion', label: t('Region', 'Region'), type: 'text', admin: { width: '20%', placeholder: 'Beograd' } },
+                  ],
+                },
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'latitude',
+                      label: t('Geografska širina', 'Latitude'),
+                      type: 'number',
+                      admin: { width: '33%', step: 0.000001, description: t('Google mape → desni klik na lokaciju → prvi broj.', 'Google Maps → right-click the location → first number.') },
+                    },
+                    {
+                      name: 'longitude',
+                      label: t('Geografska dužina', 'Longitude'),
+                      type: 'number',
+                      admin: { width: '33%', step: 0.000001, description: t('Drugi broj.', 'Second number.') },
+                    },
+                    {
+                      name: 'priceRange',
+                      label: t('Raspon cena', 'Price range'),
+                      type: 'text',
+                      admin: { width: '34%', description: t('Npr. „RSD 30.000–500.000” ili „$$”. Prazno = ne prikazuje se.', 'E.g. "$$". Empty = not shown.') },
+                    },
+                  ],
+                },
+                {
+                  name: 'openingHours',
+                  label: t('Radno vreme (za Google)', 'Opening hours (for Google)'),
+                  type: 'array',
+                  admin: { description: t('Prazno = ponedeljak–petak 08:00–16:00. Treba da se slaže sa radnim vremenom u futeru.', 'Empty = Monday–Friday 08:00–16:00. Should match the footer.') },
+                  fields: [
+                    {
+                      name: 'days',
+                      label: t('Dani', 'Days'),
+                      type: 'select',
+                      hasMany: true,
+                      required: true,
+                      options: [
+                        { label: t('Ponedeljak', 'Monday'), value: 'Monday' },
+                        { label: t('Utorak', 'Tuesday'), value: 'Tuesday' },
+                        { label: t('Sreda', 'Wednesday'), value: 'Wednesday' },
+                        { label: t('Četvrtak', 'Thursday'), value: 'Thursday' },
+                        { label: t('Petak', 'Friday'), value: 'Friday' },
+                        { label: t('Subota', 'Saturday'), value: 'Saturday' },
+                        { label: t('Nedelja', 'Sunday'), value: 'Sunday' },
+                      ],
+                    },
+                    {
+                      type: 'row',
+                      fields: [
+                        { name: 'opens', label: t('Od', 'Opens'), type: 'text', required: true, admin: { width: '50%', placeholder: '08:00' } },
+                        { name: 'closes', label: t('Do', 'Closes'), type: 'text', required: true, admin: { width: '50%', placeholder: '16:00' } },
+                      ],
+                    },
+                  ],
+                },
+                {
+                  name: 'areaServed',
+                  label: t('Područje rada (mesta, jedno u redu)', 'Area served (one place per line)'),
+                  type: 'textarea',
+                  admin: { placeholder: 'Beograd\nObrenovac\nŠabac\nNovi Sad\nZrenjanin' },
+                },
+                {
+                  name: 'googleBusinessUrl',
+                  label: t('Google Business profil (link)', 'Google Business Profile (link)'),
+                  type: 'text',
+                },
+              ],
+            },
           ],
         },
         {

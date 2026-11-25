@@ -4,6 +4,7 @@ import Link from 'next/link'
 import type { Setting } from '@/payload-types'
 import type { Dictionary, Locale } from '@/lib/i18n'
 import { platformName, SocialIcon } from './SocialIcon'
+import { BRAND_LINE, businessAddress } from '@/lib/schema'
 
 type Props = {
   locale: Locale
@@ -86,14 +87,12 @@ export function Footer({ locale, settings, logoUrl, dict, columns }: Props) {
                 </a>
               </li>
             )}
-            {settings.address && (
-              <li>
-                <a href={settings.mapsUrl || '#'} target="_blank" rel="noopener noreferrer" className="flex items-start gap-2.5 hover:text-white">
-                  <MapPin className="mt-1 size-3.5 shrink-0" aria-hidden />
-                  {settings.address}
-                </a>
-              </li>
-            )}
+            <li>
+              <a href={settings.mapsUrl || '#'} target="_blank" rel="noopener noreferrer" className="flex items-start gap-2.5 hover:text-white">
+                <MapPin className="mt-1 size-3.5 shrink-0" aria-hidden />
+                {businessAddress(settings)}
+              </a>
+            </li>
             {settings.workingHours && (
               <li className="flex items-start gap-2.5">
                 <Clock className="mt-1 size-3.5 shrink-0" aria-hidden />
@@ -106,7 +105,7 @@ export function Footer({ locale, settings, logoUrl, dict, columns }: Props) {
       <div className="border-t border-white/10">
         <div className="wrap flex flex-col gap-1 py-5 text-[12px] text-white/45 sm:flex-row sm:justify-between">
           <p>
-            © {year} {settings.legalName || settings.siteName}. {dict.rights}
+            © {year} {BRAND_LINE[locale]}. {dict.rights}
           </p>
         </div>
       </div>
