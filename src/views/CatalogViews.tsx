@@ -8,7 +8,8 @@ import { RichText } from '@/components/RichText'
 import { Breadcrumbs, CategoryCard, type Crumb, PageBanner, ProductCard, productName, ProductTile, SectionHeading } from '@/components/ui'
 import type { Dictionary, Locale } from '@/lib/i18n'
 import { asMedia, mediaUrl } from '@/lib/media'
-import { getCategoryTree, getChildCategories, getProducts } from '@/lib/payload'
+import { getCategoryTree, getChildCategories, getProductCodeIndex, getProducts } from '@/lib/payload'
+import { descriptionWithoutRepeats } from '@/lib/lexicalText'
 import { absolute, paths } from '@/lib/routes'
 import { listingHeading } from '@/lib/seoTitles'
 import { breadcrumbSchema } from '@/lib/schema'
@@ -165,10 +166,19 @@ export async function ProductView({ locale, dict, settings, product, contactHref
     .filter((m): m is NonNullable<typeof m> => !!m?.url)
     .map((m) => ({ src: mediaUrl(m, 'hero')!, thumb: mediaUrl(m, 'thumb')!, alt: m.alt || product.title }))
 
+  // 4–8 related products: the ones chosen in the CMS, topped up from the same category.
   let related = (product.related ?? []).filter((r): r is Product => typeof r === 'object' && !!r)
-  if (!related.length && category) {
-    related = (await getProducts(locale, { categoryIds: [category.id], limit: 5 })).filter((p) => p.id !== product.id).slice(0, 4)
+  if (related.length < 4 && category) {
+    const more = (await getProducts(locale, { categoryIds: [category.id], limit: 12 })).filter((p) => p.id !== product.id && !related.some((r) => r.id === p.id))
+    related = [...related, ...more].slice(0, 8)
   }
+  const codeIndex = await getProductCodeIndex(locale)
+  const ownCode = product.code?.trim().toUpperCase()
+  // The description once: without the short text shown under the name and without the kit list already in the specs.
+  const description = descriptionWithoutRepeats(product.description, product.excerpt, (product.specs ?? []).map((s) => s.label))
+  const ean = product.specs?.find((s) => /^ean$/i.test(s.label.trim()))?.value?.replace(/\D/g, '')
+  const seller = { '@id': absolute('/#business') }
+  const kitVolts = product.specs?.find((s) => /napajanje|power supply/i.test(s.label))?.value.match(/\b(24|230)\s?V/i)?.[1]
   const downloads = (product.downloads ?? []).filter((d) => asMedia(d.file)?.url)
   const datasheet = asMedia(product.datasheet)
 
@@ -182,10 +192,20 @@ export async function ProductView({ locale, dict, settings, product, contactHref
           name: product.title,
           description: product.excerpt || undefined,
           sku: product.code || undefined,
+          mpn: product.code || undefined,
+          gtin13: ean && ean.length === 13 ? ean : undefined,
           image: images.map((i) => absolute(i.src)),
-          brand: product.brand ? { '@type': 'Brand', name: product.brand } : undefined,
+          brand: { '@type': 'Brand', name: product.brand || 'Key Automation' },
+          // Google requires a price in every Offer, so the Offer is added only when a price is set in the CMS (never invented).
           offers: product.price
-            ? { '@type': 'Offer', price: product.price, priceCurrency: 'RSD', availability: product.availability === 'inStock' ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder', url: absolute(selfPath) }
+            ? {
+                '@type': 'Offer',
+                price: product.price,
+                priceCurrency: 'RSD',
+                availability: product.availability === 'inStock' ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder',
+                url: absolute(selfPath),
+                seller,
+              }
             : undefined,
           category: category?.title,
           url: absolute(selfPath),
@@ -213,7 +233,9 @@ export async function ProductView({ locale, dict, settings, product, contactHref
                   {product.specs.map((s) => (
                     <div key={s.id} className="flex items-baseline justify-between gap-6 py-1.5 text-[15px] sm:text-[16px]">
                       <dt className="shrink-0 text-ink">{s.label}</dt>
-                      <dd className="text-right font-extrabold text-ink tabular-nums">{s.value}</dd>
+                      <dd className="text-right font-extrabold text-ink tabular-nums">
+                        <LinkedCodes text={s.value} index={codeIndex} skip={ownCode} locale={locale} volts={kitVolts} />
+                      </dd>
                     </div>
                   ))}
                 </dl>
@@ -279,11 +301,20 @@ export async function ProductView({ locale, dict, settings, product, contactHref
         </div>
       </section>
 
-      {product.description && (
+      {product.seoText && (
+        <section className="py-12">
+          <div className="wrap-narrow">
+            <SectionHeading className="mb-5">{locale === 'en' ? `More about ${product.code || product.title}` : `Više o proizvodu ${product.code || product.title}`}</SectionHeading>
+            <RichText data={product.seoText} className="text-[14.5px]" />
+          </div>
+        </section>
+      )}
+
+      {description && (
         <section className="bg-band py-12">
           <div className="wrap-narrow">
             <SectionHeading className="mb-5">{dict.description}</SectionHeading>
-            <RichText data={product.description} className="text-[14.5px]" />
+            <RichText data={description} className="text-[14.5px]" />
           </div>
         </section>
       )}
@@ -340,4 +371,32 @@ export async function ProductView({ locale, dict, settings, product, contactHref
       )}
     </>
   )
+}
+
+/** Spec text with known product codes (kit parts) turned into links to their product pages. */
+function LinkedCodes({ text, index, skip, locale, volts }: { text: string; index: Map<string, string>; skip?: string; locale: Locale; volts?: string }) {
+  const parts = text.split(/(\b[A-Z0-9][A-Z0-9-]{2,}\b)/g)
+  return (
+    <>
+      {parts.map((part, i) => {
+        const slug = i % 2 === 1 && part.toUpperCase() !== skip ? findCode(part.toUpperCase(), index, volts) : undefined
+        return slug ? (
+          <Link key={i} href={paths.catalogItem(locale, slug)} className="underline decoration-accent decoration-2 underline-offset-2 hover:text-black">
+            {part}
+          </Link>
+        ) : (
+          <span key={i}>{part}</span>
+        )
+      })}
+    </>
+  )
+}
+
+/** Exact code, or a family name from a kit list ("LUMY") resolved to the model with the kit's voltage (LUMY24L). */
+function findCode(code: string, index: Map<string, string>, volts?: string) {
+  const exact = index.get(code)
+  if (exact || code.length < 4) return exact
+  const family = [...index.keys()].filter((k) => k.startsWith(code))
+  const pick = family.length === 1 ? family[0] : volts ? family.find((k) => k.startsWith(code + volts)) : undefined
+  return pick ? index.get(pick) : undefined
 }
