@@ -14,7 +14,7 @@ import { RichText } from '@/components/RichText'
 import { PageBanner, ProductTile, SectionHeading } from '@/components/ui'
 import type { Dictionary, Locale } from '@/lib/i18n'
 import { asMedia, focal, mediaUrl } from '@/lib/media'
-import { getAllSlugs, getChildCategories, getPageByTemplate, getProductBySlug, getProducts, getRelatedProjects } from '@/lib/payload'
+import { getAllSlugs, getChildCategories, getPageByTemplate, getProductBySlug, getProducts, getReadyCities, getRelatedProjects } from '@/lib/payload'
 import { absolute, paths } from '@/lib/routes'
 import { breadcrumbSchema, faqSchema } from '@/lib/schema'
 import { listingHeading } from '@/lib/seoTitles'
@@ -42,7 +42,10 @@ export async function ServiceView({ service, locale, dict, settings, contactHref
     getAllSlugs('services', service.id),
     getPageByTemplate(locale, 'portfolio'),
   ])
-  const projects = await getRelatedProjects(locale, { serviceIds: [service.id], productIds: products.map((p) => p.id), fill: true })
+  const [projects, cities] = await Promise.all([
+    getRelatedProjects(locale, { serviceIds: [service.id], productIds: products.map((p) => p.id), fill: true }),
+    getReadyCities(locale),
+  ])
   // Access control: the gallery ends with a tile promoting opening from the phone (KUBEW module).
   const kubew = slugs.sr === 'kontrola-pristupa' ? await getProductBySlug(locale, 'kubew') : null
   // …and KUBEW completes the last row of the product tiles when it is not full.
@@ -197,6 +200,23 @@ export async function ServiceView({ service, locale, dict, settings, contactHref
       <RelatedProjects projects={projects} locale={locale} portfolioHref={portfolioPage?.slug ? paths.page(locale, portfolioPage.slug) : null} />
 
       <RenderBlocks blocks={service.layout as LayoutBlock[] | undefined} locale={locale} settings={settings} />
+
+      {cities.length > 0 && (
+        <section className="py-10">
+          <div className="wrap-narrow text-center">
+            <h2 className="label-caps text-muted">{locale === 'en' ? 'Where we install' : 'Gde ugrađujemo'}</h2>
+            <ul className="mt-4 flex flex-wrap justify-center gap-2">
+              {cities.map((c) => (
+                <li key={c.id}>
+                  <Link href={paths.city(locale, c.slug || '')} className="inline-block border border-line px-4 py-2 text-[13.5px] font-bold text-ink hover:border-ink">
+                    {locale === 'en' ? `${service.title} – ${c.city}` : `${service.title} ${c.city}`}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      )}
 
       <CallBand locale={locale} settings={settings} tone="white" />
       <InquirySection locale={locale} settings={settings} defaultService={service.title} />

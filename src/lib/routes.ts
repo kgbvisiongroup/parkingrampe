@@ -11,6 +11,7 @@ export const paths = {
   /** Categories and products share one URL space: /sr/proizvodi/<slug>. */
   catalogItem: (locale: Locale, slug: string) => `/${locale}/${routeBase.products[locale]}/${slug}`,
   search: (locale: Locale) => `/${locale}/${routeBase.search[locale]}`,
+  city: (locale: Locale, slug: string) => `/${locale}/${routeBase.cityPrefix[locale]}${slug}`,
 }
 
 export const absolute = (path: string) => (/^https?:\/\//.test(path) ? path : `${siteUrl}${path}`)
@@ -25,6 +26,8 @@ export function docPath(collection: string | undefined, locale: Locale, slug?: s
       return paths.project(locale, slug)
     case 'pages':
       return paths.page(locale, slug)
+    case 'cities':
+      return paths.city(locale, slug)
     case 'product-categories':
     case 'products':
       return paths.catalogItem(locale, slug)

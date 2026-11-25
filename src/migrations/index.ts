@@ -5,6 +5,7 @@ import * as migration_20261012_210000_bez_mup_licence from './20261012_210000_be
 import * as migration_20261013_170000_pocetna_klijenti from './20261013_170000_pocetna_klijenti';
 import * as migration_20261125_213505_seo_polja from './20261125_213505_seo_polja';
 import * as migration_20261125_213749_kljucne_reci from './20261125_213749_kljucne_reci';
+import * as migration_20261125_220703_gradovi from './20261125_220703_gradovi';
 
 export const migrations = [
   {
@@ -40,6 +41,11 @@ export const migrations = [
   {
     up: migration_20261125_213749_kljucne_reci.up,
     down: migration_20261125_213749_kljucne_reci.down,
-    name: '20261125_213749_kljucne_reci'
+    name: '20261125_213749_kljucne_reci',
+  },
+  {
+    up: migration_20261125_220703_gradovi.up,
+    down: migration_20261125_220703_gradovi.down,
+    name: '20261125_220703_gradovi'
   },
 ];

@@ -72,6 +72,7 @@ export interface Config {
     'product-categories': ProductCategory;
     products: Product;
     projects: Project;
+    cities: City;
     faqs: Faq;
     clients: Client;
     media: Media;
@@ -91,6 +92,7 @@ export interface Config {
     'product-categories': ProductCategoriesSelect<false> | ProductCategoriesSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
+    cities: CitiesSelect<false> | CitiesSelect<true>;
     faqs: FaqsSelect<false> | FaqsSelect<true>;
     clients: ClientsSelect<false> | ClientsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
@@ -1268,6 +1270,106 @@ export interface MediaGalleryBlock {
   blockType: 'mediaGallery';
 }
 /**
+ * "Barriers and gate motors – <city>" pages. Hidden from Google until marked "Ready" and until it has at least 500 words of its own: local projects, areas, travel time, local questions.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cities".
+ */
+export interface City {
+  id: number;
+  /**
+   * E.g. Belgrade
+   */
+  city: string;
+  /**
+   * E.g. "Belgrade".
+   */
+  cityIn?: string | null;
+  /**
+   * E.g. belgrade → /en/barriers-and-gate-motors-belgrade
+   */
+  slug?: string | null;
+  /**
+   * Lower numbers are shown first.
+   */
+  order?: number | null;
+  /**
+   * Turn on only when the page has its own unique text.
+   */
+  ready?: boolean | null;
+  /**
+   * The main heading visitors see. Should contain the keyword but differ from the SEO title. Empty = automatic.
+   */
+  heading?: string | null;
+  intro?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * One place or area per line.
+   */
+  areas?: string | null;
+  /**
+   * E.g. "From Obrenovac in about 40 minutes; a barrier takes one day."
+   */
+  travelTime?: string | null;
+  body?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Empty = projects whose "City" matches.
+   */
+  projects?: (number | Project)[] | null;
+  /**
+   * Shown on the page and as FAQ data for Google.
+   */
+  faq?:
+    | {
+        question: string;
+        answer: string;
+        id?: string | null;
+      }[]
+    | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    noIndex?: boolean | null;
+    /**
+     * Only fill in if the same content lives at another address that should rank instead.
+     */
+    canonical?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "clients".
  */
@@ -1405,6 +1507,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'projects';
         value: number | Project;
+      } | null)
+    | ({
+        relationTo: 'cities';
+        value: number | City;
       } | null)
     | ({
         relationTo: 'faqs';
@@ -2005,6 +2111,41 @@ export interface ProjectsSelect<T extends boolean = true> {
   summary?: T;
   body?: T;
   gallery?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        noIndex?: T;
+        canonical?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cities_select".
+ */
+export interface CitiesSelect<T extends boolean = true> {
+  city?: T;
+  cityIn?: T;
+  slug?: T;
+  order?: T;
+  ready?: T;
+  heading?: T;
+  intro?: T;
+  areas?: T;
+  travelTime?: T;
+  body?: T;
+  projects?: T;
+  faq?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
   meta?:
     | T
     | {

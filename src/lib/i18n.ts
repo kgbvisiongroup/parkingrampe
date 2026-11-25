@@ -12,6 +12,8 @@ export const routeBase = {
   projects: { sr: 'portfolio', en: 'portfolio' },
   products: { sr: 'proizvodi', en: 'products' },
   search: { sr: 'pretraga', en: 'search' },
+  /** City pages are one segment: /sr/rampe-i-motori-za-kapije-beograd */
+  cityPrefix: { sr: 'rampe-i-motori-za-kapije-', en: 'barriers-and-gate-motors-' },
 } as const
 
 export const ogLocale: Record<Locale, string> = { sr: 'sr_RS', en: 'en_US' }

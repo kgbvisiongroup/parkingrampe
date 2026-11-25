@@ -18,6 +18,7 @@ import { Pages } from './collections/Pages'
 import { ProductCategories } from './collections/ProductCategories'
 import { Products } from './collections/Products'
 import { Projects } from './collections/Projects'
+import { Cities } from './collections/Cities'
 import { Services } from './collections/Services'
 import { Users } from './collections/Users'
 import { withActionButtons } from './fields/listColumns'
@@ -112,6 +113,7 @@ export default buildConfig({
     ProductCategories,
     Products,
     Projects,
+    Cities,
     Faqs,
     Clients,
     Media,
@@ -155,7 +157,7 @@ export default buildConfig({
   sharp,
   plugins: [
     seoPlugin({
-      collections: ['pages', 'services', 'product-categories', 'products', 'projects'],
+      collections: ['pages', 'services', 'product-categories', 'products', 'projects', 'cities'],
       globals: ['home'],
       uploadsCollection: 'media',
       tabbedUI: true,

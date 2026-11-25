@@ -3,6 +3,7 @@ import config from '@payload-config'
 import { getPayload } from 'payload'
 import { locales } from '@/lib/i18n'
 import { absolute, docPath, paths } from '@/lib/routes'
+import { cityIsIndexable } from '@/lib/cityPage'
 
 export const revalidate = 3600
 
@@ -55,6 +56,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           alternates: { languages },
         })
       }
+    }
+  }
+  // City pages: only those that are ready and have their own text (others are noindex).
+  const cities = await payload.find({ collection: 'cities', locale: 'all', depth: 0, limit: 100, pagination: false })
+  for (const doc of cities.docs as unknown as ({ slug?: Slugs; updatedAt: string; meta?: { noIndex?: boolean } } & Record<string, unknown>)[]) {
+    if (doc.meta?.noIndex) continue
+    // Each language separately: an English page without its own text stays out.
+    const ok: Partial<Record<(typeof locales)[number], boolean>> = {}
+    for (const l of locales) ok[l] = cityIsIndexable(await payload.findByID({ collection: 'cities', id: doc.id as number, locale: l, fallbackLocale: false, depth: 0 }))
+    const slugs = (doc.slug ?? {}) as Slugs
+    const languages: Record<string, string> = {}
+    for (const l of locales) if (slugs[l] && ok[l]) languages[l === 'sr' ? 'sr-Latn-RS' : 'en'] = absolute(paths.city(l, slugs[l]!))
+    for (const l of locales) {
+      if (!slugs[l] || !ok[l]) continue
+      entries.push({ url: absolute(paths.city(l, slugs[l]!)), lastModified: new Date(doc.updatedAt), changeFrequency: 'monthly', priority: l === 'sr' ? 0.8 : 0.7, alternates: { languages } })
     }
   }
   for (const l of locales) {
