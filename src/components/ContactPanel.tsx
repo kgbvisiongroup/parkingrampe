@@ -2,6 +2,7 @@ import { Clock, Mail, MapPin, MessageCircle, Phone } from 'lucide-react'
 import type { Setting } from '@/payload-types'
 import { getDictionary, type Locale } from '@/lib/i18n'
 import { getServices } from '@/lib/payload'
+import { businessAddress } from '@/lib/schema'
 import { ContactForm } from './ContactForm'
 import { OpenChatButton } from './OpenChatButton'
 
@@ -12,7 +13,7 @@ export async function ContactPanel({ locale, settings, defaultService }: { local
   const info = [
     settings.phone && { icon: Phone, label: dict.phone, value: settings.phoneDisplay || settings.phone, href: `tel:${settings.phone}` },
     settings.email && { icon: Mail, label: dict.email, value: settings.email, href: `mailto:${settings.email}` },
-    settings.address && { icon: MapPin, label: dict.address, value: settings.address, href: settings.mapsUrl || undefined },
+    { icon: MapPin, label: dict.address, value: businessAddress(settings), href: settings.mapsUrl || undefined },
     settings.workingHours && { icon: Clock, label: dict.workingHours, value: settings.workingHours },
   ].filter(Boolean) as { icon: typeof Phone; label: string; value: string; href?: string }[]
 

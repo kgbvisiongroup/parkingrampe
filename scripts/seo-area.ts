@@ -1,5 +1,6 @@
 /**
- * SEO task 6: the real service area instead of "širom Srbije" in texts typed in the CMS.
+ * SEO tasks 6 and 9: the real service area instead of "širom Srbije", and one brand ("KGB Automation"
+ * instead of "Key Rampa") in texts typed in the CMS, including image alt texts.
  *
  *   npm run seo:area            – lists every text that would change, changes nothing
  *   npm run seo:area -- --apply – replaces them
@@ -26,6 +27,12 @@ const RULES: Record<'sr' | 'en', [RegExp, string][]> = {
   ],
 }
 
+/** One brand: "KGB Automation" (legal name "KGB Vision Group d.o.o." stays where it is). */
+const BRAND: [RegExp, string][] = [
+  [/KGB Automation\s*[-–]\s*Key Rampa,?\s*/g, 'KGB Automation – '],
+  [/\bKey Rampa\b/g, 'KGB Automation'],
+]
+
 const apply = process.argv.includes('--apply')
 let found = 0
 
@@ -33,7 +40,7 @@ let found = 0
 function walk(value: unknown, locale: 'sr' | 'en', where: string): unknown {
   if (typeof value === 'string') {
     let out = value
-    for (const [re, to] of RULES[locale]) out = out.replace(re, to)
+    for (const [re, to] of [...RULES[locale], ...BRAND]) out = out.replace(re, to)
     if (out !== value) {
       found++
       console.log(`• ${where}\n    − ${value.slice(0, 160)}\n    + ${out.slice(0, 160)}`)
@@ -55,11 +62,13 @@ async function run() {
   const payload = await getPayload({ config })
   console.log(apply ? 'Menjam tekstove…\n' : 'Probni prolaz – ništa se ne menja. Za upis: npm run seo:area -- --apply\n')
   for (const locale of ['sr', 'en'] as const) {
-    for (const collection of ['pages', 'services', 'product-categories', 'products', 'projects', 'faqs'] as const) {
+    for (const collection of ['pages', 'services', 'product-categories', 'products', 'projects', 'faqs', 'media', 'clients'] as const) {
       const res = await payload.find({ collection, locale, depth: 0, limit: 2000, pagination: false })
-      for (const doc of res.docs as unknown as ({ id: number; title?: string; question?: string } & Record<string, unknown>)[]) {
-        const { id, createdAt, updatedAt, ...rest } = doc
-        const next = walk(rest, locale, `${collection} „${doc.title ?? doc.question}” (${locale})`) as Record<string, unknown>
+      for (const doc of res.docs as unknown as ({ id: number; title?: string; question?: string; filename?: string; name?: string } & Record<string, unknown>)[]) {
+        // Upload records: only the alt text (never file names, sizes or URLs).
+        const { id, createdAt, updatedAt, ...all } = doc
+        const rest = collection === 'media' ? { alt: doc.alt } : collection === 'clients' ? { name: doc.name } : all
+        const next = walk(rest, locale, `${collection} „${doc.title ?? doc.question ?? doc.filename ?? doc.name}” (${locale})`) as Record<string, unknown>
         if (apply && changed(rest, next)) await payload.update({ collection, id, locale, depth: 0, data: next as never })
       }
     }
