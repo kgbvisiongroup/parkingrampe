@@ -123,6 +123,27 @@ export const getProjects = cache(async (locale: Locale, limit = 100): Promise<Pr
   return res.docs
 })
 
+/**
+ * 2–3 portfolio projects for a category, service or city page: projects with equipment from the given
+ * products first, then projects of the given services, then (if asked) the latest ones.
+ */
+export const getRelatedProjects = cache(
+  async (locale: Locale, opts: { productIds?: number[]; serviceIds?: number[]; city?: string; fill?: boolean; limit?: number }): Promise<Project[]> => {
+    const all = await getProjects(locale)
+    const idOf = (x: unknown) => (typeof x === 'object' && x ? (x as { id: number }).id : (x as number))
+    const products = new Set(opts.productIds ?? [])
+    const services = new Set(opts.serviceIds ?? [])
+    const city = opts.city?.trim().toLowerCase()
+    const score = (p: Project) =>
+      (city && (p.city ?? '').trim().toLowerCase() === city ? 4 : 0) +
+      ((p.equipment ?? []).some((e) => products.has(idOf(e))) ? 2 : 0) +
+      (p.service && services.has(idOf(p.service)) ? 1 : 0)
+    const ranked = all.map((p) => ({ p, s: score(p) })).filter((x) => x.s > 0 || opts.fill)
+    ranked.sort((a, b) => b.s - a.s)
+    return ranked.slice(0, opts.limit ?? 3).map((x) => x.p)
+  },
+)
+
 export const getProjectBySlug = cache(async (locale: Locale, slug: string): Promise<Project | null> => {
   const payload = await getPayloadClient()
   const res = await payload.find({ collection: 'projects', locale, depth: 2, limit: 1, where: { slug: { equals: slug } } })
